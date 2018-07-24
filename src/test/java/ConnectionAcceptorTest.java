@@ -15,7 +15,7 @@ public class ConnectionAcceptorTest {
         SocketStub socketStub = new SocketStub(socketIO.getIn(), socketIO.getOut());
         ServerSocketStub serverSocketStub = new ServerSocketStub(socketStub);
 
-        Router router = new Router();
+        Router router = new Router(new GETHandler());
         ConnectionAcceptor connectionAcceptor =
                 new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), router);
 
@@ -30,7 +30,7 @@ public class ConnectionAcceptorTest {
         IOHelper socketIO = new IOHelper("");
         SocketStub socketStub = new SocketStub(socketIO.getIn(), socketIO.getOut());
         ServerSocketStub serverSocketStub = new ServerSocketStub(socketStub);
-        RouterSpy routerSpy = new RouterSpy();
+        RouterSpy routerSpy = new RouterSpy(new GETHandler());
 
         ConnectionAcceptor connectionAcceptor =
                 new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), routerSpy);

@@ -25,10 +25,6 @@ public class ConnectionAcceptor {
     }
 
     private void routeRequest(Socket clientSocket) {
-        try {
-            router.route(clientSocket.getInputStream().toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            router.route(clientSocket);
     }
 }
