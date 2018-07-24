@@ -8,7 +8,7 @@ public enum Message {
         this.messageAsString = messageAsString;
     }
 
-    public String getStringValue() {
+    public String getS() {
         return messageAsString;
     }
 }

@@ -1,30 +1,42 @@
 import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 public class ConnectionAcceptorTest {
 
-    private final static String exampleMessage = "exampleMessage";
-
     @Test
     public void acceptsConnection() throws IOException {
-        OutputStream serverOut = new ByteArrayOutputStream();
-        PrintStream serverPrinter = new PrintStream(serverOut);
+        IOHelper serverIO = new IOHelper("");
 
-        BufferedReader socketReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream("".getBytes())));
-        OutputStream socketOut = new ByteArrayOutputStream();
-        PrintStream socketPrinter = new PrintStream(socketOut);
-
-        SocketStub socketStub = new SocketStub(socketReader, socketPrinter);
+        IOHelper socketIO = new IOHelper("");
+        SocketStub socketStub = new SocketStub(socketIO.getIn(), socketIO.getOut());
         ServerSocketStub serverSocketStub = new ServerSocketStub(socketStub);
 
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(serverSocketStub, serverPrinter);
+        Router router = new Router();
+        ConnectionAcceptor connectionAcceptor =
+                new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), router);
 
         connectionAcceptor.start();
 
-        assertEquals(Message.CONNECTED.getStringValue(), serverOut.toString());
+        assertEquals(Message.CONNECTED.getS(), serverIO.getStringOutput());
+    }
 
+    @Test
+    public void callsRouterRoute() throws IOException {
+        IOHelper serverIO = new IOHelper("");
+        IOHelper socketIO = new IOHelper("");
+        SocketStub socketStub = new SocketStub(socketIO.getIn(), socketIO.getOut());
+        ServerSocketStub serverSocketStub = new ServerSocketStub(socketStub);
+        RouterSpy routerSpy = new RouterSpy();
+
+        ConnectionAcceptor connectionAcceptor =
+                new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), routerSpy);
+
+        connectionAcceptor.start();
+
+        assertTrue(routerSpy.routeWasCalled());
     }
 }
