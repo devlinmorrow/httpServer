@@ -1,16 +1,16 @@
 import java.net.Socket;
 
-public class RouterSpy extends Router {
+public class RequestRouterSpy extends RequestRouter {
 
     private boolean routeWasCalled;
 
-    public RouterSpy(GETHandler getHandler) {
+    public RequestRouterSpy(GETHandler getHandler) {
         super(getHandler);
         routeWasCalled = false;
     }
 
     @Override
-    public void route(Socket clientSocket) {
+    public void route(String request) {
         routeWasCalled = true;
     }
 

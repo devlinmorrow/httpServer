@@ -15,28 +15,12 @@ public class ConnectionAcceptorTest {
         SocketStub socketStub = new SocketStub(socketIO.getIn(), socketIO.getOut());
         ServerSocketStub serverSocketStub = new ServerSocketStub(socketStub);
 
-        Router router = new Router(new GETHandler());
+        SocketHandler socketHandler = new SocketHandler(new RequestRouter(new GETHandler()));
         ConnectionAcceptor connectionAcceptor =
-                new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), router);
+                new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), socketHandler);
 
         connectionAcceptor.start();
 
         assertEquals(Message.CONNECTED.getS(), serverIO.getStringOutput());
-    }
-
-    @Test
-    public void callsRouterRoute() throws IOException {
-        IOHelper serverIO = new IOHelper("");
-        IOHelper socketIO = new IOHelper("");
-        SocketStub socketStub = new SocketStub(socketIO.getIn(), socketIO.getOut());
-        ServerSocketStub serverSocketStub = new ServerSocketStub(socketStub);
-        RouterSpy routerSpy = new RouterSpy(new GETHandler());
-
-        ConnectionAcceptor connectionAcceptor =
-                new ConnectionAcceptor(serverSocketStub, serverIO.getPrintStream(), routerSpy);
-
-        connectionAcceptor.start();
-
-        assertTrue(routerSpy.routeWasCalled());
     }
 }

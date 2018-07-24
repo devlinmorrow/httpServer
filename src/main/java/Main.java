@@ -6,7 +6,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(5000);
         ConnectionAcceptor connectionAcceptor =
-                new ConnectionAcceptor(serverSocket, System.out, new Router(new GETHandler()));
+                new ConnectionAcceptor(serverSocket, System.out,
+                        new SocketHandler(new RequestRouter(new GETHandler())));
         connectionAcceptor.start();
     }
 }

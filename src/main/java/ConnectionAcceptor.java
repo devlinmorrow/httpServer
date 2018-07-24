@@ -7,24 +7,24 @@ public class ConnectionAcceptor {
 
     private ServerSocket serverSocket;
     private PrintStream stdOut;
-    private Router router;
+    private SocketHandler socketHandler;
 
-    public ConnectionAcceptor(ServerSocket serverSocket, PrintStream stdOut, Router router) {
+    public ConnectionAcceptor(ServerSocket serverSocket, PrintStream stdOut, SocketHandler socketHandler) {
         this.serverSocket = serverSocket;
         this.stdOut = stdOut;
-        this.router = router;
+        this.socketHandler = socketHandler;
     }
 
     public void start() {
             try {
-                routeRequest(serverSocket.accept());
+                handleRequest(serverSocket.accept());
             } catch (IOException e) {
                 e.printStackTrace();
             }
             stdOut.print(Message.CONNECTED.getS());
     }
 
-    private void routeRequest(Socket clientSocket) {
-            router.route(clientSocket);
+    private void handleRequest(Socket socket) {
+        socketHandler.handleRequest(socket);
     }
 }
