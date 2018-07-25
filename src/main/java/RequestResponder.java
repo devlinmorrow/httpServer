@@ -1,16 +1,15 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.Socket;
 
-public class SocketHandler {
+public class RequestResponder {
 
     private MyInputReader myInputReader;
     private MyOutputWriter myOutputWriter;
     private GETHandler getHandler;
 
-    public SocketHandler() {
+    public RequestResponder() {
         myInputReader = new MyInputReader();
         myOutputWriter = new MyOutputWriter();
         getHandler = new GETHandler();
@@ -18,8 +17,8 @@ public class SocketHandler {
 
     public void handleRequest(Socket socket) {
         try {
-            String request = readRequest(socket.getInputStream());
-            String response = findResponse(request);
+            String resourcePath = readRequest(socket.getInputStream());
+            String response = findResponse(resourcePath);
             writeResponse(socket.getOutputStream(), response);
             socket.close();
         } catch (IOException e) {

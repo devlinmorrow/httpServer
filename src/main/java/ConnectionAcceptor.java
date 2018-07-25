@@ -7,13 +7,13 @@ public class ConnectionAcceptor {
 
     private PrintStream stdOut;
     private ServerSocket serverSocket;
-    private SocketHandler socketHandler;
+    private RequestResponder requestResponder;
     private ServerStatus serverStatus;
 
-    public ConnectionAcceptor(PrintStream stdOut, ServerSocket serverSocket, SocketHandler socketHandler, ServerStatus serverStatus) {
+    public ConnectionAcceptor(PrintStream stdOut, ServerSocket serverSocket, RequestResponder requestResponder, ServerStatus serverStatus) {
         this.stdOut = stdOut;
         this.serverSocket = serverSocket;
-        this.socketHandler = socketHandler;
+        this.requestResponder = requestResponder;
         this.serverStatus = serverStatus;
     }
 
@@ -34,6 +34,6 @@ public class ConnectionAcceptor {
     }
 
     private void respondToRequest(Socket socket) {
-        socketHandler.handleRequest(socket);
+        requestResponder.handleRequest(socket);
     }
 }

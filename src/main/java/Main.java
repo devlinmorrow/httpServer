@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(5000);
         ConnectionAcceptor connectionAcceptor =
-                new ConnectionAcceptor(System.out, serverSocket, new SocketHandler(), new ServerStatus());
+                new ConnectionAcceptor(System.out, serverSocket, new RequestResponder(), new ServerStatus());
         connectionAcceptor.start();
     }
 }

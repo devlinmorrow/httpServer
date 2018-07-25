@@ -1,10 +1,8 @@
 public class GETHandler {
 
-    private StringAnalyser stringAnalyser;
     private FileConverter fileConverter;
 
     public GETHandler() {
-        stringAnalyser = new StringAnalyser();
         fileConverter = new FileConverter();
     }
 
@@ -14,6 +12,7 @@ public class GETHandler {
     }
 
     private String findFilePath(String request) {
-        return stringAnalyser.findFilePathName(request);
+//        return stringAnalyser.findFilePathName(request);
+        return "";
     }
 }
