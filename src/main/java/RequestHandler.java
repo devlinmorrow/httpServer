@@ -3,41 +3,42 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class RequestResponder {
+public class RequestHandler {
 
-    private MyInputReader myInputReader;
+    private RequestParser requestParser;
     private MyOutputWriter myOutputWriter;
     private GETHandler getHandler;
 
-    public RequestResponder() {
-        myInputReader = new MyInputReader();
+    public RequestHandler() {
+        requestParser = new RequestParser();
         myOutputWriter = new MyOutputWriter();
         getHandler = new GETHandler();
     }
 
     public void handleRequest(Socket socket) {
         try {
-            String resourcePath = readRequest(socket.getInputStream());
-            String response = findResponse(resourcePath);
+            String response = constructResponse(socket.getInputStream());
             writeResponse(socket.getOutputStream(), response);
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String readRequest(InputStream socketIn) {
-        return myInputReader.readInput(socketIn);
+    private String constructResponse(InputStream clientRequestIn) {
+        String URI = findURI(clientRequestIn);
+        return constructResponse(URI);
     }
 
-    private String findResponse(String request) {
+    private String findURI(InputStream socketIn) {
+        return requestParser.getURI(socketIn);
+    }
+
+    private String constructResponse(String request) {
         return getHandler.handleGET(request);
     }
 
     private void writeResponse(OutputStream socketOut, String response) {
-        String fullResponse = "HTTP/1.1 200 OK\nContent-Type: text/plain" +
-                "\nContent-Length: " + response.length() + "\n\n" + response;
-        System.out.println(fullResponse.length());
+        String fullResponse = "HTTP/1.1 200 OK\n\n" + response;
         myOutputWriter.write(socketOut, fullResponse);
     }
 }

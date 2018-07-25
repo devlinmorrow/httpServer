@@ -1,18 +1,12 @@
 public class GETHandler {
 
-    private FileConverter fileConverter;
+    private FileReader fileReader;
 
     public GETHandler() {
-        fileConverter = new FileConverter();
+        fileReader = new FileReader();
     }
 
-    public String handleGET(String clientRequest) {
-        return fileConverter.convertFile("/Users/devlin/cob_spec/public"
-                + findFilePath(clientRequest));
-    }
-
-    private String findFilePath(String request) {
-//        return stringAnalyser.findFilePathName(request);
-        return "";
+    public String handleGET(String URI) {
+        return fileReader.convertFile("/Users/devlin/cob_spec/public" + URI);
     }
 }

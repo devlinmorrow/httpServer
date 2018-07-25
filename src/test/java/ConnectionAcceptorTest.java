@@ -12,7 +12,7 @@ public class ConnectionAcceptorTest {
         IOHelper stdIO = new IOHelper("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                makeServerSocketSpy(""), new RequestResponderSpy(), new ServerStatusStub(1));
+                makeServerSocketSpy(""), new RequestHandlerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
@@ -23,7 +23,7 @@ public class ConnectionAcceptorTest {
     public void respondToClientRequestIsCalled() throws IOException {
         IOHelper stdIO = new IOHelper("");
 
-        RequestResponderSpy socketHandlerSpy = new RequestResponderSpy();
+        RequestHandlerSpy socketHandlerSpy = new RequestHandlerSpy();
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
                 makeServerSocketSpy(""), socketHandlerSpy, new ServerStatusStub(1));
@@ -40,7 +40,7 @@ public class ConnectionAcceptorTest {
         ServerSocketSpy serverSocketSpy = makeServerSocketSpy("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                serverSocketSpy, new RequestResponderSpy(), new ServerStatusStub(1));
+                serverSocketSpy, new RequestHandlerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
@@ -54,7 +54,7 @@ public class ConnectionAcceptorTest {
         ServerSocketSpy serverSocketSpy = makeServerSocketSpy("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                serverSocketSpy, new RequestResponderSpy(), new ServerStatusStub(2));
+                serverSocketSpy, new RequestHandlerSpy(), new ServerStatusStub(2));
 
         connectionAcceptor.start();
 
@@ -69,7 +69,7 @@ public class ConnectionAcceptorTest {
         SocketStubSpy socketStubSpy = new SocketStubSpy(socketIO.getIn(), socketIO.getOut());
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                new ServerSocketSpy(socketStubSpy), new RequestResponderSpy(), new ServerStatusStub(1));
+                new ServerSocketSpy(socketStubSpy), new RequestHandlerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
