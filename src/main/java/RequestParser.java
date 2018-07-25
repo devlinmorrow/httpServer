@@ -6,11 +6,19 @@ import java.nio.Buffer;
 
 public class RequestParser {
 
+    private Request currentRequest;
+    private String[] requestLine;
 
-    public String getURI(InputStream clientIn) {
+    public RequestParser(Request currentRequest) {
+        this.currentRequest = currentRequest;
+    }
+
+    public Request assembleRequest(InputStream clientIn) {
         BufferedReader reader = attachReader(clientIn);
-        String requestLine = extractLine(reader);
-        return findURI(requestLine);
+        requestLine = extractLine(reader).split(" ");
+        setHTTPVerb();
+        setURI();
+        return currentRequest;
     }
 
     private BufferedReader attachReader(InputStream clientIn) {
@@ -27,9 +35,14 @@ public class RequestParser {
         return requestLine;
     }
 
-    private String findURI(String requestLine) {
-        String[] requestLineWords = requestLine.split(" ");
-        return requestLineWords[1];
+    private void setHTTPVerb() {
+        if (requestLine[0].equals("GET")) {
+            currentRequest.setHttpVerb(HTTPVerb.GET);
+        }
+    }
+
+    private void setURI() {
+        currentRequest.setURI(requestLine[1]);
     }
 
 }

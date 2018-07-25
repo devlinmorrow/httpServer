@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 public class RequestParserTest {
     private String URI1 = "/file1";
-    private String exampleRequest = "GET " + URI1 + " HTTP/1.1\nHost: localhost:5000" +
+    private String exampleGETRequest1 = "GET " + URI1 + " HTTP/1.1\nHost: localhost:5000" +
             "\nConnection: keep-alive\nCache-Control: max-age=0\nUpgrade-Insecure-Requests: 1" +
             "\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 " +
             "(KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36\nAccept: text/html,application/" +
@@ -13,22 +13,50 @@ public class RequestParserTest {
             "textwrapon=false; wysiwyg=textarea";
 
     private String URI2 = "/bananas";
-    private String exampleRequest2 = "GET " + URI2 + " HTTP/1.1\nHost: localhost:5000\n\n\n";
+    private String exampleGETRequest2 = "GET " + URI2 + " HTTP/1.1\nHost: localhost:5000\n\n\n";
+
+    @Test
+    public void setHTTPVerb() {
+        Request dummyRequest = new Request();
+        RequestParser requestParser = new RequestParser(dummyRequest);
+        IOHelper clientSocket = new IOHelper(exampleGETRequest1);
+
+        requestParser.assembleRequest(clientSocket.getIn());
+
+        assertEquals(HTTPVerb.GET, dummyRequest.getHttpVerb());
+    }
+
+    @Test
+    public void setHTTPVerb2() {
+        Request dummyRequest = new Request();
+        RequestParser requestParser = new RequestParser(dummyRequest);
+        IOHelper clientSocket = new IOHelper(exampleGETRequest2);
+
+        requestParser.assembleRequest(clientSocket.getIn());
+
+        assertEquals(HTTPVerb.GET, dummyRequest.getHttpVerb());
+    }
 
     @Test
     public void getURI() {
-        RequestParser requestParser = new RequestParser();
-        IOHelper clientSocket = new IOHelper(exampleRequest);
+        Request dummyRequest = new Request();
+        RequestParser requestParser = new RequestParser(dummyRequest);
+        IOHelper clientSocket = new IOHelper(exampleGETRequest1);
 
-        assertEquals(URI1, requestParser.getURI(clientSocket.getIn()));
+        requestParser.assembleRequest(clientSocket.getIn());
+
+        assertEquals(URI1, dummyRequest.getURI());
     }
 
     @Test
     public void getURI2() {
-        RequestParser requestParser = new RequestParser();
-        IOHelper clientSocket = new IOHelper(exampleRequest2);
+        Request dummyRequest = new Request();
+        RequestParser requestParser = new RequestParser(dummyRequest);
+        IOHelper clientSocket = new IOHelper(exampleGETRequest2);
 
-        assertEquals(URI2, requestParser.getURI(clientSocket.getIn()));
+        requestParser.assembleRequest(clientSocket.getIn());
+
+        assertEquals(URI2, dummyRequest.getURI());
     }
 
 }

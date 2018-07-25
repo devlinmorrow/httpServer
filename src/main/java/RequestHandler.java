@@ -10,35 +10,26 @@ public class RequestHandler {
     private GETHandler getHandler;
 
     public RequestHandler() {
-        requestParser = new RequestParser();
+        requestParser = new RequestParser(new Request());
         myOutputWriter = new MyOutputWriter();
         getHandler = new GETHandler();
     }
 
     public void handleRequest(Socket socket) {
         try {
-            String response = constructResponse(socket.getInputStream());
-            writeResponse(socket.getOutputStream(), response);
+            Request request = assembleRequest(socket.getInputStream());
+//            String response = askResponseFromHandler(request);
+//            writeResponse(socket.getOutputStream(), response);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String constructResponse(InputStream clientRequestIn) {
-        String URI = findURI(clientRequestIn);
-        return constructResponse(URI);
-    }
-
-    private String findURI(InputStream socketIn) {
-        return requestParser.getURI(socketIn);
-    }
-
-    private String constructResponse(String request) {
-        return getHandler.handleGET(request);
+    private Request assembleRequest(InputStream clientRequestIn) {
+        return requestParser.assembleRequest(clientRequestIn);
     }
 
     private void writeResponse(OutputStream socketOut, String response) {
-        String fullResponse = "HTTP/1.1 200 OK\n\n" + response;
-        myOutputWriter.write(socketOut, fullResponse);
+        myOutputWriter.write(socketOut, response);
     }
 }

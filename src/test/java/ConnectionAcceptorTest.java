@@ -1,3 +1,4 @@
+import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class ConnectionAcceptorTest {
 
         connectionAcceptor.start();
 
-        assertEquals(Message.REQUESTMADE.getS() + "\n", stdIO.getStringOutput());
+        TestCase.assertEquals(Message.REQUESTMADE.getS() + "\n", stdIO.getStringOutput());
     }
 
     @Test
