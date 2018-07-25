@@ -1,6 +1,6 @@
 public enum Message {
 
-    CONNECTED("User connected.");
+    REQUESTMADE("Request made.");
 
     private String messageAsString;
 

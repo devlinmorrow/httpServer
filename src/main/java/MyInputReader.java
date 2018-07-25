@@ -5,15 +5,16 @@ import java.io.InputStreamReader;
 
 public class MyInputReader {
 
-    private String input;
-
     public String readInput(InputStream in) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder thing = new StringBuilder();
+        String s;
         try {
-            input = reader.readLine();
+            s = reader.readLine();
+            thing.append(s);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return input;
+        return String.valueOf(thing);
     }
 }

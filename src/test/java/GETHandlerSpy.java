@@ -6,8 +6,9 @@ public class GETHandlerSpy extends GETHandler {
         handleGETWasCalled = false;
     }
 
-    public void handleGET(String request) {
+    public String handleGET(String request) {
         handleGETWasCalled = true;
+        return null;
     }
 
     public boolean isHandleGETWasCalled() {

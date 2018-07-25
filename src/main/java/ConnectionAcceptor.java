@@ -5,26 +5,35 @@ import java.net.Socket;
 
 public class ConnectionAcceptor {
 
-    private ServerSocket serverSocket;
     private PrintStream stdOut;
+    private ServerSocket serverSocket;
     private SocketHandler socketHandler;
+    private ServerStatus serverStatus;
 
-    public ConnectionAcceptor(ServerSocket serverSocket, PrintStream stdOut, SocketHandler socketHandler) {
-        this.serverSocket = serverSocket;
+    public ConnectionAcceptor(PrintStream stdOut, ServerSocket serverSocket, SocketHandler socketHandler, ServerStatus serverStatus) {
         this.stdOut = stdOut;
+        this.serverSocket = serverSocket;
         this.socketHandler = socketHandler;
+        this.serverStatus = serverStatus;
     }
 
     public void start() {
             try {
-                handleRequest(serverSocket.accept());
+                while (serverStatus.isRunning()) {
+                    handleRequest(serverSocket.accept());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stdOut.print(Message.CONNECTED.getS());
     }
 
-    private void handleRequest(Socket socket) {
+    private void handleRequest(Socket clientSocket) throws IOException {
+        stdOut.println(Message.REQUESTMADE.getS());
+        respondToRequest(clientSocket);
+        clientSocket.close();
+    }
+
+    private void respondToRequest(Socket socket) {
         socketHandler.handleRequest(socket);
     }
 }
