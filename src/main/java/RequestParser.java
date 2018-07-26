@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 
 public class RequestParser {
 
@@ -13,7 +12,7 @@ public class RequestParser {
         this.currentRequest = currentRequest;
     }
 
-    public Request assembleRequest(InputStream clientIn) {
+    public Request parseRequest(InputStream clientIn) {
         BufferedReader reader = attachReader(clientIn);
         requestLine = extractLine(reader).split(" ");
         setHTTPVerb();
@@ -37,7 +36,7 @@ public class RequestParser {
 
     private void setHTTPVerb() {
         if (requestLine[0].equals("GET")) {
-            currentRequest.setHttpVerb(HTTPVerb.GET);
+            currentRequest.setRequestMethod(RequestMethod.GET);
         }
     }
 

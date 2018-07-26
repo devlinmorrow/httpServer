@@ -1,10 +1,10 @@
-public enum HTTPVerb {
+public enum RequestMethod {
 
     GET("GET");
 
     private String StringRep;
 
-    HTTPVerb(String StringRep) {
+    RequestMethod(String StringRep) {
         this.StringRep = StringRep;
     }
 

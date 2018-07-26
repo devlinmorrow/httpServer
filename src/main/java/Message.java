@@ -1,5 +1,6 @@
 public enum Message {
 
+    BLANKLINE("\n\n"),
     REQUESTMADE("Request made.");
 
     private String messageAsString;

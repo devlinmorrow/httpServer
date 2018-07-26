@@ -21,9 +21,9 @@ public class RequestParserTest {
         RequestParser requestParser = new RequestParser(dummyRequest);
         IOHelper clientSocket = new IOHelper(exampleGETRequest1);
 
-        requestParser.assembleRequest(clientSocket.getIn());
+        requestParser.parseRequest(clientSocket.getIn());
 
-        assertEquals(HTTPVerb.GET, dummyRequest.getHttpVerb());
+        assertEquals(RequestMethod.GET, dummyRequest.getRequestMethod());
     }
 
     @Test
@@ -32,9 +32,9 @@ public class RequestParserTest {
         RequestParser requestParser = new RequestParser(dummyRequest);
         IOHelper clientSocket = new IOHelper(exampleGETRequest2);
 
-        requestParser.assembleRequest(clientSocket.getIn());
+        requestParser.parseRequest(clientSocket.getIn());
 
-        assertEquals(HTTPVerb.GET, dummyRequest.getHttpVerb());
+        assertEquals(RequestMethod.GET, dummyRequest.getRequestMethod());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class RequestParserTest {
         RequestParser requestParser = new RequestParser(dummyRequest);
         IOHelper clientSocket = new IOHelper(exampleGETRequest1);
 
-        requestParser.assembleRequest(clientSocket.getIn());
+        requestParser.parseRequest(clientSocket.getIn());
 
         assertEquals(URI1, dummyRequest.getURI());
     }
@@ -54,7 +54,7 @@ public class RequestParserTest {
         RequestParser requestParser = new RequestParser(dummyRequest);
         IOHelper clientSocket = new IOHelper(exampleGETRequest2);
 
-        requestParser.assembleRequest(clientSocket.getIn());
+        requestParser.parseRequest(clientSocket.getIn());
 
         assertEquals(URI2, dummyRequest.getURI());
     }

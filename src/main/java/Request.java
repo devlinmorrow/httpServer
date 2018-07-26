@@ -1,18 +1,18 @@
 public class Request {
 
-    private HTTPVerb httpVerb;
+    private RequestMethod RequestMethod;
     private String URI;
 
-    public void setHttpVerb(HTTPVerb httpVerb) {
-        this.httpVerb = httpVerb;
+    public void setRequestMethod(RequestMethod RequestMethod) {
+        this.RequestMethod = RequestMethod;
     }
 
     public void setURI(String URI) {
-        this.URI = URI;
+        this.URI = HardcodedValues.RESOURCEPATH.getS() + URI;
     }
 
-    public HTTPVerb getHttpVerb() {
-        return httpVerb;
+    public RequestMethod getRequestMethod() {
+        return RequestMethod;
     }
 
     public String getURI() {

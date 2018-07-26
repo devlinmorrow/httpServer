@@ -1,10 +1,10 @@
 import java.net.Socket;
 
-public class RequestHandlerSpy extends RequestHandler {
+public class ClientConnectionManagerSpy extends ClientConnectionManager {
 
     private boolean handleRequestWasCalled;
 
-    public RequestHandlerSpy() {
+    public ClientConnectionManagerSpy() {
         handleRequestWasCalled = false;
     }
 

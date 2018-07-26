@@ -13,7 +13,7 @@ public class ConnectionAcceptorTest {
         IOHelper stdIO = new IOHelper("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                makeServerSocketSpy(""), new RequestHandlerSpy(), new ServerStatusStub(1));
+                makeServerSocketSpy(""), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
@@ -24,7 +24,7 @@ public class ConnectionAcceptorTest {
     public void respondToClientRequestIsCalled() throws IOException {
         IOHelper stdIO = new IOHelper("");
 
-        RequestHandlerSpy socketHandlerSpy = new RequestHandlerSpy();
+        ClientConnectionManagerSpy socketHandlerSpy = new ClientConnectionManagerSpy();
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
                 makeServerSocketSpy(""), socketHandlerSpy, new ServerStatusStub(1));
@@ -41,7 +41,7 @@ public class ConnectionAcceptorTest {
         ServerSocketSpy serverSocketSpy = makeServerSocketSpy("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                serverSocketSpy, new RequestHandlerSpy(), new ServerStatusStub(1));
+                serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
@@ -55,7 +55,7 @@ public class ConnectionAcceptorTest {
         ServerSocketSpy serverSocketSpy = makeServerSocketSpy("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                serverSocketSpy, new RequestHandlerSpy(), new ServerStatusStub(2));
+                serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(2));
 
         connectionAcceptor.start();
 
@@ -70,7 +70,7 @@ public class ConnectionAcceptorTest {
         SocketStubSpy socketStubSpy = new SocketStubSpy(socketIO.getIn(), socketIO.getOut());
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                new ServerSocketSpy(socketStubSpy), new RequestHandlerSpy(), new ServerStatusStub(1));
+                new ServerSocketSpy(socketStubSpy), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 

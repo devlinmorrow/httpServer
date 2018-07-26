@@ -1,13 +1,34 @@
-public class GETHandler {
+import java.io.File;
 
+public class GETHandler extends Handler {
+
+    private String fullURI;
+    private Request request;
+    private Response response;
+    private File file;
     private FileReader fileReader;
 
-    public GETHandler() {
+    @Override
+    public ResponseStatus executeRequest(Request request, Response response) {
+        this.request = request;
+        this.response = response;
         fileReader = new FileReader();
+        setFile();
+        if (!checkIfResourceExists()) {
+            response.setBodyContent(ResponseStatus.FOUROHFOUR.getStatusBody());
+            return ResponseStatus.FOUROHFOUR;
+        } else {
+            response.setBodyContent(fileReader.convertFile(request.getURI()));
+            return ResponseStatus.TWOHUNDRED;
+        }
     }
 
-//    String fullResponse = "HTTP/1.1 200 OK\n\n" + response;
-    public String handleGET(String URI) {
-        return fileReader.convertFile("/Users/devlin/cob_spec/public" + URI);
+    private boolean checkIfResourceExists() {
+        return file.exists();
     }
+
+    private void setFile() {
+        file = new File(request.getURI());
+    }
+
 }
