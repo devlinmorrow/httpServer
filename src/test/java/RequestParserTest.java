@@ -45,7 +45,7 @@ public class RequestParserTest {
 
         requestParser.parseRequest(clientSocket.getIn());
 
-        assertEquals(URI1, dummyRequest.getURI());
+        assertEquals(HardcodedValues.RESOURCEPATH.getS() + URI1, dummyRequest.getURI());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RequestParserTest {
 
         requestParser.parseRequest(clientSocket.getIn());
 
-        assertEquals(URI2, dummyRequest.getURI());
+        assertEquals(HardcodedValues.RESOURCEPATH.getS() + URI2, dummyRequest.getURI());
     }
 
 }

@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class FileReader {
+public class TextFileConverter {
 
     public String convertFile(String filePath) {
         byte[] encoded = new byte[0];

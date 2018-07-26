@@ -6,22 +6,28 @@ public class RequestServicer {
     private Request request;
     private Response response;
     private Handler handler;
+    private ResponseBuilder responseBuilder;
 
     public String serviceRequest(Request request) {
-        setUp(request);
-        return makeResponse();
+        this.request = request;
+        responseBuilder = new ResponseBuilder();
+        response = new Response();
+        actionRequest();
+        return responseBuilder.makeResponse(response);
     }
 
-    private void setUp(Request request) {
-        this.request = request;
-        response = new Response();
+    private void actionRequest() {
         if (requestCannotBeServiced()) {
-            response.setBodyContent(ResponseStatus.FOUROHFOUR.getStatusBody());
-            response.setStatus(ResponseStatus.FOUROHFOUR);
+            set404();
         } else {
             handler = findHandlerType();
             handler.executeRequest(request, response);
         }
+    }
+
+    private void set404() {
+        response.setBodyContent(ResponseStatus.FOUROHFOUR.getStatusBody());
+        response.setStatus(ResponseStatus.FOUROHFOUR);
     }
 
     private boolean requestCannotBeServiced() {
@@ -37,20 +43,4 @@ public class RequestServicer {
         return (request.getRequestMethod() == RequestMethod.GET) ? new GETHandler() : null;
     }
 
-    private String makeResponse() {
-        fullResponse = new StringBuilder();
-        makeStatusLine();
-        return String.valueOf(fullResponse);
-    }
-
-    private void makeStatusLine() {
-        appendHTTPVersion();
-        fullResponse.append(response.getResponseStatus().getReasonPhrase());
-        fullResponse.append(HardcodedValues.BLANKLINE.getS());
-        fullResponse.append(response.getBodyContent());
-    }
-
-    private void appendHTTPVersion() {
-        fullResponse.append(response.getHttpVersion()).append(" ");
-    }
 }
