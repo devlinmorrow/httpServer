@@ -1,17 +1,36 @@
+import java.io.File;
+
 public class RequestServicer {
 
     private StringBuilder fullResponse;
-    private ResponseStatus responseStatus;
     private Request request;
     private Response response;
     private Handler handler;
 
     public String serviceRequest(Request request) {
-        setRequest(request);
-        response = new Response();
-        handler = findHandlerType();
-        responseStatus = handler.executeRequest(request, response);
+        setUp(request);
         return makeResponse();
+    }
+
+    private void setUp(Request request) {
+        this.request = request;
+        response = new Response();
+        if (requestCannotBeServiced()) {
+            response.setBodyContent(ResponseStatus.FOUROHFOUR.getStatusBody());
+            response.setStatus(ResponseStatus.FOUROHFOUR);
+        } else {
+            handler = findHandlerType();
+            handler.executeRequest(request, response);
+        }
+    }
+
+    private boolean requestCannotBeServiced() {
+        return resourceDoesNotExist();
+    }
+
+    private boolean resourceDoesNotExist() {
+        File file = new File(request.getURI());
+        return !file.exists();
     }
 
     private Handler findHandlerType() {
@@ -24,13 +43,9 @@ public class RequestServicer {
         return String.valueOf(fullResponse);
     }
 
-    private void setRequest(Request request) {
-        this.request = request;
-    }
-
     private void makeStatusLine() {
         appendHTTPVersion();
-        fullResponse.append(responseStatus.getReasonPhrase());
+        fullResponse.append(response.getResponseStatus().getReasonPhrase());
         fullResponse.append(HardcodedValues.BLANKLINE.getS());
         fullResponse.append(response.getBodyContent());
     }

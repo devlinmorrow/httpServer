@@ -1,6 +1,7 @@
 public class Response {
 
     private String httpVersion;
+    private ResponseStatus responseStatus;
     private String bodyContent;
 
     public Response() {
@@ -17,5 +18,13 @@ public class Response {
 
     public String getHttpVersion() {
         return httpVersion;
+    }
+
+    public void setStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
     }
 }

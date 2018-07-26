@@ -1,4 +1,4 @@
 public abstract class Handler {
 
-    public abstract ResponseStatus executeRequest(Request request, Response response);
+    public abstract void executeRequest(Request request, Response response);
 }
