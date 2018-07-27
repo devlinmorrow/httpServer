@@ -1,22 +1,22 @@
 public class Response {
 
-    private String httpVersion;
+    private byte[] httpVersion;
     private ResponseStatus responseStatus;
-    private String bodyContent;
+    private byte[] bodyContent;
 
     public Response() {
-        httpVersion = "HTTP/1.1";
+        httpVersion = "HTTP/1.1".getBytes();
     }
 
-    public void setBodyContent(String bodyContent) {
+    public void setBodyContent(byte[] bodyContent) {
         this.bodyContent = bodyContent;
     }
 
-    public String getBodyContent() {
+    public byte[] getBodyContent() {
         return bodyContent;
     }
 
-    public String getHttpVersion() {
+    public byte[] getHttpVersion() {
         return httpVersion;
     }
 

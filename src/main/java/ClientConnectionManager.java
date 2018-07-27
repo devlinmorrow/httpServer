@@ -5,35 +5,45 @@ import java.net.Socket;
 
 public class ClientConnectionManager {
 
+    private InputStream clientRequestInput;
+    private OutputStream clientResponseOutput;
     private RequestParser requestParser;
-    private MyOutputWriter myOutputWriter;
-    private RequestServicer requestServicer;
+    private RequestServicer requestResponder;
 
     public ClientConnectionManager() {
         requestParser = new RequestParser(new Request());
-        myOutputWriter = new MyOutputWriter();
-        requestServicer = new RequestServicer();
+        requestResponder = new RequestServicer();
     }
 
     public void handleRequest(Socket socket) {
+        connect(socket);
+        Request request = parseRequest();
+        byte[] response = respondTo(request);
+        write(response, clientResponseOutput);
+    }
+
+    private void connect(Socket socket) {
         try {
-            Request request = parseRequest(socket.getInputStream());
-            String response = serviceRequest(request);
-            writeResponse(socket.getOutputStream(), response);
+            clientRequestInput = socket.getInputStream();
+            clientResponseOutput = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String serviceRequest(Request request) {
-        return requestServicer.serviceRequest(request);
+    private Request parseRequest() {
+        return requestParser.parseRequest(clientRequestInput);
     }
 
-    private Request parseRequest(InputStream clientRequestIn) {
-        return requestParser.parseRequest(clientRequestIn);
+    private byte[] respondTo(Request request) {
+        return requestResponder.respondTo(request);
     }
 
-    private void writeResponse(OutputStream socketOut, String response) {
-        myOutputWriter.write(socketOut, response);
+    private void write(byte[] response, OutputStream socketOut) {
+        try {
+            socketOut.write(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

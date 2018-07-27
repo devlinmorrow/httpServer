@@ -8,7 +8,7 @@ public class Request {
     }
 
     public void setURI(String URI) {
-        this.URI = HardcodedValues.RESOURCEPATH.getS() + URI;
+        this.URI = URI;
     }
 
     public RequestMethod getRequestMethod() {

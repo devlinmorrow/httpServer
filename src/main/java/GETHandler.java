@@ -13,7 +13,7 @@ public class GETHandler extends Handler {
         this.request = request;
         this.response = response;
 
-        response.setBodyContent(textFileConverter.convertFile(request.getURI()));
+        response.setBodyContent(textFileConverter.getFileContents(request.getURI()));
         response.setStatus(ResponseStatus.TWOHUNDRED);
     }
 

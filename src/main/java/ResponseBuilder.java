@@ -1,31 +1,20 @@
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public class ResponseBuilder {
 
-    private Response response;
-    private StringBuilder responseMessage;
-
-    public String makeResponse(Response response) {
-        setResponseMessage(response);
-        return makeResponse();
-    }
-
-    private String makeResponse() {
-        responseMessage = new StringBuilder();
-        makeStatusLine();
-        return String.valueOf(responseMessage);
-    }
-
-    private void makeStatusLine() {
-        appendHTTPVersion();
-        responseMessage.append(response.getResponseStatus().getReasonPhrase());
-        responseMessage.append(HardcodedValues.BLANKLINE.getS());
-        responseMessage.append(response.getBodyContent());
-    }
-
-    private void appendHTTPVersion() {
-        responseMessage.append(response.getHttpVersion()).append(" ");
-    }
-
-    private void setResponseMessage(Response response) {
-        this.response = response;
+    public byte[] makeResponse(Response response) {
+        ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+        try {
+            responseStream.write(response.getHttpVersion());
+            responseStream.write(" ".getBytes());
+            responseStream.write(response.getResponseStatus().getReasonPhrase());
+            responseStream.write(response.getResponseStatus().getStatusBody());
+            responseStream.write("\n\n".getBytes());
+            responseStream.write(response.getBodyContent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return responseStream.toByteArray();
     }
 }

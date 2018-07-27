@@ -41,7 +41,7 @@ public class RequestParser {
     }
 
     private void setURI() {
-        currentRequest.setURI(requestLine[1]);
+        currentRequest.setURI(HardcodedValues.RESOURCEPATH.getS() + requestLine[1]);
     }
 
 }

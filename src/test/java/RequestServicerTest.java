@@ -1,35 +1,50 @@
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertEquals;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import static org.junit.Assert.assertArrayEquals;
 
 public class RequestServicerTest {
 
     @Test
-    public void simpleGET() {
-        Request exGETRequest = makeGETRequest("/file1");
+    public void simpleGET() throws IOException {
+        Request exGETRequest = makeGETRequest("src/main/resources/dummyFile1.txt");
         RequestServicer requestServicer = new RequestServicer();
 
-        String expectedResponse = HardcodedValues.HTTPVERSION.getS() + " "
-                + ResponseStatus.TWOHUNDRED.getReasonPhrase()
-                + Message.BLANKLINE.getS() + "file1 contents";
+        ByteArrayOutputStream expectedResponseStream = new ByteArrayOutputStream();
+        expectedResponseStream.write(HardcodedValues.HTTPVERSION.getS().getBytes());
+        expectedResponseStream.write(" ".getBytes());
+        expectedResponseStream.write(ResponseStatus.TWOHUNDRED.getReasonPhrase());
+        expectedResponseStream.write(ResponseStatus.TWOHUNDRED.getStatusBody());
+        expectedResponseStream.write(Message.BLANKLINE.getS().getBytes());
+        expectedResponseStream.write("file1 contents\n".getBytes());
 
-        String actualResponse = requestServicer.serviceRequest(exGETRequest);
+        byte[] expectedResponse = expectedResponseStream.toByteArray();
 
-        assertEquals(expectedResponse, actualResponse);
+        byte[] actualResponse = requestServicer.respondTo(exGETRequest);
+
+        assertArrayEquals(expectedResponse, actualResponse);
     }
 
     @Test
-    public void attemptedGET_receives404() {
-        Request exGETRequest = makeGETRequest("/no_file_here.txt");
+    public void attemptedGET_receives404() throws IOException {
+        Request exGETRequest = makeGETRequest("src/main/resources/no-file-here.txt");
         RequestServicer requestServicer = new RequestServicer();
 
-        String expectedResponse = HardcodedValues.HTTPVERSION.getS() + " "
-                + ResponseStatus.FOUROHFOUR.getReasonPhrase()
-                + Message.BLANKLINE.getS() + ResponseStatus.FOUROHFOUR.getStatusBody();
+        ByteArrayOutputStream expectedResponseStream = new ByteArrayOutputStream();
+        expectedResponseStream.write(HardcodedValues.HTTPVERSION.getS().getBytes());
+        expectedResponseStream.write(" ".getBytes());
+        expectedResponseStream.write(ResponseStatus.FOUROHFOUR.getReasonPhrase());
+        expectedResponseStream.write(ResponseStatus.FOUROHFOUR.getStatusBody());
+        expectedResponseStream.write(Message.BLANKLINE.getS().getBytes());
+        expectedResponseStream.write("".getBytes());
 
-        String actualResponse = requestServicer.serviceRequest(exGETRequest);
+        byte[] expectedResponse = expectedResponseStream.toByteArray();
 
-        assertEquals(expectedResponse, actualResponse);
+        byte[] actualResponse = requestServicer.respondTo(exGETRequest);
+
+        assertArrayEquals(expectedResponse, actualResponse);
     }
 
     private Request makeGETRequest(String URI) {

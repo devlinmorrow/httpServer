@@ -11,11 +11,11 @@ public enum ResponseStatus {
         this.statusBody = statusBody;
     }
 
-    public String getReasonPhrase() {
-        return reasonPhrase;
+    public byte[] getReasonPhrase() {
+        return reasonPhrase.getBytes();
     }
 
-    public String getStatusBody() {
-        return statusBody;
+    public byte[] getStatusBody() {
+        return statusBody.getBytes();
     }
 }

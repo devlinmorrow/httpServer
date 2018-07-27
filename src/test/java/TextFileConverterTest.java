@@ -5,22 +5,12 @@ import static org.junit.Assert.*;
 public class TextFileConverterTest {
 
     @Test
-    public void readFile1() {
-        String file1Contents = "file1 contents";
+    public void getDummyFile1Contents() {
+        byte[] file1Contents = "file1 contents\n".getBytes();
         TextFileConverter textFileConverter = new TextFileConverter();
 
-        String actualContents = textFileConverter.convertFile("/Users/devlin/cob_spec/public/file1");
+        byte[] actualContents = textFileConverter.getFileContents("src/main/resources/dummyFile1.txt");
 
-        assertEquals(file1Contents, actualContents);
-    }
-
-    @Test
-    public void readFile2() {
-        String file2Contents = "file2 contents\n";
-        TextFileConverter textFileConverter = new TextFileConverter();
-
-        String actualContents = textFileConverter.convertFile("/Users/devlin/cob_spec/public/file2");
-
-        assertEquals(file2Contents, actualContents);
+        assertArrayEquals(file1Contents, actualContents);
     }
 }

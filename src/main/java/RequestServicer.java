@@ -2,13 +2,12 @@ import java.io.File;
 
 public class RequestServicer {
 
-    private StringBuilder fullResponse;
     private Request request;
     private Response response;
     private Handler handler;
     private ResponseBuilder responseBuilder;
 
-    public String serviceRequest(Request request) {
+    public byte[] respondTo(Request request) {
         this.request = request;
         responseBuilder = new ResponseBuilder();
         response = new Response();
@@ -25,13 +24,13 @@ public class RequestServicer {
         }
     }
 
-    private void set404() {
-        response.setBodyContent(ResponseStatus.FOUROHFOUR.getStatusBody());
-        response.setStatus(ResponseStatus.FOUROHFOUR);
-    }
-
     private boolean requestCannotBeServiced() {
         return resourceDoesNotExist();
+    }
+
+    private void set404() {
+        response.setStatus(ResponseStatus.FOUROHFOUR);
+        response.setBodyContent("".getBytes());
     }
 
     private boolean resourceDoesNotExist() {
