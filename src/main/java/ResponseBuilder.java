@@ -8,8 +8,7 @@ public class ResponseBuilder {
         try {
             responseStream.write(response.getHttpVersion());
             responseStream.write(" ".getBytes());
-            responseStream.write(response.getResponseStatus().getReasonPhrase());
-            responseStream.write(response.getResponseStatus().getStatusBody());
+            responseStream.write(response.getResponseStatus().getPhrase());
             responseStream.write("\n\n".getBytes());
             responseStream.write(response.getBodyContent());
         } catch (IOException e) {

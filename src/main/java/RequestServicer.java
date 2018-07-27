@@ -30,7 +30,7 @@ public class RequestServicer {
 
     private void set404() {
         response.setStatus(ResponseStatus.FOUROHFOUR);
-        response.setBodyContent("".getBytes());
+        response.setBodyContent(ResponseStatus.FOUROHFOUR.getStatusBody());
     }
 
     private boolean resourceDoesNotExist() {

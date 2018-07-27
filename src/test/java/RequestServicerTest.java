@@ -15,9 +15,8 @@ public class RequestServicerTest {
         ByteArrayOutputStream expectedResponseStream = new ByteArrayOutputStream();
         expectedResponseStream.write(HardcodedValues.HTTPVERSION.getS().getBytes());
         expectedResponseStream.write(" ".getBytes());
-        expectedResponseStream.write(ResponseStatus.TWOHUNDRED.getReasonPhrase());
-        expectedResponseStream.write(ResponseStatus.TWOHUNDRED.getStatusBody());
-        expectedResponseStream.write(Message.BLANKLINE.getS().getBytes());
+        expectedResponseStream.write(ResponseStatus.TWOHUNDRED.getPhrase());
+        expectedResponseStream.write("\n\n".getBytes());
         expectedResponseStream.write("file1 contents\n".getBytes());
 
         byte[] expectedResponse = expectedResponseStream.toByteArray();
@@ -35,9 +34,9 @@ public class RequestServicerTest {
         ByteArrayOutputStream expectedResponseStream = new ByteArrayOutputStream();
         expectedResponseStream.write(HardcodedValues.HTTPVERSION.getS().getBytes());
         expectedResponseStream.write(" ".getBytes());
-        expectedResponseStream.write(ResponseStatus.FOUROHFOUR.getReasonPhrase());
+        expectedResponseStream.write(ResponseStatus.FOUROHFOUR.getPhrase());
+        expectedResponseStream.write("\n\n".getBytes());
         expectedResponseStream.write(ResponseStatus.FOUROHFOUR.getStatusBody());
-        expectedResponseStream.write(Message.BLANKLINE.getS().getBytes());
         expectedResponseStream.write("".getBytes());
 
         byte[] expectedResponse = expectedResponseStream.toByteArray();
