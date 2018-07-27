@@ -1,19 +1,16 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Response {
 
     private byte[] httpVersion;
     private ResponseStatus responseStatus;
     private byte[] bodyContent;
+    private Map<byte[], byte[]> headers;
 
     public Response() {
         httpVersion = "HTTP/1.1".getBytes();
-    }
-
-    public void setBodyContent(byte[] bodyContent) {
-        this.bodyContent = bodyContent;
-    }
-
-    public byte[] getBodyContent() {
-        return bodyContent;
+        headers = new HashMap<>();
     }
 
     public byte[] getHttpVersion() {
@@ -24,7 +21,23 @@ public class Response {
         this.responseStatus = responseStatus;
     }
 
-    public ResponseStatus getResponseStatus() {
+    public ResponseStatus getStatus() {
         return responseStatus;
+    }
+
+    public void setBodyContent(byte[] bodyContent) {
+        this.bodyContent = bodyContent;
+    }
+
+    public byte[] getBodyContent() {
+        return bodyContent;
+    }
+
+    public void setContentType(ContentType contentType) {
+        headers.put(HardcodedValues.CONTENTTYPEHEADER.getBytes(), contentType.getHeaderKey());
+    }
+
+    public Map<byte[], byte[]> getHeaders() {
+        return headers;
     }
 }

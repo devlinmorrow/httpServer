@@ -13,25 +13,21 @@ public class RequestParser {
     }
 
     public Request parseRequest(InputStream clientIn) {
-        BufferedReader reader = attachReader(clientIn);
-        requestLine = extractLine(reader).split(" ");
+        requestLine = extractLine(clientIn).split(" ");
         setHTTPVerb();
         setURI();
         return currentRequest;
     }
 
-    private BufferedReader attachReader(InputStream clientIn) {
-        return new BufferedReader(new InputStreamReader(clientIn));
-    }
-
-    private String extractLine(BufferedReader reader) {
-        String requestLine = null;
+    private String extractLine(InputStream clientIn) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(clientIn));
+        String line = null;
         try {
-            requestLine = reader.readLine();
+            line = reader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return requestLine;
+        return line;
     }
 
     private void setHTTPVerb() {

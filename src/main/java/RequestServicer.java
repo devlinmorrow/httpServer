@@ -6,11 +6,13 @@ public class RequestServicer {
     private Response response;
     private Handler handler;
     private ResponseBuilder responseBuilder;
+    private File requestedFile;
 
     public byte[] respondTo(Request request) {
         this.request = request;
         responseBuilder = new ResponseBuilder();
         response = new Response();
+        requestedFile = new File(request.getURI());
         actionRequest();
         return responseBuilder.makeResponse(response);
     }
@@ -19,6 +21,7 @@ public class RequestServicer {
         if (requestCannotBeServiced()) {
             set404();
         } else {
+            setResourceType();
             handler = findHandlerType();
             handler.executeRequest(request, response);
         }
@@ -34,8 +37,20 @@ public class RequestServicer {
     }
 
     private boolean resourceDoesNotExist() {
-        File file = new File(request.getURI());
-        return !file.exists();
+        return !requestedFile.exists();
+    }
+
+    private void setResourceType() {
+        String resourceName = requestedFile.getName();
+        if (resourceName.contains(".jpeg")) {
+            response.setContentType(ContentType.JPEG);
+        } else if (resourceName.contains(".gif")) {
+            response.setContentType(ContentType.GIF);
+        } else if (resourceName.contains(".png")) {
+            response.setContentType(ContentType.PNG);
+        } else {
+            response.setContentType(ContentType.TXT);
+        }
     }
 
     private Handler findHandlerType() {
