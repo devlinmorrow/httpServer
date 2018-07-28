@@ -52,11 +52,11 @@ public class RequestResponder {
     }
 
     private void setContentType(ContentType contentType) {
-        response.getHeaders().put(HardcodedValues.CONTENTTYPEHEADER.getBytes(), contentType.getHeaderKey());
+        response.getHeaders().put(Header.CONTENTTYPE, contentType.getBytesValue());
     }
 
     private void performGETRequest(File resource) {
-        response.setBodyContent(fileContentConverter.getFileContents(resource));
+        response.setBodyContent(fileContentConverter.getContents(resource));
     }
 
     private void setOKResponse() {

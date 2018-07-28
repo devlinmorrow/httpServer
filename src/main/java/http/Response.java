@@ -7,7 +7,7 @@ public class Response {
 
     private byte[] httpVersion;
     private ResponseStatus responseStatus;
-    private Map<byte[], byte[]> headers;
+    private Map<Header, byte[]> headers;
     private byte[] bodyContent;
 
     public Response() {
@@ -38,7 +38,7 @@ public class Response {
     }
 
 
-    public Map<byte[], byte[]> getHeaders() {
+    public Map<Header, byte[]> getHeaders() {
         return headers;
     }
 }

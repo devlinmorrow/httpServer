@@ -9,11 +9,11 @@ import static org.junit.Assert.assertArrayEquals;
 public class FileContentConverterTest {
 
     @Test
-    public void getDummyFile1Contents() {
+    public void getFileContents() {
         byte[] file1Contents = "file1 contents\n".getBytes();
         FileContentConverter fileContentConverter = new FileContentConverter();
 
-        byte[] actualContents = fileContentConverter.getFileContents(new File
+        byte[] actualContents = fileContentConverter.getContents(new File
                 ("src/test/resources/dummyFile1.txt"));
 
         assertArrayEquals(file1Contents, actualContents);

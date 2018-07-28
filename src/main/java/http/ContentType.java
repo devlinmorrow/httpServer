@@ -13,7 +13,7 @@ public enum ContentType {
         this.contentTypeString = contentTypeString;
     }
 
-    public byte[] getHeaderKey() {
+    public byte[] getBytesValue() {
         return contentTypeString.getBytes();
     }
 }

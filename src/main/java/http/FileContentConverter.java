@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class FileContentConverter {
 
-    public byte[] getFileContents(File resource) {
+    public byte[] getContents(File resource) {
         byte[] encoded = new byte[0];
         try {
             encoded = Files.readAllBytes(Paths.get(resource.toURI()));
