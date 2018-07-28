@@ -16,4 +16,8 @@ public enum ContentType {
     public byte[] getBytesValue() {
         return contentTypeString.getBytes();
     }
+
+    public String getValueAsS() {
+        return contentTypeString;
+    }
 }

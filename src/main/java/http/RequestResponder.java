@@ -20,8 +20,6 @@ public class RequestResponder {
             setResourceType(resource.getName());
             if (request.getHTTPVerb() == HTTPVerb.GET) {
                 performGETRequest(resource);
-            } else {
-                return null;
             }
             setOKResponse();
         }
@@ -52,7 +50,7 @@ public class RequestResponder {
     }
 
     private void setContentType(ContentType contentType) {
-        response.getHeaders().put(Header.CONTENTTYPE, contentType.getBytesValue());
+        response.setContentTypeHeader(contentType);
     }
 
     private void performGETRequest(File resource) {

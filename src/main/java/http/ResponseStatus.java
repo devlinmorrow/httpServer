@@ -18,7 +18,15 @@ public enum ResponseStatus {
         return phrase.getBytes();
     }
 
+    public String getPhraseAsS() {
+        return phrase;
+    }
+
     public byte[] getStatusBody() {
         return statusBody.getBytes();
+    }
+
+    public String getStatusBodyAsS() {
+        return statusBody;
     }
 }

@@ -37,8 +37,11 @@ public class Response {
         return bodyContent;
     }
 
-
     public Map<Header, byte[]> getHeaders() {
         return headers;
+    }
+
+    public void setContentTypeHeader(ContentType contentType) {
+        headers.put(Header.CONTENTTYPE, contentType.getBytesValue());
     }
 }

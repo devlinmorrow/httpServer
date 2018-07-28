@@ -15,9 +15,9 @@ public class ResponseWriter {
             responseStream.write(response.getStatus().getPhrase());
             responseStream.write("\n".getBytes());
 
-
             for (Map.Entry<Header, byte[]> entry : response.getHeaders().entrySet()) {
                 responseStream.write(entry.getKey().getLabel());
+                responseStream.write(" ".getBytes());
                 responseStream.write(entry.getValue());
                 responseStream.write("\n".getBytes());
             }
