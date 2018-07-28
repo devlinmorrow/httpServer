@@ -1,3 +1,5 @@
+package http;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -5,18 +7,13 @@ import java.io.InputStreamReader;
 
 public class RequestParser {
 
-    private Request currentRequest;
     private String[] requestLine;
 
-    public RequestParser(Request currentRequest) {
-        this.currentRequest = currentRequest;
-    }
-
-    public Request parseRequest(InputStream clientIn) {
+    public Request parse(InputStream clientIn) {
         requestLine = extractLine(clientIn).split(" ");
-        setHTTPVerb();
-        setURI();
-        return currentRequest;
+        HTTPVerb httpVerb = findHTTPVerb();
+        String URI = findURI();
+        return new Request(httpVerb, URI);
     }
 
     private String extractLine(InputStream clientIn) {
@@ -30,14 +27,16 @@ public class RequestParser {
         return line;
     }
 
-    private void setHTTPVerb() {
+    private HTTPVerb findHTTPVerb() {
         if (requestLine[0].equals("GET")) {
-            currentRequest.setRequestMethod(RequestMethod.GET);
+            return HTTPVerb.GET;
+        } else {
+            return null;
         }
     }
 
-    private void setURI() {
-        currentRequest.setURI(HardcodedValues.RESOURCEPATH.getS() + requestLine[1]);
+    private String findURI() {
+        return HardcodedValues.RESOURCEPATH.getS() + requestLine[1];
     }
 
 }

@@ -1,3 +1,5 @@
+package http;
+
 public enum ContentType {
 
     TXT("text/plain"),

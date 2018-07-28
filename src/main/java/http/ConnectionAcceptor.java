@@ -1,3 +1,5 @@
+package http;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
@@ -20,20 +22,16 @@ public class ConnectionAcceptor {
     public void start() {
             try {
                 while (serverStatus.isRunning()) {
-                    handleRequest(serverSocket.accept());
+                    createConnection(serverSocket.accept());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
     }
 
-    private void handleRequest(Socket clientSocket) throws IOException {
+    private void createConnection(Socket clientConnection) throws IOException {
         stdOut.println(Message.REQUESTMADE.getS());
-        respondToRequest(clientSocket);
-        clientSocket.close();
-    }
-
-    private void respondToRequest(Socket socket) {
-        clientConnectionManager.handleRequest(socket);
+        clientConnectionManager.manage(clientConnection);
+        clientConnection.close();
     }
 }

@@ -1,3 +1,5 @@
+package http;
+
 public class ServerStatus {
 
     public boolean isRunning() {

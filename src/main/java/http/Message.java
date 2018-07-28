@@ -1,3 +1,5 @@
+package http;
+
 public enum Message {
 
     REQUESTMADE("Request made.");

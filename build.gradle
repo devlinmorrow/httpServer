@@ -17,11 +17,11 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'Main'
+        attributes 'Main-Class' : 'http/Main'
     }
 }
 
-mainClassName = 'Main'
+mainClassName = 'http/Main'
 
 run {
     standardInput = System.in

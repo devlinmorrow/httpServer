@@ -1,3 +1,5 @@
+package http;
+
 public class ServerStatusStub extends ServerStatus {
 
     private int numberOfRequests;

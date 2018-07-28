@@ -1,8 +1,9 @@
+package http;
+
 public enum HardcodedValues {
 
     RESOURCEPATH("/Users/devlin/cob_spec/public"),
     HTTPVERSION("HTTP/1.1"),
-    BLANKLINE("\n\n"),
     CONTENTTYPEHEADER("Content-Type: ");
 
     private String s;

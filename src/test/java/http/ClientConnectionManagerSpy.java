@@ -1,3 +1,7 @@
+package http;
+
+import http.ClientConnectionManager;
+
 import java.net.Socket;
 
 public class ClientConnectionManagerSpy extends ClientConnectionManager {
@@ -9,7 +13,7 @@ public class ClientConnectionManagerSpy extends ClientConnectionManager {
     }
 
     @Override
-    public void handleRequest(Socket socket) {
+    public void manage(Socket clientConnection) {
         handleRequestWasCalled = true;
     }
 

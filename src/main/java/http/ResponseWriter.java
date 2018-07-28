@@ -1,10 +1,13 @@
+package http;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
-public class ResponseBuilder {
+public class ResponseWriter {
 
-    public byte[] makeResponse(Response response) {
+    public void write(Response response, OutputStream clientResponseOutput) {
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
         try {
             responseStream.write(response.getHttpVersion());
@@ -24,6 +27,14 @@ public class ResponseBuilder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return responseStream.toByteArray();
+        writeToSocket(responseStream.toByteArray(), clientResponseOutput);
+    }
+
+    private void writeToSocket(byte[] response, OutputStream clientResponseOutput) {
+        try {
+            clientResponseOutput.write(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
