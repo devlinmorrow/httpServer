@@ -17,7 +17,7 @@ public class ClientConnectionManagerSpy extends ClientConnectionManager {
         handleRequestWasCalled = true;
     }
 
-    public boolean wasHandleRequestCalled() {
+    public boolean wasRespondToRequestCalled() {
         return handleRequestWasCalled;
     }
 }

@@ -22,14 +22,14 @@ public class ConnectionAcceptor {
     public void start() {
             try {
                 while (serverStatus.isRunning()) {
-                    createConnection(serverSocket.accept());
+                    respondToRequest(serverSocket.accept());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
     }
 
-    private void createConnection(Socket clientConnection) throws IOException {
+    private void respondToRequest(Socket clientConnection) throws IOException {
         stdOut.println(Message.REQUESTMADE.getS());
         clientConnectionManager.respondTo(clientConnection);
         clientConnection.close();

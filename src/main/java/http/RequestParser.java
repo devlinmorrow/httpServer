@@ -7,13 +7,9 @@ import java.io.InputStreamReader;
 
 public class RequestParser {
 
-    private String[] requestLine;
-
     public Request parse(InputStream clientIn) {
-        requestLine = extractLine(clientIn).split(" ");
-        HTTPVerb httpVerb = findHTTPVerb();
-        String URI = findURI();
-        return new Request(httpVerb, URI);
+        String[] requestLine = extractLine(clientIn).split(" ");
+        return new Request(findHTTPVerb(requestLine), findURI(requestLine));
     }
 
     private String extractLine(InputStream clientIn) {
@@ -27,7 +23,7 @@ public class RequestParser {
         return line;
     }
 
-    private HTTPVerb findHTTPVerb() {
+    private HTTPVerb findHTTPVerb(String[] requestLine) {
         if (requestLine[0].equals("GET")) {
             return HTTPVerb.GET;
         } else {
@@ -35,7 +31,7 @@ public class RequestParser {
         }
     }
 
-    private String findURI() {
+    private String findURI(String[] requestLine) {
         return HardcodedValues.RESOURCEPATH.getS() + requestLine[1];
     }
 

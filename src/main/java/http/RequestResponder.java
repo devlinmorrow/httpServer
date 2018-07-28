@@ -18,7 +18,11 @@ public class RequestResponder {
             setResourceNotFoundResponse();
         } else {
             setResourceType(resource.getName());
-            performGETRequest(resource);
+            if (request.getHTTPVerb() == HTTPVerb.GET) {
+                performGETRequest(resource);
+            } else {
+                return null;
+            }
             setOKResponse();
         }
         return response;

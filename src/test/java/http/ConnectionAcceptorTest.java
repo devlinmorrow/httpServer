@@ -1,9 +1,9 @@
 package http;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.PrintStream;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -11,53 +11,23 @@ import static junit.framework.TestCase.assertTrue;
 public class ConnectionAcceptorTest {
 
     @Test
-    public void printsAcceptedConnection() throws IOException {
-        IOHelper stdIO = new IOHelper("");
+    public void respondToClientConnectionIsCalled() throws IOException {
+        ClientConnectionManagerSpy connectionManagerSpy = new ClientConnectionManagerSpy();
 
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                new ServerSocketSpy(new SocketStubSpy("")), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
-
-        connectionAcceptor.start();
-
-        TestCase.assertEquals(Message.REQUESTMADE.getS() + "\n", stdIO.getStringOutput());
-    }
-
-    @Test
-    public void respondToClientRequestIsCalled() throws IOException {
-        IOHelper stdIO = new IOHelper("");
-
-        ClientConnectionManagerSpy socketHandlerSpy = new ClientConnectionManagerSpy();
-
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
+        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
                 new ServerSocketSpy(new SocketStubSpy("")),
-                socketHandlerSpy, new ServerStatusStub(1));
+                connectionManagerSpy, new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
-        assertTrue(socketHandlerSpy.wasHandleRequestCalled());
-    }
-
-    @Test
-    public void serverSocketAcceptIsCalled() throws IOException {
-        IOHelper stdIO = new IOHelper("");
-
-        ServerSocketSpy serverSocketSpy = new ServerSocketSpy(new SocketStubSpy(""));
-
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(1));
-
-        connectionAcceptor.start();
-
-        assertEquals(1, serverSocketSpy.howManyTimesAcceptCalled());
+        assertTrue(connectionManagerSpy.wasRespondToRequestCalled());
     }
 
     @Test
     public void acceptIsCalledTwiceForTwoRequests() throws IOException {
-        IOHelper stdIO = new IOHelper("");
-
         ServerSocketSpy serverSocketSpy = new ServerSocketSpy(new SocketStubSpy(""));
 
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
+        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
                 serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(2));
 
         connectionAcceptor.start();
@@ -67,15 +37,19 @@ public class ConnectionAcceptorTest {
 
     @Test
     public void clientSocketClosed() throws IOException {
-        IOHelper stdIO = new IOHelper("");
-
         SocketStubSpy socketStubSpy = new SocketStubSpy("");
 
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                new ServerSocketSpy(socketStubSpy), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
+        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
+                new ServerSocketSpy(socketStubSpy), new ClientConnectionManagerSpy(),
+                new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
         assertTrue(socketStubSpy.wasClosedCalled());
+    }
+
+    private PrintStream makeStdOut() {
+        IOHelper stdIO = new IOHelper("");
+        return stdIO.getPrintStream();
     }
 }
