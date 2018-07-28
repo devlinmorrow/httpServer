@@ -7,24 +7,26 @@ import java.net.Socket;
 
 public class SocketStubSpy extends Socket {
 
-    private InputStream in;
-    private OutputStream out;
+    private IOHelper io;
     private boolean closeWasCalled;
 
-    public SocketStubSpy(InputStream in, OutputStream out) {
-        this.in = in;
-        this.out = out;
+    public SocketStubSpy(String input) {
+        io = new IOHelper(input);
         closeWasCalled = false;
     }
 
     @Override
     public OutputStream getOutputStream() {
-        return out;
+        return io.getOut();
     }
 
     @Override
     public InputStream getInputStream() {
-        return in;
+        return io.getIn();
+    }
+
+    public String getOutputS() {
+        return io.getStringOutput();
     }
 
     @Override

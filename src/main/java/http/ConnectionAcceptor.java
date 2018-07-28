@@ -31,7 +31,7 @@ public class ConnectionAcceptor {
 
     private void createConnection(Socket clientConnection) throws IOException {
         stdOut.println(Message.REQUESTMADE.getS());
-        clientConnectionManager.manage(clientConnection);
+        clientConnectionManager.respondTo(clientConnection);
         clientConnection.close();
     }
 }

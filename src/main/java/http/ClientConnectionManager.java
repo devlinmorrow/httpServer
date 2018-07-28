@@ -19,7 +19,7 @@ public class ClientConnectionManager {
         responseWriter = new ResponseWriter();
     }
 
-    public void manage(Socket clientConnection) {
+    public void respondTo(Socket clientConnection) {
         connectInAndOut(clientConnection);
         Request request = requestParser.parse(clientInput);
         Response response = requestResponder.respondTo(request);

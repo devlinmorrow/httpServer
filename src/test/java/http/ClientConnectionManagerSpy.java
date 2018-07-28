@@ -13,7 +13,7 @@ public class ClientConnectionManagerSpy extends ClientConnectionManager {
     }
 
     @Override
-    public void manage(Socket clientConnection) {
+    public void respondTo(Socket clientConnection) {
         handleRequestWasCalled = true;
     }
 

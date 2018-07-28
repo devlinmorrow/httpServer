@@ -15,7 +15,7 @@ public class ConnectionAcceptorTest {
         IOHelper stdIO = new IOHelper("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                makeServerSocketSpy(""), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
+                new ServerSocketSpy(new SocketStubSpy("")), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
@@ -29,7 +29,8 @@ public class ConnectionAcceptorTest {
         ClientConnectionManagerSpy socketHandlerSpy = new ClientConnectionManagerSpy();
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
-                makeServerSocketSpy(""), socketHandlerSpy, new ServerStatusStub(1));
+                new ServerSocketSpy(new SocketStubSpy("")),
+                socketHandlerSpy, new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
@@ -40,7 +41,7 @@ public class ConnectionAcceptorTest {
     public void serverSocketAcceptIsCalled() throws IOException {
         IOHelper stdIO = new IOHelper("");
 
-        ServerSocketSpy serverSocketSpy = makeServerSocketSpy("");
+        ServerSocketSpy serverSocketSpy = new ServerSocketSpy(new SocketStubSpy(""));
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
                 serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(1));
@@ -54,7 +55,7 @@ public class ConnectionAcceptorTest {
     public void acceptIsCalledTwiceForTwoRequests() throws IOException {
         IOHelper stdIO = new IOHelper("");
 
-        ServerSocketSpy serverSocketSpy = makeServerSocketSpy("");
+        ServerSocketSpy serverSocketSpy = new ServerSocketSpy(new SocketStubSpy(""));
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
                 serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(2));
@@ -68,8 +69,7 @@ public class ConnectionAcceptorTest {
     public void clientSocketClosed() throws IOException {
         IOHelper stdIO = new IOHelper("");
 
-        IOHelper socketIO = new IOHelper("");
-        SocketStubSpy socketStubSpy = new SocketStubSpy(socketIO.getIn(), socketIO.getOut());
+        SocketStubSpy socketStubSpy = new SocketStubSpy("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(stdIO.getPrintStream(),
                 new ServerSocketSpy(socketStubSpy), new ClientConnectionManagerSpy(), new ServerStatusStub(1));
@@ -78,11 +78,4 @@ public class ConnectionAcceptorTest {
 
         assertTrue(socketStubSpy.wasClosedCalled());
     }
-
-    private ServerSocketSpy makeServerSocketSpy(String input) throws IOException {
-        IOHelper socketIO = new IOHelper(input);
-        SocketStubSpy socketStubSpy = new SocketStubSpy(socketIO.getIn(), socketIO.getOut());
-        return new ServerSocketSpy(socketStubSpy);
-    }
-
 }
