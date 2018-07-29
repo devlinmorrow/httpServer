@@ -4,7 +4,8 @@ public enum ResponseStatus {
 
     OK("200 OK", ""),
     NOTFOUND("404 Not Found", "404 Error - Requested resource not found on this server."),
-    SERVERERROR("500 Internal Server Error","500 Error - Internal Server Error.");
+    METHODNOTALLOWED("405 Method Not Allowed", "The requested method is not allowed for this resource."),
+    SERVERERROR("500 Internal Server Error", "500 Error - Internal Server Error.");
 
     private String phrase;
     private String statusBody;
@@ -24,9 +25,5 @@ public enum ResponseStatus {
 
     public byte[] getStatusBody() {
         return statusBody.getBytes();
-    }
-
-    public String getStatusBodyAsS() {
-        return statusBody;
     }
 }

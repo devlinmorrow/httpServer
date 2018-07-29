@@ -37,4 +37,18 @@ public class RequestResponderTest {
         assertArrayEquals(ResponseStatus.NOTFOUND.getStatusBody(),
                 mockResponse.getBodyContent());
     }
+
+    @Test
+    public void respondTo_Request_MethodNotAllowed() {
+        String URI = "src/test/resources/dummyFile1.txt";
+        RequestResponder requestResponder = new RequestResponder();
+        Request mockRequest = new Request(HTTPVerb.POST, URI);
+
+        Response mockResponse = requestResponder.respondTo(mockRequest);
+
+        assertEquals(ResponseStatus.METHODNOTALLOWED, mockResponse.getStatus());
+        assertNull(mockResponse.getHeaders().get(Header.CONTENTTYPE));
+        assertArrayEquals(ResponseStatus.METHODNOTALLOWED.getStatusBody(),
+                mockResponse.getBodyContent());
+    }
 }

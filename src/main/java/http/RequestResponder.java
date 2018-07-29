@@ -18,19 +18,26 @@ public class RequestResponder {
         if (doesNotExist(resource)) {
             setResourceNotFoundResponse();
         } else {
-            if (httpVerb == HTTPVerb.HEAD) {
+            if (httpVerb.isNotallowed()) {
+                setMethodNotAllowedResponse();
+            } else if (httpVerb == HTTPVerb.HEAD) {
                 performHEADRequest();
             } else if (httpVerb == HTTPVerb.GET) {
                 setResourceType(resource.getName());
                 performGETRequest(resource);
             }
-            setOKResponse();
         }
         return response;
     }
 
+    private void setMethodNotAllowedResponse() {
+        response.setStatus(ResponseStatus.METHODNOTALLOWED);
+        response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
+    }
+
     private void performHEADRequest() {
         response.clearAllExceptStatusLine();
+        setOKResponse();
     }
 
     private boolean doesNotExist(File requestedFile) {
@@ -62,6 +69,7 @@ public class RequestResponder {
 
     private void performGETRequest(File resource) {
         response.setBodyContent(fileContentConverter.getContents(resource));
+        setOKResponse();
     }
 
     private void setOKResponse() {
