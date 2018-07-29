@@ -14,7 +14,7 @@ public class Response {
         httpVersion = "HTTP/1.1".getBytes();
         this.responseStatus = ResponseStatus.SERVERERROR;
         headers = new HashMap<>();
-        bodyContent = "".getBytes();
+        bodyContent = new byte[0];
     }
 
     public byte[] getHttpVersion() {
@@ -43,5 +43,10 @@ public class Response {
 
     public void setContentTypeHeader(ContentType contentType) {
         headers.put(Header.CONTENTTYPE, contentType.getBytesValue());
+    }
+
+    public void clearAllExceptStatusLine() {
+        headers.clear();
+        bodyContent = new byte[0];
     }
 }

@@ -9,7 +9,7 @@ public class RequestParser {
 
     public Request parse(InputStream clientIn) {
         String[] requestLine = extractLine(clientIn).split(" ");
-        return new Request(findHTTPVerb(requestLine), findURI(requestLine));
+        return new Request(findHTTPVerb(requestLine[0]), findURI(requestLine[1]));
     }
 
     private String extractLine(InputStream clientIn) {
@@ -23,16 +23,12 @@ public class RequestParser {
         return line;
     }
 
-    private HTTPVerb findHTTPVerb(String[] requestLine) {
-        if (requestLine[0].equals("GET")) {
-            return HTTPVerb.GET;
-        } else {
-            return null;
-        }
+    private HTTPVerb findHTTPVerb(String requestedVerb) {
+        return HTTPVerb.find(requestedVerb);
     }
 
-    private String findURI(String[] requestLine) {
-        return HardcodedValues.RESOURCEPATH.getS() + requestLine[1];
+    private String findURI(String requestLine) {
+        return HardcodedValues.RESOURCEPATH.getS() + requestLine;
     }
 
 }

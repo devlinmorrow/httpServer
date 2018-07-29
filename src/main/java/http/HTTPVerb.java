@@ -2,16 +2,22 @@ package http;
 
 public enum HTTPVerb {
 
-    GET("GET");
+    NOTRECOGNISED(""),
+    GET("GET"),
+    HEAD("HEAD");
 
-    private String StringRep;
+    private String label;
 
-    HTTPVerb(String StringRep) {
-        this.StringRep = StringRep;
+    HTTPVerb(String label) {
+        this.label = label;
     }
 
-    public String getStringRep() {
-        return StringRep;
+    public static HTTPVerb find(String requestedHTTPVerb) {
+        for (HTTPVerb httpVerb : HTTPVerb.values()) {
+            if (httpVerb.label.equals(requestedHTTPVerb)) {
+                return httpVerb;
+            }
+        }
+        return NOTRECOGNISED;
     }
-
 }

@@ -14,16 +14,23 @@ public class RequestResponder {
     public Response respondTo(Request request) {
         response = new Response();
         File resource = new File(request.getURI());
+        HTTPVerb httpVerb = request.getHTTPVerb();
         if (doesNotExist(resource)) {
             setResourceNotFoundResponse();
         } else {
-            setResourceType(resource.getName());
-            if (request.getHTTPVerb() == HTTPVerb.GET) {
+            if (httpVerb == HTTPVerb.HEAD) {
+                performHEADRequest();
+            } else if (httpVerb == HTTPVerb.GET) {
+                setResourceType(resource.getName());
                 performGETRequest(resource);
             }
             setOKResponse();
         }
         return response;
+    }
+
+    private void performHEADRequest() {
+        response.clearAllExceptStatusLine();
     }
 
     private boolean doesNotExist(File requestedFile) {
