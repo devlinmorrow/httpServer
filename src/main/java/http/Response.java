@@ -49,4 +49,8 @@ public class Response {
         headers.clear();
         bodyContent = new byte[0];
     }
+
+    public void setAllowHeader(String allowedMethods) {
+        headers.put(Header.ALLOW, allowedMethods.getBytes());
+    }
 }

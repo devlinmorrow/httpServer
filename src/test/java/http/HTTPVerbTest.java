@@ -15,4 +15,9 @@ public class HTTPVerbTest {
     public void findRequestedVerb_NotRecognised() {
         assertEquals(HTTPVerb.NOTRECOGNISED, HTTPVerb.find("get"));
     }
+
+    @Test
+    public void getAllowedMethods() {
+        assertEquals("GET, HEAD, OPTIONS, PUT, DELETE", HTTPVerb.getAllowedMethods());
+    }
 }

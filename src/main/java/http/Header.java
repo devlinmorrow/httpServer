@@ -2,7 +2,8 @@ package http;
 
 public enum Header {
 
-    CONTENTTYPE("Content-Type:");
+    CONTENTTYPE("Content-Type"),
+    ALLOW("Allow");
 
     private String label;
 

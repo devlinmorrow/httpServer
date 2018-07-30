@@ -15,7 +15,9 @@ public class RequestResponder {
         response = new Response();
         File resource = new File(request.getURI());
         HTTPVerb httpVerb = request.getHTTPVerb();
-        if (doesNotExist(resource)) {
+        if (httpVerb == HTTPVerb.OPTIONS) {
+            performOPTIONSRequest(resource.getName());
+        } else if (doesNotExist(resource)) {
             setResourceNotFoundResponse();
         } else {
             if (httpVerb.isNotallowed()) {
@@ -30,6 +32,17 @@ public class RequestResponder {
         return response;
     }
 
+    private void performOPTIONSRequest(String resourceName) {
+        String allowedMethods;
+        if (resourceName.contains("logs")) {
+            allowedMethods = HTTPVerb.getAllowedForLogsMethods();
+        } else {
+            allowedMethods = HTTPVerb.getAllowedMethods();
+        }
+        response.setAllowHeader(allowedMethods);
+        response.setStatus(ResponseStatus.OK);
+    }
+
     private void setMethodNotAllowedResponse() {
         response.setStatus(ResponseStatus.METHODNOTALLOWED);
         response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
@@ -37,7 +50,7 @@ public class RequestResponder {
 
     private void performHEADRequest() {
         response.clearAllExceptStatusLine();
-        setOKResponse();
+        response.setStatus(ResponseStatus.OK);
     }
 
     private boolean doesNotExist(File requestedFile) {
@@ -69,10 +82,6 @@ public class RequestResponder {
 
     private void performGETRequest(File resource) {
         response.setBodyContent(fileContentConverter.getContents(resource));
-        setOKResponse();
-    }
-
-    private void setOKResponse() {
         response.setStatus(ResponseStatus.OK);
     }
 
