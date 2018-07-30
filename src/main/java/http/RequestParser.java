@@ -27,8 +27,8 @@ public class RequestParser {
         return HTTPVerb.find(requestedVerb);
     }
 
-    private String findURI(String requestLine) {
-        return HardcodedValues.RESOURCEPATH.getS() + requestLine;
+    private String findURI(String requestedURI) {
+        return HardcodedValues.RESOURCEPATH.getS() + requestedURI;
     }
 
 }

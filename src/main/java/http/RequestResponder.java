@@ -25,7 +25,6 @@ public class RequestResponder {
             } else if (httpVerb == HTTPVerb.HEAD) {
                 performHEADRequest();
             } else if (httpVerb == HTTPVerb.GET) {
-                setResourceType(resource.getName());
                 performGETRequest(resource);
             }
         }
@@ -70,9 +69,12 @@ public class RequestResponder {
         response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
     }
 
-    private void setResourceType(String resourceName) {
+    private void setResourceType(File resource) {
+        String resourceName = resource.getName();
         ContentType contentType;
-        if (resourceName.contains(".jpeg")) {
+        if (resource.isDirectory() || resourceName.contains(".html")) {
+            contentType = ContentType.HTML;
+        } else if (resourceName.contains(".jpeg")) {
             contentType = ContentType.JPEG;
         } else if (resourceName.contains(".gif")) {
             contentType = ContentType.GIF;
@@ -89,8 +91,26 @@ public class RequestResponder {
     }
 
     private void performGETRequest(File resource) {
-        response.setBodyContent(fileContentConverter.getContents(resource));
+        setResourceType(resource);
+        if (resource.isDirectory()) {
+            response.setBodyContent(getDirectoryContent(resource));
+        } else {
+            response.setBodyContent(fileContentConverter.getContents(resource));
+        }
         response.setStatus(ResponseStatus.OK);
+    }
+
+    private byte[] getDirectoryContent(File resource) {
+        StringBuilder listing = new StringBuilder();
+        listing.append("<html><head></head><body>");
+        File[] files = resource.listFiles();
+        for (File file : files) {
+            String fileName = file.getName();
+            listing.append("<a href='/").append(fileName).append("'>")
+                    .append(fileName).append("</a>").append("<br>");
+        }
+        listing.append("</body></html>");
+        return String.valueOf(listing).getBytes();
     }
 
 }

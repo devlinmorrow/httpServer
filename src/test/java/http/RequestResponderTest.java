@@ -27,18 +27,18 @@ public class RequestResponderTest {
 
     @Test
     public void respondTo_GETRequest_withDirectory() {
-        byte[] dummyDirectory = ("<html><head></head><body>" +
-                "<a href='dummyFile1'>dummyFile1</a>" +
+        byte[] dummyDirectoryContents = ("<html><head></head><body>" +
+                "<a href='/dummyFile2.txt'>dummyFile2.txt</a><br>" +
                 "</body></html>").getBytes();
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/");
+        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory");
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(ContentType.HTML.getBytesValue(),
                 mockResponse.getHeaders().get(Header.CONTENTTYPE));
-        assertArrayEquals(dummyDirectory, mockResponse.getBodyContent());
+        assertArrayEquals(dummyDirectoryContents, mockResponse.getBodyContent());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_HEADRequest_withDirectoryResource() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/");
+        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory");
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -95,7 +95,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_GETRequest_MethodNotAllowedForLogs() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/dummyLogs");
+        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logsDummy");
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
