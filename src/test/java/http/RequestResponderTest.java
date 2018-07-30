@@ -12,7 +12,7 @@ public class RequestResponderTest {
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
 
     @Test
-    public void respondTo_GETRequest_withResource() {
+    public void respondTo_GETRequest_withFileResource() {
         byte[] dummyFileContents = "file1 contents\n".getBytes();
         RequestResponder requestResponder = new RequestResponder();
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI);
@@ -23,6 +23,22 @@ public class RequestResponderTest {
         assertArrayEquals(ContentType.TXT.getBytesValue(),
                 mockResponse.getHeaders().get(Header.CONTENTTYPE));
         assertArrayEquals(dummyFileContents, mockResponse.getBodyContent());
+    }
+
+    @Test
+    public void respondTo_GETRequest_withDirectory() {
+        byte[] dummyDirectory = ("<html><head></head><body>" +
+                "<a href='dummyFile1'>dummyFile1</a>" +
+                "</body></html>").getBytes();
+        RequestResponder requestResponder = new RequestResponder();
+        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/");
+
+        Response mockResponse = requestResponder.respondTo(mockRequest);
+
+        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        assertArrayEquals(ContentType.HTML.getBytesValue(),
+                mockResponse.getHeaders().get(Header.CONTENTTYPE));
+        assertArrayEquals(dummyDirectory, mockResponse.getBodyContent());
     }
 
     @Test
@@ -40,7 +56,7 @@ public class RequestResponderTest {
     }
 
     @Test
-    public void respondTo_HEADRequest_withResource() {
+    public void respondTo_HEADRequest_withFileResource() {
         RequestResponder requestResponder = new RequestResponder();
         Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI);
 
@@ -52,9 +68,34 @@ public class RequestResponderTest {
     }
 
     @Test
-    public void respondTo_Request_MethodNotAllowed() {
+    public void respondTo_HEADRequest_withDirectoryResource() {
+        RequestResponder requestResponder = new RequestResponder();
+        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/");
+
+        Response mockResponse = requestResponder.respondTo(mockRequest);
+
+        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        assertTrue(mockResponse.getHeaders().isEmpty());
+        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
+    }
+
+    @Test
+    public void respondTo_GETRequest_MethodNotAllowedForFile() {
         RequestResponder requestResponder = new RequestResponder();
         Request mockRequest = new Request(HTTPVerb.POST, mockFileURI);
+
+        Response mockResponse = requestResponder.respondTo(mockRequest);
+
+        assertEquals(ResponseStatus.METHODNOTALLOWED, mockResponse.getStatus());
+        assertTrue(mockResponse.getHeaders().isEmpty());
+        assertArrayEquals(ResponseStatus.METHODNOTALLOWED.getStatusBody(),
+                mockResponse.getBodyContent());
+    }
+
+    @Test
+    public void respondTo_GETRequest_MethodNotAllowedForLogs() {
+        RequestResponder requestResponder = new RequestResponder();
+        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/dummyLogs");
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 

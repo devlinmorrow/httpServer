@@ -20,7 +20,7 @@ public class RequestResponder {
         } else if (doesNotExist(resource)) {
             setResourceNotFoundResponse();
         } else {
-            if (httpVerb.isNotallowed()) {
+            if (methodNotAllowed(httpVerb, resource.getName())) {
                 setMethodNotAllowedResponse();
             } else if (httpVerb == HTTPVerb.HEAD) {
                 performHEADRequest();
@@ -32,9 +32,17 @@ public class RequestResponder {
         return response;
     }
 
+    private boolean methodNotAllowed(HTTPVerb httpVerb, String resourceName) {
+        if (resourceName.toLowerCase().contains("logs")) {
+            return httpVerb.isNotAllowedForLogs();
+        } else {
+            return httpVerb.isNotAllowed();
+        }
+    }
+
     private void performOPTIONSRequest(String resourceName) {
         String allowedMethods;
-        if (resourceName.contains("logs")) {
+        if (resourceName.toLowerCase().contains("logs")) {
             allowedMethods = HTTPVerb.getAllowedForLogsMethods();
         } else {
             allowedMethods = HTTPVerb.getAllowedMethods();

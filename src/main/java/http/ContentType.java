@@ -3,6 +3,7 @@ package http;
 public enum ContentType {
 
     TXT("text/plain"),
+    HTML("text/html"),
     GIF("image/gif"),
     JPEG("image/jpeg"),
     PNG("image/png");

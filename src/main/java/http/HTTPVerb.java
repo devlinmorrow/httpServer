@@ -53,7 +53,11 @@ public enum HTTPVerb {
         return new String(allowedMethods);
     }
 
-    public boolean isNotallowed() {
+    public boolean isNotAllowed() {
         return !allowed;
+    }
+
+    public boolean isNotAllowedForLogs() {
+        return !allowedForLogs;
     }
 }
