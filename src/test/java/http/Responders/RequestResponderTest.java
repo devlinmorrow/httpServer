@@ -2,17 +2,13 @@ package http.Responders;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class RequestResponderTest {
 
@@ -46,19 +42,6 @@ public class RequestResponderTest {
     }
 
     @Test
-    public void respondTo_OPTIONSRequest_ForLogFile() {
-        RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.OPTIONS,"src/test/resources/logs", emptyHeaders);
-
-        Response mockResponse = requestResponder.respondTo(mockRequest);
-
-        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-        assertArrayEquals("GET, HEAD, OPTIONS".getBytes(),
-                mockResponse.getHeaders().get(ResponseHeader.ALLOW));
-        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
-    }
-
-    @Test
     public void respondTo_GETRequest_PartialContent() {
 //        RequestResponder requestResponder = new RequestResponder();
 //        HashMap<String, String> rangeHeader = new HashMap<>();
@@ -75,20 +58,5 @@ public class RequestResponderTest {
 //
 //        assertEquals(ResponseStatus.PARTIALCONTENT, mockResponse.getStatus());
 //        assertArrayEquals(expectedContent, mockResponse.getBodyContent());
-    }
-
-    @Test
-    public void respondTo_OPTIONSRequest_ignoreRange() {
-        RequestResponder requestResponder = new RequestResponder();
-        HashMap<String, String> rangeHeader = new HashMap<>();
-        rangeHeader.put("Range","bytes=0-4");
-        Request mockRequest = new Request(HTTPVerb.OPTIONS, mockFileURI, rangeHeader);
-
-        Response mockResponse = requestResponder.respondTo(mockRequest);
-
-        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-        assertArrayEquals(HTTPVerb.getAllowedMethods().getBytes(),
-                mockResponse.getHeaders().get(ResponseHeader.ALLOW));
-        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
     }
 }

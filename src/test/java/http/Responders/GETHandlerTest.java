@@ -2,14 +2,13 @@ package http.Responders;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class GETFileHandlerTest {
+public class GETHandlerTest {
 
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
     private HashMap<String, String> emptyHeaders = new HashMap<>();
@@ -18,9 +17,9 @@ public class GETFileHandlerTest {
     public void respondTo_GETRequest_withFileResource() {
         byte[] dummyFileContents = "file1 contents\n".getBytes();
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, emptyHeaders);
-        GETFileHandler getFileHandler = new GETFileHandler();
+        GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getFileHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handleRequest(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(ContentType.TXT.getBytesValue(),
@@ -31,9 +30,9 @@ public class GETFileHandlerTest {
     @Test
     public void respondTo_GETRequest_withNotFound() {
         Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/no-file.txt", emptyHeaders);
-        GETFileHandler getFileHandler = new GETFileHandler();
+        GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getFileHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handleRequest(mockRequest);
 
         assertEquals(ResponseStatus.NOTFOUND, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());
@@ -43,9 +42,9 @@ public class GETFileHandlerTest {
     @Test
     public void respondTo_HEADRequest_withFileResource() {
         Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI, emptyHeaders);
-        GETFileHandler getFileHandler = new GETFileHandler();
+        GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getFileHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handleRequest(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());
@@ -60,9 +59,9 @@ public class GETFileHandlerTest {
                 "</body></html>").getBytes();
         Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory", emptyHeaders);
 
-        GETFileHandler getFileHandler = new GETFileHandler();
+        GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getFileHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handleRequest(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(ContentType.HTML.getBytesValue(),
@@ -73,9 +72,9 @@ public class GETFileHandlerTest {
     @Test
     public void respondTo_HEADRequest_withDirectoryResource() {
         Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory", emptyHeaders);
-        GETFileHandler getFileHandler = new GETFileHandler();
+        GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getFileHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handleRequest(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());

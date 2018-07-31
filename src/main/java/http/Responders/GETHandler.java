@@ -5,13 +5,13 @@ import http.Requesters.Request;
 
 import java.io.File;
 
-public class GETFileHandler implements Handler {
+public class GETHandler implements Handler {
 
     private ResourceTypeIdentifier resourceTypeIdentifier;
     private FileContentConverter fileContentConverter;
     private Response response;
 
-    public GETFileHandler() {
+    public GETHandler() {
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
     }
