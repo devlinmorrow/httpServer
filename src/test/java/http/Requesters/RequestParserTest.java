@@ -27,7 +27,7 @@ public class RequestParserTest {
     }
 
     @Test
-    public void parse_GETRequest_partialContentHeader() {
+    public void parse_GETRequest_withHeaders() {
         String requestInput = "GET " + mockURI + " HTTP/1.1\nHost: Localhost: 5000\nRange: bytes=0-4\n";
         RequestParser requestParser = new RequestParser();
 
