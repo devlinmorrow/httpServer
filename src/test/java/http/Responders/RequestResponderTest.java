@@ -1,6 +1,11 @@
-package http;
+package http.Responders;
 
+import http.Requesters.HTTPVerb;
+import http.Requesters.Request;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
@@ -10,18 +15,20 @@ import static org.junit.Assert.assertNull;
 public class RequestResponderTest {
 
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
+    private HashMap<String, String> emptyHeaders = new HashMap<>();
 
     @Test
     public void respondTo_GETRequest_withFileResource() {
         byte[] dummyFileContents = "file1 contents\n".getBytes();
+        HashMap<String, String> headers = new HashMap<>();
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI);
+        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-        assertArrayEquals(ContentType.TXT.getBytesValue(),
-                mockResponse.getHeaders().get(Header.CONTENTTYPE));
+        Assert.assertArrayEquals(ContentType.TXT.getBytesValue(),
+                mockResponse.getHeaders().get(ResponseHeader.CONTENTTYPE));
         assertArrayEquals(dummyFileContents, mockResponse.getBodyContent());
     }
 
@@ -31,13 +38,13 @@ public class RequestResponderTest {
                 "<a href='/dummyFile2.txt'>dummyFile2.txt</a><br>" +
                 "</body></html>").getBytes();
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory");
+        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory", emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(ContentType.HTML.getBytesValue(),
-                mockResponse.getHeaders().get(Header.CONTENTTYPE));
+                mockResponse.getHeaders().get(ResponseHeader.CONTENTTYPE));
         assertArrayEquals(dummyDirectoryContents, mockResponse.getBodyContent());
     }
 
@@ -45,7 +52,7 @@ public class RequestResponderTest {
     public void respondTo_GETRequest_ResourceNotFound() {
         String URI = "src/test/resources/no-file-here";
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.GET, URI);
+        Request mockRequest = new Request(HTTPVerb.GET, URI, emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -58,7 +65,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_HEADRequest_withFileResource() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI);
+        Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI, emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -70,7 +77,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_HEADRequest_withDirectoryResource() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory");
+        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory", emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -82,7 +89,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_GETRequest_MethodNotAllowedForFile() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.POST, mockFileURI);
+        Request mockRequest = new Request(HTTPVerb.POST, mockFileURI, emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -95,7 +102,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_GETRequest_MethodNotAllowedForLogs() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logsDummy");
+        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logsDummy", emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -108,26 +115,26 @@ public class RequestResponderTest {
     @Test
     public void respondTo_OPTIONSRequest_NotLogs() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.OPTIONS, mockFileURI);
+        Request mockRequest = new Request(HTTPVerb.OPTIONS, mockFileURI, emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(HTTPVerb.getAllowedMethods().getBytes(),
-                mockResponse.getHeaders().get(Header.ALLOW));
+                mockResponse.getHeaders().get(ResponseHeader.ALLOW));
         assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
     }
 
     @Test
     public void respondTo_OPTIONSRequest_ForLogFile() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.OPTIONS,"src/test/resources/logs" );
+        Request mockRequest = new Request(HTTPVerb.OPTIONS,"src/test/resources/logs", emptyHeaders);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("GET, HEAD, OPTIONS".getBytes(),
-                mockResponse.getHeaders().get(Header.ALLOW));
+                mockResponse.getHeaders().get(ResponseHeader.ALLOW));
         assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
     }
 }

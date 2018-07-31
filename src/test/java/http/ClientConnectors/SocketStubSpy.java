@@ -1,4 +1,6 @@
-package http;
+package http.ClientConnectors;
+
+import http.IOHelper;
 
 import java.io.IOException;
 import java.io.InputStream;

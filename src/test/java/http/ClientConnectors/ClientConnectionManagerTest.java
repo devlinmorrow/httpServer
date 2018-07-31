@@ -1,5 +1,6 @@
-package http;
+package http.ClientConnectors;
 
+import http.Responders.ResponseStatus;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

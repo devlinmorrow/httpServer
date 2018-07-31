@@ -1,4 +1,4 @@
-package http;
+package http.Responders;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class ResponseWriter {
             responseStream.write(response.getStatus().getPhrase());
             responseStream.write("\n".getBytes());
 
-            for (Map.Entry<Header, byte[]> entry : response.getHeaders().entrySet()) {
+            for (Map.Entry<ResponseHeader, byte[]> entry : response.getHeaders().entrySet()) {
                 responseStream.write(entry.getKey().getLabel());
                 responseStream.write(": ".getBytes());
                 responseStream.write(entry.getValue());

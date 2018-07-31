@@ -1,4 +1,4 @@
-package http;
+package http.Responders;
 
 public class ServerStatus {
 

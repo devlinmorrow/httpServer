@@ -1,4 +1,6 @@
-package http;
+package http.ClientConnectors;
+
+import http.Responders.ServerStatus;
 
 public class ServerStatusStub extends ServerStatus {
 

@@ -1,6 +1,6 @@
-package http;
+package http.ClientConnectors;
 
-import http.ClientConnectionManager;
+import http.ClientConnectors.ClientConnectionManager;
 
 import java.net.Socket;
 

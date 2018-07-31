@@ -1,5 +1,7 @@
-package http;
+package http.Responders;
 
+import http.HardcodedValues;
+import http.IOHelper;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;

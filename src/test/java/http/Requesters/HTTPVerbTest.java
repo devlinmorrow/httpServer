@@ -1,5 +1,6 @@
-package http;
+package http.Requesters;
 
+import http.Requesters.HTTPVerb;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

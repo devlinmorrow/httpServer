@@ -1,5 +1,6 @@
-package http;
+package http.Responders;
 
+import http.Responders.FileContentConverter;
 import org.junit.Test;
 
 import java.io.File;

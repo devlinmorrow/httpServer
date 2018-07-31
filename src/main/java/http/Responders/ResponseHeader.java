@@ -1,13 +1,13 @@
-package http;
+package http.Responders;
 
-public enum Header {
+public enum ResponseHeader {
 
     CONTENTTYPE("Content-Type"),
     ALLOW("Allow");
 
     private String label;
 
-    Header(String label) {
+    ResponseHeader(String label) {
         this.label = label;
     }
 

@@ -1,4 +1,8 @@
-package http;
+package http.ClientConnectors;
+
+import http.ClientConnectors.ClientConnectionManager;
+import http.Message;
+import http.Responders.ServerStatus;
 
 import java.io.IOException;
 import java.io.PrintStream;

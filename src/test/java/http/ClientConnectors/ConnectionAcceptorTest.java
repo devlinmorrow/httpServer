@@ -1,5 +1,6 @@
-package http;
+package http.ClientConnectors;
 
+import http.IOHelper;
 import org.junit.Test;
 
 import java.io.IOException;

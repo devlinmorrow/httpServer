@@ -1,4 +1,4 @@
-package http;
+package http.Responders;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ public class Response {
 
     private byte[] httpVersion;
     private ResponseStatus responseStatus;
-    private Map<Header, byte[]> headers;
+    private Map<ResponseHeader, byte[]> headers;
     private byte[] bodyContent;
 
     public Response() {
@@ -37,12 +37,12 @@ public class Response {
         return bodyContent;
     }
 
-    public Map<Header, byte[]> getHeaders() {
+    public Map<ResponseHeader, byte[]> getHeaders() {
         return headers;
     }
 
     public void setContentTypeHeader(ContentType contentType) {
-        headers.put(Header.CONTENTTYPE, contentType.getBytesValue());
+        headers.put(ResponseHeader.CONTENTTYPE, contentType.getBytesValue());
     }
 
     public void clearAllExceptStatusLine() {
@@ -51,6 +51,6 @@ public class Response {
     }
 
     public void setAllowHeader(String allowedMethods) {
-        headers.put(Header.ALLOW, allowedMethods.getBytes());
+        headers.put(ResponseHeader.ALLOW, allowedMethods.getBytes());
     }
 }

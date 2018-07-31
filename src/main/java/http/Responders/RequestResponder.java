@@ -1,4 +1,7 @@
-package http;
+package http.Responders;
+
+import http.Requesters.HTTPVerb;
+import http.Requesters.Request;
 
 import java.io.File;
 

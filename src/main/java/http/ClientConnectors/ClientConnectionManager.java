@@ -1,4 +1,10 @@
-package http;
+package http.ClientConnectors;
+
+import http.Requesters.Request;
+import http.Requesters.RequestParser;
+import http.Responders.RequestResponder;
+import http.Responders.Response;
+import http.Responders.ResponseWriter;
 
 import java.io.IOException;
 import java.io.InputStream;
