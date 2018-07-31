@@ -4,43 +4,47 @@ import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class RequestResponder {
 
     private FileContentConverter fileContentConverter;
     private Response response;
+    private Request request;
 
     public RequestResponder() {
         fileContentConverter = new FileContentConverter();
     }
 
     public Response respondTo(Request request) {
+        this.request = request;
         response = new Response();
         File resource = new File(request.getURI());
         HTTPVerb httpVerb = request.getHTTPVerb();
-        if (httpVerb == HTTPVerb.OPTIONS) {
-            performOPTIONSRequest(resource.getName());
-        } else if (doesNotExist(resource)) {
-            setResourceNotFoundResponse();
+        if (methodNotAllowed(httpVerb, resource.getName())) {
+            setMethodNotAllowedResponse();
+        } else if (httpVerb == HTTPVerb.OPTIONS) {
+            OPTIONSHandler optionsHandler = new OPTIONSHandler();
+            response = optionsHandler.handleRequest(request);
         } else {
-            if (methodNotAllowed(httpVerb, resource.getName())) {
-                setMethodNotAllowedResponse();
-            } else if (httpVerb == HTTPVerb.HEAD) {
-                performHEADRequest();
-            } else if (httpVerb == HTTPVerb.GET) {
-                performGETRequest(resource);
+            if (httpVerb == HTTPVerb.GET || httpVerb == HTTPVerb.HEAD) {
+                    GETFileHandler getFileHandler = new GETFileHandler();
+                    response = getFileHandler.handleRequest(request);
             }
         }
         return response;
     }
-
-    private boolean methodNotAllowed(HTTPVerb httpVerb, String resourceName) {
-        if (resourceName.toLowerCase().contains("logs")) {
-            return httpVerb.isNotAllowedForLogs();
-        } else {
-            return httpVerb.isNotAllowed();
-        }
-    }
+//        } else {
+//            byte[] fullContent = fileContentConverter.getContents(resource);
+//            if (request.getHeaders().get("Range") != null) {
+//                performRangeRequest(fullContent);
+//            } else {
+//                performfullGETRequest(fullContent);
+//            }
+//        }
 
     private void performOPTIONSRequest(String resourceName) {
         String allowedMethods;
@@ -51,6 +55,14 @@ public class RequestResponder {
         }
         response.setAllowHeader(allowedMethods);
         response.setStatus(ResponseStatus.OK);
+    }
+
+    private boolean methodNotAllowed(HTTPVerb httpVerb, String resourceName) {
+        if (resourceName.toLowerCase().contains("logs")) {
+            return httpVerb.isNotAllowedForLogs();
+        } else {
+            return httpVerb.isNotAllowed();
+        }
     }
 
     private void setMethodNotAllowedResponse() {
@@ -72,48 +84,15 @@ public class RequestResponder {
         response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
     }
 
-    private void setResourceType(File resource) {
-        String resourceName = resource.getName();
-        ContentType contentType;
-        if (resource.isDirectory() || resourceName.contains(".html")) {
-            contentType = ContentType.HTML;
-        } else if (resourceName.contains(".jpeg")) {
-            contentType = ContentType.JPEG;
-        } else if (resourceName.contains(".gif")) {
-            contentType = ContentType.GIF;
-        } else if (resourceName.contains(".png")) {
-            contentType = ContentType.PNG;
-        } else {
-            contentType = ContentType.TXT;
-        }
-        setContentType(contentType);
+    private void performRangeRequest(byte[] fullContent) {
+        String rangeSpecification = request.getHeaders().get("Range");
+        String str = rangeSpecification.replaceAll("[^0-9]+", " ");
+        List<String> range = Arrays.asList(str.trim().split(" "));
+        int[] numberRange = range.stream().mapToInt(Integer::parseInt).toArray();
+        byte[] specifiedContent = Arrays.copyOfRange(fullContent, numberRange[0], numberRange[1]);
+        response.setBodyContent(specifiedContent);
+        response.setStatus(ResponseStatus.PARTIALCONTENT);
     }
 
-    private void setContentType(ContentType contentType) {
-        response.setContentTypeHeader(contentType);
-    }
-
-    private void performGETRequest(File resource) {
-        setResourceType(resource);
-        if (resource.isDirectory()) {
-            response.setBodyContent(getDirectoryContent(resource));
-        } else {
-            response.setBodyContent(fileContentConverter.getContents(resource));
-        }
-        response.setStatus(ResponseStatus.OK);
-    }
-
-    private byte[] getDirectoryContent(File resource) {
-        StringBuilder listing = new StringBuilder();
-        listing.append("<html><head></head><body>");
-        File[] files = resource.listFiles();
-        for (File file : files) {
-            String fileName = file.getName();
-            listing.append("<a href='/").append(fileName).append("'>")
-                    .append(fileName).append("</a>").append("<br>");
-        }
-        listing.append("</body></html>");
-        return String.valueOf(listing).getBytes();
-    }
 
 }

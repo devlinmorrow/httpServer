@@ -1,6 +1,5 @@
 package http.Requesters;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
