@@ -9,22 +9,18 @@ public class RequestResponder {
 
     private HandlerFactory handlerFactory;
     private Response response;
-    private Request request;
 
     public RequestResponder() {
         handlerFactory = new HandlerFactory();
     }
 
     public Response respondTo(Request request) {
-        this.request = request;
         response = new Response();
         File resource = new File(request.getURI());
-        HTTPVerb httpVerb = request.getHTTPVerb();
-        System.out.println(httpVerb.getLabel());
-        if (methodNotAllowed(httpVerb, resource.getName())) {
+        if (methodNotAllowed(request.getHTTPVerb(), resource.getName())) {
             setMethodNotAllowedResponse();
         } else {
-            Handler handler = handlerFactory.buildHandler(httpVerb);
+            Handler handler = handlerFactory.buildHandler(request.getHTTPVerb());
             response = handler.handle(request);
         }
         return response;

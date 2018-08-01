@@ -1,39 +1,58 @@
 package http.Requesters;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class RequestReader {
 
-    private Scanner scanner;
+    private BufferedReader reader;
 
     public RequestReader(InputStream clientIn) {
-        scanner = new Scanner(clientIn);
+        reader = new BufferedReader(new InputStreamReader(clientIn));
     }
 
     public String extractRequestLine() {
-        return scanner.nextLine();
+        String line = null;
+        try {
+            line = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return line;
     }
 
     public String extractHeaders() {
         StringBuilder headers = new StringBuilder();
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (line.isEmpty()) {
-                break;
-            } else {
-                headers.append(line).append("\n");
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                if (line.isEmpty()) {
+                    break;
+                } else {
+                    headers.append(line).append("\n");
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return new String(headers);
     }
 
-    public String extractBodyContent() {
-        StringBuilder bodyContent = new StringBuilder();
-        while (scanner.hasNextLine()) {
-            bodyContent.append(scanner.nextLine()).append("\n");
+    public String extractBodyContent(int contentLength) {
+        String body = "";
+        char[] buffer = new char[contentLength];
+        try {
+            reader.read(buffer);
+            for (char s : buffer) {
+                body += s;
+            }
+            } catch (IOException e) {
+            e.printStackTrace();
         }
-        return new String(bodyContent);
+        return body.trim();
     }
 
 }

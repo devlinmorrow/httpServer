@@ -32,4 +32,9 @@ public class HandlerFactoryTest {
     public void buildOPTIONSHandler() {
         assert(handlerFactory.buildHandler(HTTPVerb.OPTIONS) instanceof OPTIONSHandler);
     }
+
+    @Test
+    public void buildPUTHandler() {
+        assert(handlerFactory.buildHandler(HTTPVerb.PUT) instanceof PUTHandler);
+    }
 }

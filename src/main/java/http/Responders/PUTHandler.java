@@ -9,12 +9,8 @@ import java.nio.file.Paths;
 
 public class PUTHandler implements Handler {
 
-    private Response response;
-    private Request request;
-
     public Response handle(Request request) {
-        this.request = request;
-        response = new Response();
+        Response response = new Response();
         String dataToWrite = request.getBodyContent();
         Path file = Paths.get(request.getURI());
         try {

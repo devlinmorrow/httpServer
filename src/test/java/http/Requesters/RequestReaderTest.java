@@ -34,7 +34,7 @@ public class RequestReaderTest {
         requestReader.extractRequestLine();
         requestReader.extractHeaders();
 
-        assertEquals(requestBodyContent + "\n", requestReader.extractBodyContent());
+        assertEquals(requestBodyContent, requestReader.extractBodyContent(requestBodyContent.length()));
     }
 
     private RequestReader setUpRequestReader() {

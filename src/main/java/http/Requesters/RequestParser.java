@@ -28,7 +28,12 @@ public class RequestParser {
         } else {
             headers = new HashMap<>();
         }
-        bodyContent = requestReader.extractBodyContent();
+        if (headers.get("Content-Length") != null) {
+            bodyContent = requestReader.extractBodyContent
+                    (Integer.parseInt(headers.get("Content-Length").trim()));
+        } else {
+            bodyContent = "";
+        }
     }
 
     private HTTPVerb matchHTTPVerb(String requestedVerb) {
@@ -47,7 +52,7 @@ public class RequestParser {
     private HashMap<String, String> mapHeaders(String[] headersCollection) {
         HashMap<String, String> newHeaders = new HashMap<>();
         for (String header : headersCollection) {
-            String[] headerElements = header.split(":",2);
+            String[] headerElements = header.split(":", 2);
             newHeaders.put(headerElements[0].trim(), headerElements[1].trim());
         }
         return newHeaders;
