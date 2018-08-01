@@ -12,14 +12,15 @@ public class GETHandlerTest {
 
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
     private HashMap<String, String> emptyHeaders = new HashMap<>();
+    private String emptyBody = "";
 
     @Test
     public void respondTo_GETRequest_withFileResource() {
         byte[] dummyFileContents = "file1 contents\n".getBytes();
-        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, emptyHeaders, emptyBody);
         GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handle(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(ContentType.TXT.getBytesValue(),
@@ -29,10 +30,10 @@ public class GETHandlerTest {
 
     @Test
     public void respondTo_GETRequest_withNotFound() {
-        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/no-file.txt", emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/no-file.txt", emptyHeaders, emptyBody);
         GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handle(mockRequest);
 
         assertEquals(ResponseStatus.NOTFOUND, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());
@@ -41,10 +42,10 @@ public class GETHandlerTest {
 
     @Test
     public void respondTo_HEADRequest_withFileResource() {
-        Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI, emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI, emptyHeaders, emptyBody);
         GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handle(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());
@@ -57,11 +58,11 @@ public class GETHandlerTest {
         byte[] dummyDirectoryContents = ("<html><head></head><body>" +
                 "<a href='/dummyFile2.txt'>dummyFile2.txt</a><br>" +
                 "</body></html>").getBytes();
-        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory", emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory", emptyHeaders, emptyBody);
 
         GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handle(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(ContentType.HTML.getBytesValue(),
@@ -71,13 +72,33 @@ public class GETHandlerTest {
 
     @Test
     public void respondTo_HEADRequest_withDirectoryResource() {
-        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory", emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory", emptyHeaders, emptyBody);
         GETHandler getHandler = new GETHandler();
 
-        Response mockResponse = getHandler.handleRequest(mockRequest);
+        Response mockResponse = getHandler.handle(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());
         assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
     }
+//
+//    @Test
+//    public void respondTo_GETRequest_PartialContent() {
+//        GETHandler getHandler = new GETHandler();
+//        HashMap<String, String> rangeHeader = new HashMap<>();
+//        rangeHeader.put("Range","bytes=0-4");
+//        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader);
+//
+//        Response mockResponse = getHandler.handle(mockRequest);
+//
+//        FileContentConverter fileContentConverter = new FileContentConverter();
+//        File file = new File(mockFileURI);
+//        byte[] fullContent = fileContentConverter.getContents(file);
+//        byte[] expectedContent = Arrays.copyOfRange(fullContent, 0, 4);
+//
+//        assertEquals(ResponseStatus.PARTIALCONTENT, mockResponse.getStatus());
+//        assertArrayEquals("bytes 0-4/15".getBytes(), mockResponse.getHeaders()
+//                .get(ResponseHeader.CONTENTRANGE));
+//        assertArrayEquals(expectedContent, mockResponse.getBodyContent());
+//    }
 }

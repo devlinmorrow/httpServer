@@ -53,4 +53,9 @@ public class Response {
     public void setAllowHeader(String allowedMethods) {
         headers.put(ResponseHeader.ALLOW, allowedMethods.getBytes());
     }
+
+    public void setContentRangeHeader(Integer first, Integer last, Integer total) {
+        headers.put(ResponseHeader.CONTENTRANGE, ("bytes " + first.toString()
+                + "-" + last.toString() + "/" + total.toString()).getBytes());
+    }
 }

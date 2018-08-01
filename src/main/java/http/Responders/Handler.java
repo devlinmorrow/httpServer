@@ -4,6 +4,6 @@ import http.Requesters.Request;
 
 public interface Handler {
 
-    Response handleRequest(Request request);
+    Response handle(Request request);
 
 }

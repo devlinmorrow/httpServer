@@ -15,7 +15,7 @@ public class RequestParser {
     public Request parse(InputStream clientIn) {
         RequestReader requestReader = new RequestReader(clientIn);
         setRequestElements(requestReader);
-        return new Request(httpVerb, URI, headers);
+        return new Request(httpVerb, URI, headers, bodyContent);
     }
 
     private void setRequestElements(RequestReader requestReader) {
@@ -28,6 +28,7 @@ public class RequestParser {
         } else {
             headers = new HashMap<>();
         }
+        bodyContent = requestReader.extractBodyContent();
     }
 
     private HTTPVerb matchHTTPVerb(String requestedVerb) {

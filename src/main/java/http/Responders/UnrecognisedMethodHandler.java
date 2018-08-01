@@ -2,9 +2,9 @@ package http.Responders;
 
 import http.Requesters.Request;
 
-public class ERRORHandler implements Handler {
+public class UnrecognisedMethodHandler implements Handler {
 
-    public Response handleRequest(Request request) {
+    public Response handle(Request request) {
         Response response = new Response();
         response.setStatus(ResponseStatus.SERVERERROR);
         return response;

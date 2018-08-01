@@ -4,8 +4,6 @@ import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 public class RequestResponder {
 
@@ -27,18 +25,10 @@ public class RequestResponder {
             setMethodNotAllowedResponse();
         } else {
             Handler handler = handlerFactory.buildHandler(httpVerb);
-            response = handler.handleRequest(request);
+            response = handler.handle(request);
         }
         return response;
     }
-//        } else {
-//            byte[] fullContent = fileContentConverter.getContents(resource);
-//            if (request.getHeaders().get("Range") != null) {
-//                performRangeRequest(fullContent);
-//            } else {
-//                performfullGETRequest(fullContent);
-//            }
-//        }
 
     private boolean methodNotAllowed(HTTPVerb httpVerb, String resourceName) {
         if (resourceName.toLowerCase().contains("logs")) {
@@ -53,15 +43,6 @@ public class RequestResponder {
         response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
     }
 
-    private void performRangeRequest(byte[] fullContent) {
-        String rangeSpecification = request.getHeaders().get("Range");
-        String str = rangeSpecification.replaceAll("[^0-9]+", " ");
-        List<String> range = Arrays.asList(str.trim().split(" "));
-        int[] numberRange = range.stream().mapToInt(Integer::parseInt).toArray();
-        byte[] specifiedContent = Arrays.copyOfRange(fullContent, numberRange[0], numberRange[1]);
-        response.setBodyContent(specifiedContent);
-        response.setStatus(ResponseStatus.PARTIALCONTENT);
-    }
 
 
 }

@@ -7,7 +7,7 @@ import java.io.File;
 
 public class OPTIONSHandler implements Handler {
 
-    public Response handleRequest(Request request) {
+    public Response handle(Request request) {
         Response response = new Response();
         File resource = new File(request.getURI());
         String allowedMethods;

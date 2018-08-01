@@ -29,11 +29,11 @@ public class RequestReader {
     }
 
     public String extractBodyContent() {
-        StringBuilder headers = new StringBuilder();
+        StringBuilder bodyContent = new StringBuilder();
         while (scanner.hasNextLine()) {
-            headers.append(scanner.nextLine());
+            bodyContent.append(scanner.nextLine()).append("\n");
         }
-        return new String(headers);
+        return new String(bodyContent);
     }
 
 }

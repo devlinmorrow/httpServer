@@ -3,7 +3,8 @@ package http.Responders;
 public enum ResponseHeader {
 
     CONTENTTYPE("Content-Type"),
-    ALLOW("Allow");
+    ALLOW("Allow"),
+    CONTENTRANGE("Content-Range");
 
     private String label;
 

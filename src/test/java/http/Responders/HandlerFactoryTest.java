@@ -4,8 +4,6 @@ import http.Requesters.HTTPVerb;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class HandlerFactoryTest {
 
     private HandlerFactory handlerFactory;
@@ -17,7 +15,7 @@ public class HandlerFactoryTest {
 
     @Test
     public void defaultIsERRORHandler() {
-        assert(handlerFactory.buildHandler(HTTPVerb.POST) instanceof ERRORHandler);
+        assert(handlerFactory.buildHandler(HTTPVerb.POST) instanceof UnrecognisedMethodHandler);
     }
 
     @Test

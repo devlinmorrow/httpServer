@@ -10,7 +10,7 @@ public class HandlerFactory {
         } else if (httpVerb == HTTPVerb.GET || httpVerb == HTTPVerb.HEAD) {
             return new GETHandler();
         } else {
-            return new ERRORHandler();
+            return new UnrecognisedMethodHandler();
         }
     }
 }

@@ -14,11 +14,12 @@ public class RequestResponderTest {
 
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
     private HashMap<String, String> emptyHeaders = new HashMap<>();
+    private String emptyBody;
 
     @Test
     public void respondTo_GETRequest_MethodNotAllowedForFile() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.POST, mockFileURI, emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.POST, mockFileURI, emptyHeaders, emptyBody);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -31,7 +32,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_GETRequest_MethodNotAllowedForLogs() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logsDummy", emptyHeaders);
+        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logsDummy", emptyHeaders, emptyBody);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 
@@ -41,22 +42,4 @@ public class RequestResponderTest {
                 mockResponse.getBodyContent());
     }
 
-    @Test
-    public void respondTo_GETRequest_PartialContent() {
-//        RequestResponder requestResponder = new RequestResponder();
-//        HashMap<String, String> rangeHeader = new HashMap<>();
-//        rangeHeader.put("Range","bytes=0-4");
-//        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader);
-//
-//        Response mockResponse = requestResponder.respondTo(mockRequest);
-//
-//        FileContentConverter fileContentConverter = new FileContentConverter();
-//        File file = new File(mockFileURI);
-//
-//        byte[] fullContent = fileContentConverter.getContents(file);
-//        byte[] expectedContent = Arrays.copyOfRange(fullContent, 0, 4);
-//
-//        assertEquals(ResponseStatus.PARTIALCONTENT, mockResponse.getStatus());
-//        assertArrayEquals(expectedContent, mockResponse.getBodyContent());
-    }
 }
