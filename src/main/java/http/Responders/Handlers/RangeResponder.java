@@ -47,11 +47,22 @@ public class RangeResponder {
                 break;
             }
         }
-        byte[] specifiedContent = fileContentConverter.getPartialContent(fullContents, first, last);
-        response.setBodyContent(specifiedContent);
-        response.setContentRangeHeader(first, last, fullContents.length);
-        response.setStatus(ResponseStatus.PARTIALCONTENT);
+        if (outOfRange(fullContents, first) || outOfRange(fullContents, last)) {
+            response.setContentRangeHeader(("bytes " + "*/" + Integer.toString(fullContents.length)));
+            response.setBodyContent(ResponseStatus.RANGENOTSATISFIABLE.getStatusBody());
+            response.setStatus(ResponseStatus.RANGENOTSATISFIABLE);
+        } else {
+            byte[] specifiedContent = fileContentConverter.getPartialContent(fullContents, first, last);
+            response.setBodyContent(specifiedContent);
+            response.setContentRangeHeader(("bytes " + Integer.toString(first)
+                + "-" + Integer.toString(last) + "/" + Integer.toString(fullContents.length)));
+            response.setStatus(ResponseStatus.PARTIALCONTENT);
+        }
         return response;
+    }
+
+    private boolean outOfRange(byte[] contents, int number) {
+       return number > contents.length || number < 0;
     }
 
     private String findRangePattern(String rangeCut) {

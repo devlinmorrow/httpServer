@@ -79,4 +79,18 @@ public class RangeResponderTest {
                 .get(ResponseHeader.CONTENTRANGE));
         assertArrayEquals(expectedContent, mockResponse.getBodyContent());
     }
+
+    @Test
+    public void respondTo_GETRequest_PartialContent_RangeNotSatisfiable() {
+        GETHandler getHandler = new GETHandler();
+        HashMap<String, String> rangeHeader = new HashMap<>();
+        rangeHeader.put("Range","bytes=10-20");
+        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
+
+        Response mockResponse = getHandler.handle(mockRequest);
+
+        assertEquals(ResponseStatus.RANGENOTSATISFIABLE, mockResponse.getStatus());
+        assertArrayEquals("bytes */15".getBytes(), mockResponse.getHeaders()
+                .get(ResponseHeader.CONTENTRANGE));
+    }
 }
