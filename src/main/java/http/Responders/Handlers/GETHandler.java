@@ -1,12 +1,12 @@
-package http.Responders;
+package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
+import http.Responders.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class GETHandler implements Handler {
 
@@ -20,6 +20,7 @@ public class GETHandler implements Handler {
         fileContentConverter = new FileContentConverter();
     }
 
+    @Override
     public Response handle(Request request) {
         this.request = request;
         response = new Response();

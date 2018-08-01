@@ -1,10 +1,12 @@
-package http.Responders;
+package http.Responders.Handlers;
 
 import http.Requesters.Request;
+import http.Responders.Handlers.Handler;
+import http.Responders.Response;
+import http.Responders.ResponseStatus;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class PUTHandler implements Handler {
@@ -12,6 +14,7 @@ public class PUTHandler implements Handler {
     private Request request;
     private Response response;
 
+    @Override
     public Response handle(Request request) {
         this.request = request;
         response = new Response();

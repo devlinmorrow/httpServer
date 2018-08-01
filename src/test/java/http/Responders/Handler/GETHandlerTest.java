@@ -1,7 +1,13 @@
-package http.Responders;
+package http.Responders.Handler;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
+import http.Responders.ContentType;
+import http.Responders.Handlers.GETHandler;
+import http.Responders.Response;
+import http.Responders.ResponseHeader;
+import http.Responders.ResponseStatus;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -22,8 +28,8 @@ public class GETHandlerTest {
 
         Response mockResponse = getHandler.handle(mockRequest);
 
-        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-        assertArrayEquals(ContentType.TXT.getBytesValue(),
+        Assert.assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        Assert.assertArrayEquals(ContentType.TXT.getBytesValue(),
                 mockResponse.getHeaders().get(ResponseHeader.CONTENTTYPE));
         assertArrayEquals(dummyFileContents, mockResponse.getBodyContent());
     }

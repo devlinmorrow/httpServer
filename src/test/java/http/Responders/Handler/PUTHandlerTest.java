@@ -1,7 +1,11 @@
-package http.Responders;
+package http.Responders.Handler;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
+import http.Responders.Handlers.PUTHandler;
+import http.Responders.Response;
+import http.Responders.ResponseStatus;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,7 +32,7 @@ public class PUTHandlerTest {
 
         Response mockResponse = putHandler.handle(mockRequest);
 
-        assertEquals(ResponseStatus.CREATED, mockResponse.getStatus());
+        Assert.assertEquals(ResponseStatus.CREATED, mockResponse.getStatus());
         assertTrue(Files.exists(Paths.get(mockFileURI)));
         assertArrayEquals(mockContents.getBytes(), Files.readAllBytes(Paths.get(mockFileURI)));
     }

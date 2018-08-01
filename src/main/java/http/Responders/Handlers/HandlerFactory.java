@@ -1,4 +1,4 @@
-package http.Responders;
+package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 
@@ -11,6 +11,8 @@ public class HandlerFactory {
             return new GETHandler();
         } else if (httpVerb == HTTPVerb.PUT) {
             return new PUTHandler();
+        } else if (httpVerb == HTTPVerb.DELETE) {
+            return new DELETEHandler();
         } else {
             return new UnrecognisedMethodHandler();
         }

@@ -1,6 +1,7 @@
-package http.Responders;
+package http.Responders.Handler;
 
 import http.Requesters.HTTPVerb;
+import http.Responders.Handlers.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,5 +37,10 @@ public class HandlerFactoryTest {
     @Test
     public void buildPUTHandler() {
         assert(handlerFactory.buildHandler(HTTPVerb.PUT) instanceof PUTHandler);
+    }
+
+    @Test
+    public void buildDELETEHandler() {
+        assert(handlerFactory.buildHandler(HTTPVerb.DELETE) instanceof DELETEHandler);
     }
 }
