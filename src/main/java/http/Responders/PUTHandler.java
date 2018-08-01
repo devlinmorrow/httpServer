@@ -9,17 +9,37 @@ import java.nio.file.Paths;
 
 public class PUTHandler implements Handler {
 
+    private Request request;
+    private Response response;
+
     public Response handle(Request request) {
-        Response response = new Response();
-        String dataToWrite = request.getBodyContent();
-        Path file = Paths.get(request.getURI());
-        try {
-            Files.write(file, dataToWrite.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+        this.request = request;
+        response = new Response();
+        if (Files.exists(Paths.get(request.getURI()))) {
+            performUpdateResponse();
+        } else {
+            performCreateResponse();
         }
-        response.setStatus(ResponseStatus.CREATED);
         return response;
     }
 
+    private void performCreateResponse() {
+        writeFile();
+        response.setStatus(ResponseStatus.CREATED);
+    }
+
+    private void performUpdateResponse() {
+        writeFile();
+        response.setStatus(ResponseStatus.OK);
+    }
+
+
+    private void writeFile() {
+        try {
+            Files.write(Paths.get(request.getURI()),
+                    request.getBodyContent().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
