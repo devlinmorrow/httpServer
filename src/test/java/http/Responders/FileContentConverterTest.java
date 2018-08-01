@@ -1,6 +1,5 @@
 package http.Responders;
 
-import http.Responders.FileContentConverter;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,7 +13,7 @@ public class FileContentConverterTest {
         byte[] file1Contents = "file1 contents\n".getBytes();
         FileContentConverter fileContentConverter = new FileContentConverter();
 
-        byte[] actualContents = fileContentConverter.getContents(new File
+        byte[] actualContents = fileContentConverter.getFullContents(new File
                 ("src/test/resources/dummyFile1.txt"));
 
         assertArrayEquals(file1Contents, actualContents);

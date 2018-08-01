@@ -14,10 +14,12 @@ public class GETHandler implements Handler {
     private FileContentConverter fileContentConverter;
     private Response response;
     private Request request;
+    private RangeResponder rangeResponder;
 
     public GETHandler() {
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
+        rangeResponder = new RangeResponder(fileContentConverter);
     }
 
     @Override
@@ -70,30 +72,12 @@ public class GETHandler implements Handler {
 
     private void GETFile(File resource) {
         response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
-        byte[] fullContents = fileContentConverter.getContents(resource);
-//        if (request.getHeaders().containsKey("Range")) {
-//            performRangeRequest(fullContents);
-//        } else {
-        performNormalGETRequest(fullContents);
-//        }
-    }
-
-    private void performRangeRequest(byte[] fullContents) {
-        String rangeSpecification = request.getHeaders().get("Range");
-        String str = rangeSpecification.replaceAll("[^0-9]+", " ");
-        String[] rangeNumbers = str.trim().split(" ");
-        ArrayList<Integer> range = new ArrayList<>();
-        for (String number : rangeNumbers) {
-            range.add(Integer.parseInt(number));
+        byte[] fullContents = fileContentConverter.getFullContents(resource);
+        if (request.getHeaders().containsKey("Range")) {
+            response = rangeResponder.performRangeRequest(request, fullContents);
+        } else {
+            response.setBodyContent(fullContents);
+            response.setStatus(ResponseStatus.OK);
         }
-        byte[] specifiedContent = Arrays.copyOfRange(fullContents, range.get(0), range.get(1));
-        response.setBodyContent(specifiedContent);
-        response.setContentRangeHeader(range.get(0), range.get(1), fullContents.length);
-        response.setStatus(ResponseStatus.PARTIALCONTENT);
-    }
-
-    private void performNormalGETRequest(byte[] fullContents) {
-        response.setBodyContent(fullContents);
-        response.setStatus(ResponseStatus.OK);
     }
 }

@@ -13,16 +13,16 @@ public class ResponseWriter {
             responseStream.write(response.getHttpVersion());
             responseStream.write(" ".getBytes());
             responseStream.write(response.getStatus().getPhrase());
-            responseStream.write("\n".getBytes());
+            responseStream.write("\r\n".getBytes());
 
             for (Map.Entry<ResponseHeader, byte[]> entry : response.getHeaders().entrySet()) {
                 responseStream.write(entry.getKey().getLabel());
                 responseStream.write(": ".getBytes());
                 responseStream.write(entry.getValue());
-                responseStream.write("\n".getBytes());
+                responseStream.write("\r\n".getBytes());
             }
 
-            responseStream.write("\n".getBytes());
+            responseStream.write("\r\n".getBytes());
             responseStream.write(response.getBodyContent());
         } catch (IOException e) {
             e.printStackTrace();

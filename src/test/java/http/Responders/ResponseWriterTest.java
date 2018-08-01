@@ -37,7 +37,7 @@ public class ResponseWriterTest {
 
     private String makeExpectedR(ResponseStatus status, ContentType contentType, String bodyContents) {
         return (HardcodedValues.HTTPVERSION.getS() + " " + status.getPhraseAsS()
-                + "\n" + HardcodedValues.CONTENTTYPEHEADER.getS()
-                + contentType.getValueAsS() + "\n\n" + bodyContents);
+                + "\r\n" + HardcodedValues.CONTENTTYPEHEADER.getS()
+                + contentType.getValueAsS() + "\r\n\r\n" + bodyContents);
     }
 }

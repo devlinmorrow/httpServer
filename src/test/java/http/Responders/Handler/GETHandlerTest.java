@@ -2,14 +2,13 @@ package http.Responders.Handler;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.ContentType;
+import http.Responders.*;
 import http.Responders.Handlers.GETHandler;
-import http.Responders.Response;
-import http.Responders.ResponseHeader;
-import http.Responders.ResponseStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -87,24 +86,4 @@ public class GETHandlerTest {
         assertTrue(mockResponse.getHeaders().isEmpty());
         assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
     }
-//
-//    @Test
-//    public void respondTo_GETRequest_PartialContent() {
-//        GETHandler getHandler = new GETHandler();
-//        HashMap<String, String> rangeHeader = new HashMap<>();
-//        rangeHeader.put("Range","bytes=0-4");
-//        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader);
-//
-//        Response mockResponse = getHandler.handle(mockRequest);
-//
-//        FileContentConverter fileContentConverter = new FileContentConverter();
-//        File file = new File(mockFileURI);
-//        byte[] fullContent = fileContentConverter.getContents(file);
-//        byte[] expectedContent = Arrays.copyOfRange(fullContent, 0, 4);
-//
-//        assertEquals(ResponseStatus.PARTIALCONTENT, mockResponse.getStatus());
-//        assertArrayEquals("bytes 0-4/15".getBytes(), mockResponse.getHeaders()
-//                .get(ResponseHeader.CONTENTRANGE));
-//        assertArrayEquals(expectedContent, mockResponse.getBodyContent());
-//    }
 }

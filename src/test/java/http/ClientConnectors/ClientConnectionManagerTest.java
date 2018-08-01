@@ -16,7 +16,7 @@ public class ClientConnectionManagerTest {
         clientConnectionManager.respondTo(mockRequest);
 
         String expectedResponse = "HTTP/1.1 " + new String(ResponseStatus.NOTFOUND.getPhrase())
-                + "\n\n" + new String(ResponseStatus.NOTFOUND.getStatusBody());
+                + "\r\n\r\n" + new String(ResponseStatus.NOTFOUND.getStatusBody());
 
         assertEquals(expectedResponse, mockRequest.getOutputS());
     }
