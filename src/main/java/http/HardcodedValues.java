@@ -2,9 +2,11 @@ package http;
 
 public enum HardcodedValues {
 
-    RESOURCEPATH("/Users/devlin/cob_spec/public"),
+    AUTHENTICATEMESSAGE("Basic realm=\"Access the logs file.\""),
+    AUTHORIZATIONHEADER("Authorization"),
+    CONTENTTYPEHEADER("Content-Type: "),
     HTTPVERSION("HTTP/1.1"),
-    CONTENTTYPEHEADER("Content-Type: ");
+    RESOURCEPATH("/Users/devlin/cob_spec/public");
 
     private String s;
 

@@ -5,6 +5,7 @@ public enum ResponseStatus {
     OK("200 OK", ""),
     CREATED("201 Created",""),
     PARTIALCONTENT("206 Partial Content", ""),
+    UNAUTHORISED("401 Unauthorised", "You have not provided the credentials required for this resource."),
     RANGENOTSATISFIABLE("416 Range Not Satisfiable", ""),
     NOTFOUND("404 Not Found", "404 Error - Requested resource not found on this server."),
     METHODNOTALLOWED("405 Method Not Allowed", "The requested method is not allowed for this resource."),

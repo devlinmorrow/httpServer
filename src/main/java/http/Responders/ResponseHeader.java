@@ -2,9 +2,10 @@ package http.Responders;
 
 public enum ResponseHeader {
 
-    CONTENTTYPE("Content-Type"),
     ALLOW("Allow"),
-    CONTENTRANGE("Content-Range");
+    AUTHENTICATE("WWW-Authenticate"),
+    CONTENTRANGE("Content-Range"),
+    CONTENTTYPE("Content-Type");
 
     private String label;
 

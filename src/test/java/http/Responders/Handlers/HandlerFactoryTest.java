@@ -1,4 +1,4 @@
-package http.Responders.Handler;
+package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Responders.Handlers.*;

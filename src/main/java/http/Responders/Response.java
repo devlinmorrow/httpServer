@@ -57,4 +57,8 @@ public class Response {
     public void setContentRangeHeader(String contentRangeValue) {
         headers.put(ResponseHeader.CONTENTRANGE, contentRangeValue.getBytes());
     }
+
+    public void setUnauthorisedHeader(String authenticateMessage) {
+        headers.put(ResponseHeader.AUTHENTICATE, authenticateMessage.getBytes());
+    }
 }

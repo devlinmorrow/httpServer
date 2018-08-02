@@ -20,10 +20,6 @@ public enum HTTPVerb {
         this.allowedForLogs = allowedForLogs;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
     public static HTTPVerb find(String requestedHTTPVerb) {
         for (HTTPVerb verb : HTTPVerb.values()) {
             if (verb.label.equals(requestedHTTPVerb)) {

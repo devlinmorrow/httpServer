@@ -1,14 +1,14 @@
-package http.Responders.Handler;
+package http.Responders.Handlers;
 
+import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.*;
-import http.Responders.Handlers.GETHandler;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 public class GETHandlerTest {
 
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
+    private String mockLogsURI = "src/test/resources/logs";
     private HashMap<String, String> emptyHeaders = new HashMap<>();
     private String emptyBody = "";
 
@@ -85,5 +86,56 @@ public class GETHandlerTest {
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertTrue(mockResponse.getHeaders().isEmpty());
         assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
+    }
+
+    @Test
+    public void respondTo_HEADRequest_forLogs_withMethodNotAllowed() {
+        Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/logs", emptyHeaders, emptyBody);
+        GETHandler getHandler = new GETHandler();
+
+        Response mockResponse = getHandler.handle(mockRequest);
+
+        assertEquals(ResponseStatus.METHODNOTALLOWED, mockResponse.getStatus());
+    }
+
+    @Test
+    public void respondTo_HEADLogs_withMethodNotAllowed() {
+        Request mockRequest = new Request(HTTPVerb.HEAD, mockLogsURI, emptyHeaders, emptyBody);
+
+        GETHandler getHandler = new GETHandler();
+
+        Response mockResponse = getHandler.handle(mockRequest);
+
+        assertEquals(ResponseStatus.METHODNOTALLOWED, mockResponse.getStatus());
+    }
+
+    @Test
+    public void respondTo_GETLogs_withUnauthorised() {
+        Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, emptyHeaders, emptyBody);
+
+        GETHandler getHandler = new GETHandler();
+
+        Response mockResponse = getHandler.handle(mockRequest);
+
+        assertEquals(ResponseStatus.UNAUTHORISED, mockResponse.getStatus());
+        assertNotNull(mockResponse.getHeaders().get(ResponseHeader.AUTHENTICATE));
+        assertArrayEquals(ResponseStatus.UNAUTHORISED.getStatusBody(), mockResponse.getBodyContent());
+    }
+
+    @Test
+    public void respondTo_GETLogs_whenAuthorised() {
+        HashMap<String, String> authHeader = new HashMap<>();
+        byte[] auth = Base64.getEncoder().encode("admin hunter2".getBytes());
+        String authorizationValue = "Basic " + new String(auth);
+        authHeader.put(HardcodedValues.AUTHORIZATIONHEADER.getS(), authorizationValue);
+        Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, authHeader, emptyBody);
+        FileContentConverter fileContentConverter = new FileContentConverter();
+        byte[] logsData = fileContentConverter.getFullContents(new File(mockLogsURI));
+        GETHandler getHandler = new GETHandler();
+
+        Response mockResponse = getHandler.handle(mockRequest);
+
+        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        assertArrayEquals(logsData, mockResponse.getBodyContent());
     }
 }

@@ -32,7 +32,7 @@ public class RequestResponderTest {
     @Test
     public void respondTo_GETRequest_MethodNotAllowedForLogs() {
         RequestResponder requestResponder = new RequestResponder();
-        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logsDummy", emptyHeaders, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.DELETE, "src/test/resources/logs", emptyHeaders, emptyBody);
 
         Response mockResponse = requestResponder.respondTo(mockRequest);
 

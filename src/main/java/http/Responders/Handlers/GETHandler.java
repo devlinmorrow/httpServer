@@ -1,12 +1,11 @@
 package http.Responders.Handlers;
 
+import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GETHandler implements Handler {
 
@@ -15,11 +14,13 @@ public class GETHandler implements Handler {
     private Response response;
     private Request request;
     private RangeResponder rangeResponder;
+    private Authenticator authenticator;
 
     public GETHandler() {
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
+        authenticator = new Authenticator();
     }
 
     @Override
@@ -27,16 +28,51 @@ public class GETHandler implements Handler {
         this.request = request;
         response = new Response();
         File resource = new File(request.getURI());
-        if (!resource.exists()) {
-            setResourceNotFoundResponse();
+        if (isLogs()) {
+            String logsAction = authenticator.handleLogs(request, response);
+            routeLogs(logsAction, resource);
         } else {
-            performGETResponse(resource);
+            if (!resource.exists()) {
+                setResourceNotFoundResponse();
+            } else {
+                performGETResponse(resource);
+            }
         }
-        if (request.getHTTPVerb() == HTTPVerb.HEAD) {
+        if (headRequest()) {
             response.clearAllExceptStatusLine();
         }
         return response;
     }
+
+    private void routeLogs(String logsAction, File resource) {
+        if (logsAction.equals("NotAllowed")) {
+            setMethodNotAllowed();
+        } else if (logsAction.equals("Unauthorised")) {
+            setUnauthorised();
+        } else {
+            performGETResponse(resource);
+        }
+    }
+
+    private void setUnauthorised() {
+        response.setUnauthorisedHeader(HardcodedValues.AUTHENTICATEMESSAGE.getS());
+        response.setBodyContent(ResponseStatus.UNAUTHORISED.getStatusBody());
+        response.setStatus(ResponseStatus.UNAUTHORISED);
+    }
+
+    private void setMethodNotAllowed() {
+        response.setStatus(ResponseStatus.METHODNOTALLOWED);
+        response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
+    }
+
+    private boolean isLogs() {
+        return request.getURI().toLowerCase().contains("logs");
+    }
+
+    private boolean headRequest() {
+        return request.getHTTPVerb() == HTTPVerb.HEAD;
+    }
+
 
     private void setResourceNotFoundResponse() {
         response.setStatus(ResponseStatus.NOTFOUND);
