@@ -1,7 +1,5 @@
 package http.ClientConnectors;
 
-import http.ClientConnectors.ClientConnectionManager;
-import http.HardcodedValues;
 import http.Message;
 import http.Responders.ServerStatus;
 
@@ -9,9 +7,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ConnectionAcceptor {
 
