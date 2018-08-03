@@ -125,7 +125,7 @@ public class GETHandlerTest {
     @Test
     public void respondTo_GETLogs_whenAuthorised() {
         HashMap<String, String> authHeader = new HashMap<>();
-        byte[] auth = Base64.getEncoder().encode("admin hunter2".getBytes());
+        byte[] auth = Base64.getEncoder().encode("admin:hunter2".getBytes());
         String authorizationValue = "Basic " + new String(auth);
         authHeader.put(HardcodedValues.AUTHORIZATIONHEADER.getS(), authorizationValue);
         Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, authHeader, emptyBody);

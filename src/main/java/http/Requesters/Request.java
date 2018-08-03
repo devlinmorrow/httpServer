@@ -1,10 +1,12 @@
 package http.Requesters;
 
+import http.HardcodedValues;
+
 import java.util.Map;
 
 public class Request {
 
-    private http.Requesters.HTTPVerb HTTPVerb;
+    private HTTPVerb HTTPVerb;
     private String URI;
     private Map<String, String> headers;
     private String bodyContent;
@@ -30,5 +32,10 @@ public class Request {
 
     public String getBodyContent() {
         return bodyContent;
+    }
+
+    public String getRequestLine() {
+        String lastPartURI = URI.replace(HardcodedValues.RESOURCEPATH.getS(), "");
+        return HTTPVerb + " " + lastPartURI + " " + HardcodedValues.HTTPVERSION.getS();
     }
 }

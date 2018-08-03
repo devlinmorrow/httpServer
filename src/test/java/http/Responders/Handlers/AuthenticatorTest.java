@@ -6,6 +6,10 @@ import http.Requesters.Request;
 import http.Responders.Response;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -34,7 +38,7 @@ public class AuthenticatorTest {
     }
 
     @Test
-    public void respondTo_GETLogs_whenAuthorised() {
+    public void respondTo_GETLogs_whenAuthorised() throws IOException {
         HashMap<String, String> authHeader = new HashMap<>();
         byte[] auth = Base64.getEncoder().encode("admin:hunter2".getBytes());
         String authorizationValue = "Basic " + new String(auth);
