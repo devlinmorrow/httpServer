@@ -2,13 +2,13 @@ package http.Requesters;
 
 public enum HTTPVerb {
 
-    NOTRECOGNISED("", false, false),
+    DELETE("DELETE", true, false),
     GET("GET", true, true),
     HEAD("HEAD", true, true),
+    NOTRECOGNISED("", false, false),
     OPTIONS("OPTIONS", true, true),
-    PUT("PUT", true, false),
-    DELETE("DELETE", true, false),
-    POST("POST", false, false);
+    POST("POST", false, false),
+    PUT("PUT", true, false);
 
     private String label;
     private boolean allowed;

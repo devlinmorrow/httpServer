@@ -1,9 +1,12 @@
 package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
+import http.Requesters.Request;
 import http.Responders.Handlers.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 public class HandlerFactoryTest {
 
@@ -16,31 +19,37 @@ public class HandlerFactoryTest {
 
     @Test
     public void defaultIsERRORHandler() {
-        assert(handlerFactory.buildHandler(HTTPVerb.POST) instanceof UnrecognisedMethodHandler);
+        Request request = new Request(HTTPVerb.POST, "/", new HashMap<>(), "");
+        assert(handlerFactory.buildHandler(request) instanceof UnrecognisedMethodHandler);
     }
 
     @Test
     public void buildGETHandler_withGET() {
-        assert(handlerFactory.buildHandler(HTTPVerb.GET) instanceof GETHandler);
+        Request request = new Request(HTTPVerb.GET, "/", new HashMap<>(), "");
+        assert(handlerFactory.buildHandler(request) instanceof GETHandler);
     }
 
     @Test
     public void buildGETHandler_withHEAD() {
-        assert(handlerFactory.buildHandler(HTTPVerb.HEAD) instanceof GETHandler);
+        Request request = new Request(HTTPVerb.HEAD, "/", new HashMap<>(), "");
+        assert(handlerFactory.buildHandler(request) instanceof GETHandler);
     }
 
     @Test
     public void buildOPTIONSHandler() {
-        assert(handlerFactory.buildHandler(HTTPVerb.OPTIONS) instanceof OPTIONSHandler);
+        Request request = new Request(HTTPVerb.OPTIONS, "/", new HashMap<>(), "");
+        assert(handlerFactory.buildHandler(request) instanceof OPTIONSHandler);
     }
 
     @Test
     public void buildPUTHandler() {
-        assert(handlerFactory.buildHandler(HTTPVerb.PUT) instanceof PUTHandler);
+        Request request = new Request(HTTPVerb.PUT, "/", new HashMap<>(), "");
+        assert(handlerFactory.buildHandler(request) instanceof PUTHandler);
     }
 
     @Test
     public void buildDELETEHandler() {
-        assert(handlerFactory.buildHandler(HTTPVerb.DELETE) instanceof DELETEHandler);
+        Request request = new Request(HTTPVerb.DELETE, "/", new HashMap<>(), "");
+        assert(handlerFactory.buildHandler(request) instanceof DELETEHandler);
     }
 }

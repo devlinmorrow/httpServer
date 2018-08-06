@@ -5,7 +5,8 @@ public enum ResponseHeader {
     ALLOW("Allow"),
     AUTHENTICATE("WWW-Authenticate"),
     CONTENTRANGE("Content-Range"),
-    CONTENTTYPE("Content-Type");
+    CONTENTTYPE("Content-Type"),
+    LOCATION("Location");
 
     private String label;
 

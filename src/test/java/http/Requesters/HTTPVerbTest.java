@@ -19,6 +19,6 @@ public class HTTPVerbTest {
 
     @Test
     public void getAllowedMethods() {
-        assertEquals("GET, HEAD, OPTIONS, PUT, DELETE", HTTPVerb.getAllowedMethods());
+        assertEquals("DELETE, GET, HEAD, OPTIONS, PUT", HTTPVerb.getAllowedMethods());
     }
 }

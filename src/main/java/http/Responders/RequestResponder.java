@@ -21,11 +21,23 @@ public class RequestResponder {
         File resource = new File(request.getURI());
         if (methodNotAllowed(request.getHTTPVerb(), resource.getName())) {
             setMethodNotAllowedResponse();
+        } else if (resourceTempMoved(resource.getName())) {
+            setFoundResponse();
         } else {
-            Handler handler = handlerFactory.buildHandler(request.getHTTPVerb());
+            Handler handler = handlerFactory.buildHandler(request);
             response = handler.handle(request);
         }
         return response;
+    }
+
+    private void setFoundResponse() {
+        response.setLocationHeader("/");
+        response.setBodyContent(ResponseStatus.FOUND.getStatusBody());
+        response.setStatus(ResponseStatus.FOUND);
+    }
+
+    private boolean resourceTempMoved(String URI) {
+        return (URI.equals("redirect"));
     }
 
     private boolean methodNotAllowed(HTTPVerb httpVerb, String resourceName) {

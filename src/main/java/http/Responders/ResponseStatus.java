@@ -2,14 +2,16 @@ package http.Responders;
 
 public enum ResponseStatus {
 
-    OK("200 OK", ""),
     CREATED("201 Created",""),
-    PARTIALCONTENT("206 Partial Content", ""),
-    UNAUTHORISED("401 Unauthorised", "You have not provided the credentials required for this resource."),
-    RANGENOTSATISFIABLE("416 Range Not Satisfiable", ""),
-    NOTFOUND("404 Not Found", "404 Error - Requested resource not found on this server."),
+    FOUND("302 Found", "Redirecting..."),
+    IMATEAPOT("418 I'm a teapot","I'm a teapot... you can't get coffee from me!"),
     METHODNOTALLOWED("405 Method Not Allowed", "The requested method is not allowed for this resource."),
-    SERVERERROR("500 Internal Server Error", "500 Error - Internal Server Error.");
+    NOTFOUND("404 Not Found", "404 Error - Requested resource not found on this server."),
+    OK("200 OK", ""),
+    PARTIALCONTENT("206 Partial Content", ""),
+    RANGENOTSATISFIABLE("416 Range Not Satisfiable", ""),
+    SERVERERROR("500 Internal Server Error", "500 Error - Internal Server Error."),
+    UNAUTHORISED("401 Unauthorised", "You have not provided the credentials required for this resource.");
 
     private String phrase;
     private String statusBody;

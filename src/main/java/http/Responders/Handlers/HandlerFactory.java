@@ -1,14 +1,20 @@
 package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
+import http.Requesters.Request;
 
 public class HandlerFactory {
 
-    public Handler buildHandler(HTTPVerb httpVerb) {
+    public Handler buildHandler(Request request) {
+        HTTPVerb httpVerb = request.getHTTPVerb();
         if (httpVerb == HTTPVerb.OPTIONS) {
             return new OPTIONSHandler();
         } else if (httpVerb == HTTPVerb.GET || httpVerb == HTTPVerb.HEAD) {
-            return new GETHandler();
+            if (request.getURI().contains("?")) {
+                return new PARAMETERHandler();
+            } else {
+                return new GETHandler();
+            }
         } else if (httpVerb == HTTPVerb.PUT) {
             return new PUTHandler();
         } else if (httpVerb == HTTPVerb.DELETE) {

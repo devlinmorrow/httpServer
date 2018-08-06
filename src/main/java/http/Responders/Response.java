@@ -61,4 +61,8 @@ public class Response {
     public void setUnauthorisedHeader(String authenticateMessage) {
         headers.put(ResponseHeader.AUTHENTICATE, authenticateMessage.getBytes());
     }
+
+    public void setLocationHeader(String redirectURI) {
+        headers.put(ResponseHeader.LOCATION, redirectURI.getBytes());
+    }
 }

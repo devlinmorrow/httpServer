@@ -31,6 +31,8 @@ public class GETHandler implements Handler {
         if (isLogs()) {
             String logsAction = authenticator.handleLogs(request, response);
             routeLogs(logsAction, resource);
+        } else if (isBeverage(resource.getName())) {
+            setTeapotResponse(resource.getName());
         } else {
             if (!resource.exists()) {
                 setResourceNotFoundResponse();
@@ -42,6 +44,20 @@ public class GETHandler implements Handler {
             response.clearAllExceptStatusLine();
         }
         return response;
+    }
+
+    private void setTeapotResponse(String URI) {
+        if (URI.equals("coffee")) {
+            response.setStatus(ResponseStatus.IMATEAPOT);
+            response.setBodyContent(ResponseStatus.IMATEAPOT.getStatusBody());
+        } else {
+            response.setStatus(ResponseStatus.OK);
+            response.setBodyContent("Here's some delicious tea!".getBytes());
+        }
+    }
+
+    private boolean isBeverage(String URI) {
+        return URI.equals("coffee") || URI.equals("tea");
     }
 
     private void routeLogs(String logsAction, File resource) {
