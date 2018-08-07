@@ -22,7 +22,8 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent() {
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=0-4");
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
@@ -42,7 +43,8 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent_onlyStartIndex() {
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=11-");
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
@@ -62,7 +64,8 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent_onlyEndNumber() {
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=-6");
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
@@ -82,7 +85,8 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent_RangeNotSatisfiable() {
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=10-20");
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);

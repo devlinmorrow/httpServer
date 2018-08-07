@@ -19,7 +19,7 @@ public class HandlerFactoryTest {
 
     @Test
     public void defaultIsERRORHandler() {
-        Request request = new Request(HTTPVerb.POST, "/", new HashMap<>(), "");
+        Request request = new Request(HTTPVerb.NOTRECOGNISED, "/", new HashMap<>(), "");
         assert(handlerFactory.buildHandler(request) instanceof UnrecognisedMethodHandler);
     }
 

@@ -6,6 +6,7 @@ import http.Requesters.Request;
 import http.Responders.*;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class GETHandler implements Handler {
 
@@ -15,12 +16,16 @@ public class GETHandler implements Handler {
     private Request request;
     private RangeResponder rangeResponder;
     private Authenticator authenticator;
+    private FormFields formFields;
+    private FormHandler formHandler;
 
-    public GETHandler() {
+    public GETHandler(FormFields formFields) {
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
         authenticator = new Authenticator();
+        this.formFields = formFields;
+        formHandler = new FormHandler(formFields);
     }
 
     @Override
@@ -33,6 +38,8 @@ public class GETHandler implements Handler {
             routeLogs(logsAction, resource);
         } else if (isBeverage(resource.getName())) {
             setTeapotResponse(resource.getName());
+        } else if (containsForm(request.getURI())) {
+            response = formHandler.handle(request);
         } else {
             if (!resource.exists()) {
                 setResourceNotFoundResponse();
@@ -44,6 +51,10 @@ public class GETHandler implements Handler {
             response.clearAllExceptStatusLine();
         }
         return response;
+    }
+
+    private boolean containsForm(String name) {
+        return name.toLowerCase().contains("form");
     }
 
     private void setTeapotResponse(String URI) {

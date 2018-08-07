@@ -27,7 +27,8 @@ public class GETHandlerTest {
     public void respondTo_GETRequest_withFileResource() {
         byte[] dummyFileContents = "file1 contents\n".getBytes();
         Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, emptyHeaders, emptyBody);
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -40,7 +41,8 @@ public class GETHandlerTest {
     @Test
     public void respondTo_GETRequest_withNotFound() {
         Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/no-file.txt", emptyHeaders, emptyBody);
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -52,7 +54,8 @@ public class GETHandlerTest {
     @Test
     public void respondTo_HEADRequest_withFileResource() {
         Request mockRequest = new Request(HTTPVerb.HEAD, mockFileURI, emptyHeaders, emptyBody);
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -69,7 +72,8 @@ public class GETHandlerTest {
                 "</body></html>").getBytes();
         Request mockRequest = new Request(HTTPVerb.GET,"src/test/resources/dummyDirectory", emptyHeaders, emptyBody);
 
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -82,7 +86,8 @@ public class GETHandlerTest {
     @Test
     public void respondTo_HEADRequest_withDirectoryResource() {
         Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/dummyDirectory", emptyHeaders, emptyBody);
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -94,7 +99,8 @@ public class GETHandlerTest {
     @Test
     public void respondTo_HEADRequest_forLogs_withMethodNotAllowed() {
         Request mockRequest = new Request(HTTPVerb.HEAD,"src/test/resources/logs", emptyHeaders, emptyBody);
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -105,7 +111,8 @@ public class GETHandlerTest {
     public void respondTo_HEADLogs_withMethodNotAllowed() {
         Request mockRequest = new Request(HTTPVerb.HEAD, mockLogsURI, emptyHeaders, emptyBody);
 
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -116,7 +123,8 @@ public class GETHandlerTest {
     public void respondTo_GETLogs_withUnauthorised() {
         Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, emptyHeaders, emptyBody);
 
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
@@ -142,7 +150,8 @@ public class GETHandlerTest {
         Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, authHeader, emptyBody);
         FileContentConverter fileContentConverter = new FileContentConverter();
         byte[] logsData = fileContentConverter.getFullContents(logFile);
-        GETHandler getHandler = new GETHandler();
+        FormFields formFields = new FormFields(new HashMap<>());
+        GETHandler getHandler = new GETHandler(formFields);
 
         Response mockResponse = getHandler.handle(mockRequest);
 
