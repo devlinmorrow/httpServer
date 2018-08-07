@@ -7,6 +7,7 @@ public enum HTTPVerb {
     HEAD("HEAD", true, true),
     NOTRECOGNISED("", false, false),
     OPTIONS("OPTIONS", true, true),
+    PATCH("PATCH", true, true),
     POST("POST", false, false),
     PUT("PUT", true, false);
 

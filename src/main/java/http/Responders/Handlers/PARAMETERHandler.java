@@ -31,7 +31,6 @@ public class PARAMETERHandler implements Handler {
             bodyContent.append(decode(splitVariable[1]));
             bodyContent.append("\n");
         }
-        System.out.println(bodyContent);
         return new String(bodyContent);
     }
 

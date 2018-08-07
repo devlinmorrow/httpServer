@@ -65,4 +65,8 @@ public class Response {
     public void setLocationHeader(String redirectURI) {
         headers.put(ResponseHeader.LOCATION, redirectURI.getBytes());
     }
+
+    public void setCookieHeader(String cookieType) {
+        headers.put(ResponseHeader.COOKIE, cookieType.getBytes());
+    }
 }

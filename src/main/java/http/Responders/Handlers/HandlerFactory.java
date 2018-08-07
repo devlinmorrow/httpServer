@@ -10,11 +10,15 @@ public class HandlerFactory {
         if (httpVerb == HTTPVerb.OPTIONS) {
             return new OPTIONSHandler();
         } else if (httpVerb == HTTPVerb.GET || httpVerb == HTTPVerb.HEAD) {
-            if (request.getURI().contains("?")) {
+            if (request.getURI().contains("cookie")) {
+                return new COOKIEHandler();
+            } else if (request.getURI().contains("?")) {
                 return new PARAMETERHandler();
             } else {
                 return new GETHandler();
             }
+        } else if (httpVerb == HTTPVerb.PATCH) {
+            return new PATCHHandler();
         } else if (httpVerb == HTTPVerb.PUT) {
             return new PUTHandler();
         } else if (httpVerb == HTTPVerb.DELETE) {

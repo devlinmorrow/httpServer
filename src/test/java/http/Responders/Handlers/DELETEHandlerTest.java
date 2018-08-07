@@ -32,7 +32,7 @@ public class DELETEHandlerTest {
 
         Response mockResponse = deleteHandler.handle(mockRequest);
 
-        Assert.assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertFalse(Files.exists(Paths.get(mockFileURI)));
     }
 
@@ -47,6 +47,6 @@ public class DELETEHandlerTest {
 
         Response mockResponse = deleteHandler.handle(mockRequest);
 
-        Assert.assertEquals(ResponseStatus.NOTFOUND, mockResponse.getStatus());
+        assertEquals(ResponseStatus.NOTFOUND, mockResponse.getStatus());
     }
 }

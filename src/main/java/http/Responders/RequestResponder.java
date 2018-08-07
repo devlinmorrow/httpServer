@@ -21,7 +21,7 @@ public class RequestResponder {
         File resource = new File(request.getURI());
         if (methodNotAllowed(request.getHTTPVerb(), resource.getName())) {
             setMethodNotAllowedResponse();
-        } else if (resourceTempMoved(resource.getName())) {
+        } else if (tempMoved(resource.getName())) {
             setFoundResponse();
         } else {
             Handler handler = handlerFactory.buildHandler(request);
@@ -36,7 +36,7 @@ public class RequestResponder {
         response.setStatus(ResponseStatus.FOUND);
     }
 
-    private boolean resourceTempMoved(String URI) {
+    private boolean tempMoved(String URI) {
         return (URI.equals("redirect"));
     }
 

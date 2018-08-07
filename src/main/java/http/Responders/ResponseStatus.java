@@ -6,9 +6,11 @@ public enum ResponseStatus {
     FOUND("302 Found", "Redirecting..."),
     IMATEAPOT("418 I'm a teapot","I'm a teapot... you can't get coffee from me!"),
     METHODNOTALLOWED("405 Method Not Allowed", "The requested method is not allowed for this resource."),
+    NOCONTENT("204 No Content", ""),
     NOTFOUND("404 Not Found", "404 Error - Requested resource not found on this server."),
     OK("200 OK", ""),
     PARTIALCONTENT("206 Partial Content", ""),
+    PRECONDITIONFAILED("412 Precondition Failed", "A precondition was not satisfied."),
     RANGENOTSATISFIABLE("416 Range Not Satisfiable", ""),
     SERVERERROR("500 Internal Server Error", "500 Error - Internal Server Error."),
     UNAUTHORISED("401 Unauthorised", "You have not provided the credentials required for this resource.");
