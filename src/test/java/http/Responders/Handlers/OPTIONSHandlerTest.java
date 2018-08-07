@@ -40,7 +40,7 @@ public class OPTIONSHandlerTest {
         Response mockResponse = optionsHandler.handle(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-        assertArrayEquals("GET, HEAD, OPTIONS".getBytes(),
+        assertArrayEquals("GET, HEAD, OPTIONS, PATCH".getBytes(),
                 mockResponse.getHeaders().get(ResponseHeader.ALLOW));
         assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
     }

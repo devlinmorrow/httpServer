@@ -43,8 +43,10 @@ public class RequestResponder {
     private boolean methodNotAllowed(HTTPVerb httpVerb, String resourceName) {
         if (resourceName.toLowerCase().contains("logs")) {
             return httpVerb.isNotAllowedForLogs();
-        } else {
+        } else if (resourceName.toLowerCase().contains("file1")) {
             return httpVerb.isNotAllowed();
+        } else {
+            return false;
         }
     }
 

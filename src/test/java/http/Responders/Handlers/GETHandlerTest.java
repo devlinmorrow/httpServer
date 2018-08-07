@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -124,13 +127,21 @@ public class GETHandlerTest {
 
     @Test
     public void respondTo_GETLogs_whenAuthorised() {
+        File logFile = new File(mockLogsURI);
+        if (!Files.exists(Paths.get(mockLogsURI))) {
+            try {
+                Files.createFile(Paths.get(mockLogsURI));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         HashMap<String, String> authHeader = new HashMap<>();
         byte[] auth = Base64.getEncoder().encode("admin:hunter2".getBytes());
         String authorizationValue = "Basic " + new String(auth);
         authHeader.put(HardcodedValues.AUTHORIZATIONHEADER.getS(), authorizationValue);
         Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, authHeader, emptyBody);
         FileContentConverter fileContentConverter = new FileContentConverter();
-        byte[] logsData = fileContentConverter.getFullContents(new File(mockLogsURI));
+        byte[] logsData = fileContentConverter.getFullContents(logFile);
         GETHandler getHandler = new GETHandler();
 
         Response mockResponse = getHandler.handle(mockRequest);
