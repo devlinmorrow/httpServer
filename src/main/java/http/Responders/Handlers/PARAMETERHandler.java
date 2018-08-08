@@ -13,11 +13,7 @@ public class PARAMETERHandler extends Handler {
 
     public PARAMETERHandler() {
         addHandledVerb(HTTPVerb.GET);
-    }
-
-    @Override
-    public boolean isHandledPathSegment(Request request) {
-        return request.getResourcePath().toLowerCase().contains("parameter");
+        addHandledPathSegment("parameter");
     }
 
     @Override

@@ -7,17 +7,23 @@ import http.Responders.ResponseStatus;
 
 import java.io.File;
 
-public class FormHandler {
+public class FormHandler extends Handler {
 
     private Response response;
     private Request request;
     private FormFields formFields;
 
     public FormHandler(FormFields formFields) {
+        addHandledVerb(HTTPVerb.DELETE);
+        addHandledVerb(HTTPVerb.GET);
+        addHandledVerb(HTTPVerb.POST);
+        addHandledVerb(HTTPVerb.PUT);
+        addHandledPathSegment("form");
         this.formFields = formFields;
     }
 
-    public Response handle(Request request) {
+    @Override
+    public Response getResponse(Request request) {
         response = new Response();
         this.request = request;
         HTTPVerb httpVerb = request.getHTTPVerb();

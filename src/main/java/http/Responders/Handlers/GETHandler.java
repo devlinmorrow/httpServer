@@ -16,10 +16,8 @@ public class GETHandler extends Handler {
     private Request request;
     private RangeResponder rangeResponder;
     private Authenticator authenticator;
-    private FormFields formFields;
-    private FormHandler formHandler;
 
-    public GETHandler(String rootPath, FormFields formFields) {
+    public GETHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.GET);
         addHandledVerb(HTTPVerb.HEAD);
@@ -30,13 +28,12 @@ public class GETHandler extends Handler {
         addHandledPathSegment("jpg");
         addHandledPathSegment("foobar");
         addHandledPathSegment("logs");
-        addHandledPathSegment("parameter");
+        addHandledPathSegment("tea");
+        addHandledPathSegment("coffee");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
         authenticator = new Authenticator();
-        this.formFields = formFields;
-        formHandler = new FormHandler(formFields);
     }
 
     @Override
@@ -55,8 +52,6 @@ public class GETHandler extends Handler {
             routeLogs(logsAction, resource);
         } else if (isBeverage(request.getResourcePath())) {
             setTeapotResponse(request.getResourcePath());
-        } else if (containsForm(rootPath + request.getResourcePath())) {
-            response = formHandler.handle(request);
         } else {
             if (!resource.exists()) {
                 setResourceNotFoundResponse();
@@ -70,12 +65,8 @@ public class GETHandler extends Handler {
         return response;
     }
 
-    private boolean containsForm(String name) {
-        return name.toLowerCase().contains("form");
-    }
-
-    private void setTeapotResponse(String URI) {
-        if (URI.equals("coffee")) {
+    private void setTeapotResponse(String resourcePath) {
+        if (resourcePath.contains("coffee")) {
             response.setStatus(ResponseStatus.IMATEAPOT);
             response.setBodyContent(ResponseStatus.IMATEAPOT.getStatusBody());
         } else {
@@ -84,8 +75,8 @@ public class GETHandler extends Handler {
         }
     }
 
-    private boolean isBeverage(String URI) {
-        return URI.equals("coffee") || URI.equals("tea");
+    private boolean isBeverage(String resourcePath) {
+        return resourcePath.contains("coffee") || resourcePath.contains("tea");
     }
 
     private void routeLogs(String logsAction, File resource) {
