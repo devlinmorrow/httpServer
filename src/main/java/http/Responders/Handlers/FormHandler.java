@@ -6,9 +6,8 @@ import http.Responders.Response;
 import http.Responders.ResponseStatus;
 
 import java.io.File;
-import java.util.Map;
 
-public class FormHandler implements Handler {
+public class FormHandler {
 
     private Response response;
     private Request request;
@@ -18,7 +17,6 @@ public class FormHandler implements Handler {
         this.formFields = formFields;
     }
 
-    @Override
     public Response handle(Request request) {
         response = new Response();
         this.request = request;
@@ -36,7 +34,7 @@ public class FormHandler implements Handler {
     }
 
     private Response respondToGet() {
-        File resource = new File(request.getURI());
+        File resource = new File(request.getResourcePath());
         String keyRequest = resource.getName();
         if (!formFields.getFormFields().containsKey(keyRequest)) {
             response.setStatus(ResponseStatus.NOTFOUND);
@@ -53,7 +51,7 @@ public class FormHandler implements Handler {
         String keyOfData = keyValuePair[0];
         String valueOfData = keyValuePair[1];
         formFields.getFormFields().put(keyOfData, valueOfData);
-        File resource = new File(request.getURI());
+        File resource = new File(request.getResourcePath());
         response.setLocationHeader("/" + resource.getName() + "/" + keyOfData);
         response.setStatus(ResponseStatus.CREATED);
         return response;
@@ -73,7 +71,7 @@ public class FormHandler implements Handler {
     }
 
     private Response respondToDelete() {
-        File resource = new File(request.getURI());
+        File resource = new File(request.getResourcePath());
         String keyRequest = resource.getName();
         formFields.getFormFields().remove(keyRequest);
         response.setStatus(ResponseStatus.OK);

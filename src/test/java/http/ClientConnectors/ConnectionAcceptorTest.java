@@ -17,7 +17,7 @@ public class ConnectionAcceptorTest {
 //
 //    @Test
 //    public void respondToClientConnectionIsCalled() throws IOException {
-//        ClientConnectionManagerSpy connectionManagerSpy = new ClientConnectionManagerSpy();
+//        ConnectionManagerSpy connectionManagerSpy = new ConnectionManagerSpy();
 //
 //        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
 //                new ServerSocketSpy(new SocketStubSpy("")),
@@ -33,7 +33,7 @@ public class ConnectionAcceptorTest {
 //        ServerSocketSpy serverSocketSpy = new ServerSocketSpy(new SocketStubSpy(""));
 //
 //        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
-//                serverSocketSpy, new ClientConnectionManagerSpy(), new ServerStatusStub(2));
+//                serverSocketSpy, new ConnectionManagerSpy(), new ServerStatusStub(2));
 //
 //        connectionAcceptor.start();
 //
@@ -45,7 +45,7 @@ public class ConnectionAcceptorTest {
 //        SocketStubSpy socketStubSpy = new SocketStubSpy("");
 //
 //        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
-//                new ServerSocketSpy(socketStubSpy), new ClientConnectionManagerSpy(),
+//                new ServerSocketSpy(socketStubSpy), new ConnectionManagerSpy(),
 //                new ServerStatusStub(1));
 //
 //        connectionAcceptor.start();
@@ -63,7 +63,7 @@ public class ConnectionAcceptorTest {
 //        SocketStubSpy socketStubSpy = new SocketStubSpy("");
 //
 //        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
-//                new ServerSocketSpy(socketStubSpy), new ClientConnectionManagerSpy(),
+//                new ServerSocketSpy(socketStubSpy), new ConnectionManagerSpy(),
 //                new ServerStatusStub(0));
 //
 //        connectionAcceptor.start();

@@ -1,7 +1,8 @@
 package http;
 
-import http.ClientConnectors.ClientConnectionManager;
+import http.ClientConnectors.ConnectionManager;
 import http.ClientConnectors.ConnectionAcceptor;
+import http.Responders.Router2;
 import http.Responders.ServerStatus;
 
 import java.io.*;
@@ -13,12 +14,13 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        Router2 router2 = new Router2("/Users/devlin/cob_spec/public");
         String logsPath = startLog();
         ServerSocket serverSocket = new ServerSocket(5000);
         ConnectionAcceptor connectionAcceptor =
                 new ConnectionAcceptor(System.out, serverSocket,
-                        new ClientConnectionManager(new BufferedWriter(new FileWriter
-                                (logsPath))), new ServerStatus());
+                        new ConnectionManager(new BufferedWriter(new FileWriter
+                                (logsPath)), router2), new ServerStatus());
         connectionAcceptor.start();
     }
 
@@ -39,4 +41,6 @@ public class Main {
         }
         return logPathString;
     }
+
+
 }

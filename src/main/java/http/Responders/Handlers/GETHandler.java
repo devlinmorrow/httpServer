@@ -6,10 +6,10 @@ import http.Requesters.Request;
 import http.Responders.*;
 
 import java.io.File;
-import java.util.HashMap;
 
-public class GETHandler implements Handler {
+public class GETHandler extends Handler {
 
+    private String rootPath;
     private ResourceTypeIdentifier resourceTypeIdentifier;
     private FileContentConverter fileContentConverter;
     private Response response;
@@ -19,7 +19,18 @@ public class GETHandler implements Handler {
     private FormFields formFields;
     private FormHandler formHandler;
 
-    public GETHandler(FormFields formFields) {
+    public GETHandler(String rootPath, FormFields formFields) {
+        this.rootPath = rootPath;
+        addHandledVerb(HTTPVerb.GET);
+        addHandledVerb(HTTPVerb.HEAD);
+        addHandledPathSegment("file1");
+        addHandledPathSegment("file2");
+        addHandledPathSegment("txt");
+        addHandledPathSegment("image");
+        addHandledPathSegment("/");
+        addHandledPathSegment("logs");
+        addHandledPathSegment("redirect");
+        addHandledPathSegment("parameter");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
@@ -29,16 +40,16 @@ public class GETHandler implements Handler {
     }
 
     @Override
-    public Response handle(Request request) {
+    public Response getResponse(Request request) {
         this.request = request;
         response = new Response();
-        File resource = new File(request.getURI());
+        File resource = new File(rootPath + request.getResourcePath());
         if (isLogs()) {
             String logsAction = authenticator.handleLogs(request, response);
             routeLogs(logsAction, resource);
-        } else if (isBeverage(resource.getName())) {
-            setTeapotResponse(resource.getName());
-        } else if (containsForm(request.getURI())) {
+        } else if (isBeverage(request.getResourcePath())) {
+            setTeapotResponse(request.getResourcePath());
+        } else if (containsForm(rootPath + request.getResourcePath())) {
             response = formHandler.handle(request);
         } else {
             if (!resource.exists()) {
@@ -93,7 +104,7 @@ public class GETHandler implements Handler {
     }
 
     private boolean isLogs() {
-        return request.getURI().toLowerCase().contains("logs");
+        return request.getResourcePath().toLowerCase().contains("logs");
     }
 
     private boolean headRequest() {

@@ -1,10 +1,40 @@
 package http.Responders.Handlers;
 
+import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.Response;
 
-public interface Handler {
+import java.util.ArrayList;
 
-    Response handle(Request request);
+public abstract class Handler {
 
+    private final ArrayList<HTTPVerb> handledVerbs = new ArrayList<>();
+    private final ArrayList<String> handledPaths = new ArrayList<>();
+
+    public abstract Response getResponse(Request request);
+
+    public void addHandledVerb(HTTPVerb httpVerb) {
+        handledVerbs.add(httpVerb);
+    }
+
+    public boolean isHandledVerb(Request request) {
+        return handledVerbs.contains(request.getHTTPVerb());
+    }
+
+    public void addHandledPathSegment(String path) {
+        handledPaths.add(path);
+    }
+
+    public boolean isHandledPathSegment(Request request) {
+        for (String handledPath : handledPaths) {
+            if (request.getResourcePath().contains(handledPath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean handles(Request request) {
+        return isHandledVerb(request) && isHandledPathSegment(request);
+    }
 }

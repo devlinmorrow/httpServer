@@ -7,23 +7,19 @@ import java.util.Map;
 public class Request {
 
     private HTTPVerb HTTPVerb;
-    private String URI;
+    private String resourcePath;
     private Map<String, String> headers;
     private String bodyContent;
 
-    public Request(HTTPVerb HTTPVerb, String URI, Map<String, String> headers, String bodyContent) {
+    public Request(HTTPVerb HTTPVerb, String resourcePath, Map<String, String> headers, String bodyContent) {
         this.HTTPVerb = HTTPVerb;
-        this.URI = URI;
+        this.resourcePath = resourcePath;
         this.headers = headers;
         this.bodyContent = bodyContent;
     }
 
     public HTTPVerb getHTTPVerb() {
         return HTTPVerb;
-    }
-
-    public String getURI() {
-        return URI;
     }
 
     public Map<String, String> getHeaders() {
@@ -35,7 +31,10 @@ public class Request {
     }
 
     public String getRequestLine() {
-        String lastPartURI = URI.replace(HardcodedValues.RESOURCEPATH.getS(), "");
-        return HTTPVerb + " " + lastPartURI + " " + HardcodedValues.HTTPVERSION.getS();
+        return HTTPVerb + " " + resourcePath + " " + HardcodedValues.HTTPVERSION.getS();
+    }
+
+    public String getResourcePath() {
+        return resourcePath;
     }
 }

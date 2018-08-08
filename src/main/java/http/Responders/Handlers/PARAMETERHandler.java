@@ -1,5 +1,6 @@
 package http.Responders.Handlers;
 
+import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
@@ -8,13 +9,21 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class PARAMETERHandler implements Handler {
+public class PARAMETERHandler extends Handler {
+
+    public PARAMETERHandler() {
+        addHandledVerb(HTTPVerb.GET);
+    }
 
     @Override
-    public Response handle(Request request) {
+    public boolean isHandledPathSegment(Request request) {
+        return request.getResourcePath().toLowerCase().contains("parameter");
+    }
+
+    @Override
+    public Response getResponse(Request request) {
         Response response = new Response();
-        File resource = new File(request.getURI());
-        String body = getAllQParams(resource.getName());
+        String body = getAllQParams(request.getResourcePath());
         response.setBodyContent(body.getBytes());
         response.setStatus(ResponseStatus.OK);
         return response;

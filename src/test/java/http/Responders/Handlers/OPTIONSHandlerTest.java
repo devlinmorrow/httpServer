@@ -24,7 +24,7 @@ public class OPTIONSHandlerTest {
         Request mockRequest = new Request(HTTPVerb.OPTIONS, mockFileURI, emptyHeaders, emptyBody);
         OPTIONSHandler optionsHandler = new OPTIONSHandler();
 
-        Response mockResponse = optionsHandler.handle(mockRequest);
+        Response mockResponse = optionsHandler.getResponse(mockRequest);
 
         Assert.assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(HTTPVerb.getAllowedMethods().getBytes(),
@@ -37,7 +37,7 @@ public class OPTIONSHandlerTest {
         Request mockRequest = new Request(HTTPVerb.OPTIONS, "src/test/resources/Logs", emptyHeaders, emptyBody);
         OPTIONSHandler optionsHandler = new OPTIONSHandler();
 
-        Response mockResponse = optionsHandler.handle(mockRequest);
+        Response mockResponse = optionsHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("GET, HEAD, OPTIONS, PATCH".getBytes(),

@@ -19,7 +19,7 @@ public class COOKIEHandlerTest {
         Request mockRequest = new Request(HTTPVerb.GET, "/cookie?type=mint", new HashMap<>(), "");
         COOKIEHandler cookieHandler = new COOKIEHandler();
 
-        Response mockResponse = cookieHandler.handle(mockRequest);
+        Response mockResponse = cookieHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("mint".getBytes(), mockResponse.getHeaders().get(ResponseHeader.COOKIE));
@@ -33,7 +33,7 @@ public class COOKIEHandlerTest {
         Request mockRequest = new Request(HTTPVerb.GET, "/eat_cookie", cookieHeader, "");
         COOKIEHandler cookieHandler = new COOKIEHandler();
 
-        Response mockResponse = cookieHandler.handle(mockRequest);
+        Response mockResponse = cookieHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("mmmm banana".getBytes(), mockResponse.getBodyContent());

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestParserTest {
 
-    private String mockURI = "dummyFile1.txt";
+    private String mockURI = "/dummyFile1.txt";
 
     @Test
     public void parse_GETRequest_noHeaders() {
@@ -19,7 +19,7 @@ public class RequestParserTest {
         Request mockRequest = requestParser.parse(clientIO.getIn());
 
         assertEquals(HTTPVerb.GET, mockRequest.getHTTPVerb());
-        assertEquals(HardcodedValues.RESOURCEPATH.getS() + mockURI, mockRequest.getURI());
+        assertEquals(mockURI, mockRequest.getResourcePath());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class RequestParserTest {
         Request mockRequest = requestParser.parse(clientIO.getIn());
 
         assertEquals(HTTPVerb.GET, mockRequest.getHTTPVerb());
-        assertEquals(HardcodedValues.RESOURCEPATH.getS() + mockURI, mockRequest.getURI());
+        assertEquals(mockURI, mockRequest.getResourcePath());
         assertEquals("Localhost: 5000", mockRequest.getHeaders().get("Host"));
         assertEquals("bytes=0-4", mockRequest.getHeaders().get("Range"));
     }

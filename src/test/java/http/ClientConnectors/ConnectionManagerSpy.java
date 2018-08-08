@@ -1,19 +1,16 @@
 package http.ClientConnectors;
 
-import http.ClientConnectors.ClientConnectionManager;
+import http.Responders.Router2;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientConnectionManagerSpy extends ClientConnectionManager {
+public class ConnectionManagerSpy extends ConnectionManager {
 
     private boolean handleRequestWasCalled;
 
-    public ClientConnectionManagerSpy(BufferedWriter bufferedWriter) {
-        super(bufferedWriter);
+    public ConnectionManagerSpy(BufferedWriter bufferedWriter, Router2 router2) {
+        super(bufferedWriter, router2);
         handleRequestWasCalled = false;
     }
 

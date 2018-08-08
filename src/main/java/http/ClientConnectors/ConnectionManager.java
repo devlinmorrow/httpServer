@@ -3,26 +3,26 @@ package http.ClientConnectors;
 import http.HardcodedValues;
 import http.Requesters.Request;
 import http.Requesters.RequestParser;
-import http.Responders.RequestResponder;
 import http.Responders.Response;
 import http.Responders.ResponseWriter;
+import http.Responders.Router2;
 
 import java.io.*;
 import java.net.Socket;
 
-public class ClientConnectionManager {
+public class ConnectionManager {
 
     private InputStream clientInput;
     private OutputStream clientOutput;
     private RequestParser requestParser;
-    private RequestResponder requestResponder;
     private ResponseWriter responseWriter;
     private FileOutputStream fileOutputStream;
     private BufferedWriter bufferedWriter;
+    private Router2 router2;
 
-    public ClientConnectionManager(BufferedWriter bufferedWriter) {
+    public ConnectionManager(BufferedWriter bufferedWriter, Router2 router2) {
+        this.router2 = router2;
         requestParser = new RequestParser();
-        requestResponder = new RequestResponder();
         responseWriter = new ResponseWriter();
         this.bufferedWriter = bufferedWriter;
         try {
@@ -36,7 +36,7 @@ public class ClientConnectionManager {
         connectInAndOut(clientConnection);
         Request request = requestParser.parse(clientInput);
         writeToLog(request);
-        Response response = requestResponder.respondTo(request);
+        Response response = router2.handle(request);
         responseWriter.write(response, clientOutput);
     }
 

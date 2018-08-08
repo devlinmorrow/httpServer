@@ -1,9 +1,7 @@
 package http.Responders.Handlers;
 
-import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.RequestResponder;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
 import org.junit.Test;
@@ -24,7 +22,7 @@ public class PARAMETERHandlerTest {
                 "/parameters?variable_1=a%20query%20string%20parameter",
                 emptyHeaders, emptyBody);
 
-        Response mockResponse = parameterHandler.handle(mockRequest);
+        Response mockResponse = parameterHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("variable_1 = a query string parameter\n".getBytes(),
@@ -39,7 +37,7 @@ public class PARAMETERHandlerTest {
                     "C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20" +
                     "that%20all%22%3F&variable_2=stuff", emptyHeaders, emptyBody);
 
-        Response mockResponse = parameterHandler.handle(mockRequest);
+        Response mockResponse = parameterHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]:" +

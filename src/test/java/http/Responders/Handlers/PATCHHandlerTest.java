@@ -23,15 +23,17 @@ import static org.junit.Assert.assertEquals;
 public class PATCHHandlerTest {
 
     private FileContentConverter fileContentConverter;
-    private String URI = "src/test/resources/patchFile.txt";
+    private String mockRootPath = "src/test/resources";
+    private String resourcePath = "/patchFile.txt";
+    private String URI = mockRootPath + resourcePath;
     private File patchFileDummy = new File(URI);
 
     @Test
     public void handle_PATCHRequest_noEncoding() {
-        Request mockRequest = new Request(HTTPVerb.PATCH, URI, new HashMap<>(), "");
-        PATCHHandler patchHandler = new PATCHHandler();
+        Request mockRequest = new Request(HTTPVerb.PATCH, resourcePath, new HashMap<>(), "");
+        PATCHHandler patchHandler = new PATCHHandler(mockRootPath);
 
-        Response mockResponse = patchHandler.handle(mockRequest);
+        Response mockResponse = patchHandler.getResponse(mockRequest);
 
 
         assertEquals(ResponseStatus.PRECONDITIONFAILED, mockResponse.getStatus());
@@ -47,10 +49,10 @@ public class PATCHHandlerTest {
         String shaMock = createSHA1();
         HashMap<String, String> ifMatchHeader = new HashMap<>();
         ifMatchHeader.put("If-Match", shaMock);
-        Request mockRequest = new Request(HTTPVerb.PATCH, URI, ifMatchHeader, "patched content");
-        PATCHHandler patchHandler = new PATCHHandler();
+        Request mockRequest = new Request(HTTPVerb.PATCH, resourcePath, ifMatchHeader, "patched content");
+        PATCHHandler patchHandler = new PATCHHandler(mockRootPath);
 
-        Response mockResponse = patchHandler.handle(mockRequest);
+        Response mockResponse = patchHandler.getResponse(mockRequest);
 
         byte[] newPatchFileContents = fileContentConverter.getFullContents(patchFileDummy);
 

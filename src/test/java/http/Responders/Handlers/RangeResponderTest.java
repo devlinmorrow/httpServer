@@ -16,19 +16,21 @@ import static org.junit.Assert.*;
 
 public class RangeResponderTest {
 
-    private String mockFileURI = "src/test/resources/dummyFile1.txt";
+    private String mockRootPath = "src/test/resources";
+    private String resourcePath = "/dummyFile1.txt";
+    private String mockFileURI = mockRootPath + resourcePath;
     private HashMap<String, String> emptyHeaders = new HashMap<>();
     private String emptyBody = "";
 
     @Test
     public void respondTo_GETRequest_PartialContent() {
         FormFields formFields = new FormFields(new HashMap<>());
-        GETHandler getHandler = new GETHandler(formFields);
+        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=0-4");
-        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
 
-        Response mockResponse = getHandler.handle(mockRequest);
+        Response mockResponse = getHandler.getResponse(mockRequest);
 
         FileContentConverter fileContentConverter = new FileContentConverter();
         File file = new File(mockFileURI);
@@ -44,12 +46,12 @@ public class RangeResponderTest {
     @Test
     public void respondTo_GETRequest_PartialContent_onlyStartIndex() {
         FormFields formFields = new FormFields(new HashMap<>());
-        GETHandler getHandler = new GETHandler(formFields);
+        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=11-");
-        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
 
-        Response mockResponse = getHandler.handle(mockRequest);
+        Response mockResponse = getHandler.getResponse(mockRequest);
 
         FileContentConverter fileContentConverter = new FileContentConverter();
         File file = new File(mockFileURI);
@@ -65,12 +67,12 @@ public class RangeResponderTest {
     @Test
     public void respondTo_GETRequest_PartialContent_onlyEndNumber() {
         FormFields formFields = new FormFields(new HashMap<>());
-        GETHandler getHandler = new GETHandler(formFields);
+        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=-6");
-        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
 
-        Response mockResponse = getHandler.handle(mockRequest);
+        Response mockResponse = getHandler.getResponse(mockRequest);
 
         FileContentConverter fileContentConverter = new FileContentConverter();
         File file = new File(mockFileURI);
@@ -86,12 +88,12 @@ public class RangeResponderTest {
     @Test
     public void respondTo_GETRequest_PartialContent_RangeNotSatisfiable() {
         FormFields formFields = new FormFields(new HashMap<>());
-        GETHandler getHandler = new GETHandler(formFields);
+        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range","bytes=10-20");
-        Request mockRequest = new Request(HTTPVerb.GET, mockFileURI, rangeHeader, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
 
-        Response mockResponse = getHandler.handle(mockRequest);
+        Response mockResponse = getHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.RANGENOTSATISFIABLE, mockResponse.getStatus());
         assertArrayEquals("bytes */15".getBytes(), mockResponse.getHeaders()

@@ -21,7 +21,7 @@ public class RequestParser {
     private void setRequestElements(RequestReader requestReader) {
         String[] requestLine = requestReader.extractRequestLine().split(" ");
         httpVerb = matchHTTPVerb(requestLine[0]);
-        URI = getFullURI(requestLine[1]);
+        URI = requestLine[1];
         String potentialHeaders = requestReader.extractHeaders();
         if (!potentialHeaders.isEmpty()) {
             headers = assembleHeaders(potentialHeaders);
