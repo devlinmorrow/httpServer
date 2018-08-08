@@ -16,15 +16,16 @@ public class Router2 {
 
     public Router2(String rootPath) {
         addHandlers(Arrays.asList(
-                new GETHandler(rootPath),
-                new OPTIONSHandler(),
-                new PUTHandler(rootPath),
                 new COOKIEHandler(),
                 new DELETEHandler(rootPath),
+                new FormHandler(new FormFields(new HashMap<>())),
+                new GETHandler(rootPath),
+                new OPTIONSHandler(),
                 new PARAMETERHandler(),
                 new PATCHHandler(rootPath),
+                new PUTHandler(rootPath),
                 new RedirectHandler(),
-                new FormHandler(new FormFields(new HashMap<>()))
+                new TeapotHandler()
         ));
     }
 

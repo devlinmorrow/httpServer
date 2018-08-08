@@ -28,8 +28,6 @@ public class GETHandler extends Handler {
         addHandledPathSegment("jpg");
         addHandledPathSegment("foobar");
         addHandledPathSegment("logs");
-        addHandledPathSegment("tea");
-        addHandledPathSegment("coffee");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
@@ -50,8 +48,6 @@ public class GETHandler extends Handler {
         if (isLogs()) {
             String logsAction = authenticator.handleLogs(request, response);
             routeLogs(logsAction, resource);
-        } else if (isBeverage(request.getResourcePath())) {
-            setTeapotResponse(request.getResourcePath());
         } else {
             if (!resource.exists()) {
                 setResourceNotFoundResponse();
@@ -63,20 +59,6 @@ public class GETHandler extends Handler {
             response.clearAllExceptStatusLine();
         }
         return response;
-    }
-
-    private void setTeapotResponse(String resourcePath) {
-        if (resourcePath.contains("coffee")) {
-            response.setStatus(ResponseStatus.IMATEAPOT);
-            response.setBodyContent(ResponseStatus.IMATEAPOT.getStatusBody());
-        } else {
-            response.setStatus(ResponseStatus.OK);
-            response.setBodyContent("Here's some delicious tea!".getBytes());
-        }
-    }
-
-    private boolean isBeverage(String resourcePath) {
-        return resourcePath.contains("coffee") || resourcePath.contains("tea");
     }
 
     private void routeLogs(String logsAction, File resource) {
