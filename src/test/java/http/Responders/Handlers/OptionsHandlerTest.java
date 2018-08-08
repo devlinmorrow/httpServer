@@ -2,7 +2,6 @@ package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Handlers.OPTIONSHandler;
 import http.Responders.Response;
 import http.Responders.ResponseHeader;
 import http.Responders.ResponseStatus;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class OPTIONSHandlerTest {
+public class OptionsHandlerTest {
 
     private String mockFileURI = "src/test/resources/dummyFile1.txt";
     private HashMap<String, String> emptyHeaders = new HashMap<>();
@@ -22,7 +21,7 @@ public class OPTIONSHandlerTest {
     @Test
     public void respondTo_OPTIONSRequest_NotLogs() {
         Request mockRequest = new Request(HTTPVerb.OPTIONS, mockFileURI, emptyHeaders, emptyBody);
-        OPTIONSHandler optionsHandler = new OPTIONSHandler();
+        OptionsHandler optionsHandler = new OptionsHandler();
 
         Response mockResponse = optionsHandler.getResponse(mockRequest);
 
@@ -35,7 +34,7 @@ public class OPTIONSHandlerTest {
     @Test
     public void respondTo_OPTIONSRequest_ForLogs() {
         Request mockRequest = new Request(HTTPVerb.OPTIONS, "src/test/resources/Logs", emptyHeaders, emptyBody);
-        OPTIONSHandler optionsHandler = new OPTIONSHandler();
+        OptionsHandler optionsHandler = new OptionsHandler();
 
         Response mockResponse = optionsHandler.getResponse(mockRequest);
 

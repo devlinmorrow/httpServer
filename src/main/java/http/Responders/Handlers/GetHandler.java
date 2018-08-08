@@ -7,7 +7,7 @@ import http.Responders.*;
 
 import java.io.File;
 
-public class GETHandler extends Handler {
+public class GetHandler extends Handler {
 
     private String rootPath;
     private ResourceTypeIdentifier resourceTypeIdentifier;
@@ -17,7 +17,7 @@ public class GETHandler extends Handler {
     private RangeResponder rangeResponder;
     private Authenticator authenticator;
 
-    public GETHandler(String rootPath) {
+    public GetHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.GET);
         addHandledVerb(HTTPVerb.HEAD);
@@ -35,12 +35,6 @@ public class GETHandler extends Handler {
     }
 
     @Override
-    public boolean isHandledPathSegment(Request request) {
-        return (super.isHandledPathSegment(request)) || (request.getResourcePath()
-                .charAt(request.getResourcePath().length() - 1) == '/');
-    }
-
-    @Override
     public Response getResponse(Request request) {
         this.request = request;
         response = new Response();
@@ -52,7 +46,7 @@ public class GETHandler extends Handler {
             if (!resource.exists()) {
                 setResourceNotFoundResponse();
             } else {
-                performGETResponse(resource);
+                GETFile(resource);
             }
         }
         if (headRequest()) {
@@ -67,7 +61,7 @@ public class GETHandler extends Handler {
         } else if (logsAction.equals("Unauthorised")) {
             setUnauthorised();
         } else {
-            performGETResponse(resource);
+            GETFile(resource);
         }
     }
 
@@ -94,33 +88,6 @@ public class GETHandler extends Handler {
     private void setResourceNotFoundResponse() {
         response.setStatus(ResponseStatus.NOTFOUND);
         response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
-    }
-
-    private void performGETResponse(File resource) {
-        if (resource.isDirectory()) {
-            GETDirectory(resource);
-        } else {
-            GETFile(resource);
-        }
-    }
-
-    private void GETDirectory(File resource) {
-        response.setContentTypeHeader(ContentType.HTML);
-        response.setBodyContent(getDirectoryContent(resource));
-        response.setStatus(ResponseStatus.OK);
-    }
-
-    private byte[] getDirectoryContent(File resource) {
-        StringBuilder listing = new StringBuilder();
-        listing.append("<html><head></head><body>");
-        File[] files = resource.listFiles();
-        for (File file : files) {
-            String fileName = file.getName();
-            listing.append("<a href='/").append(fileName).append("'>")
-                    .append(fileName).append("</a>").append("<br>");
-        }
-        listing.append("</body></html>");
-        return String.valueOf(listing).getBytes();
     }
 
     private void GETFile(File resource) {

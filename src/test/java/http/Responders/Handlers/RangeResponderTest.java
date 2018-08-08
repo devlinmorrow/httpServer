@@ -25,7 +25,7 @@ public class RangeResponderTest {
 //    @Test
 //    public void respondTo_GETRequest_PartialContent() {
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
+//        GetHandler getHandler = new GetHandler(mockRootPath, formFields);
 //        HashMap<String, String> rangeHeader = new HashMap<>();
 //        rangeHeader.put("Range","bytes=0-4");
 //        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
@@ -46,7 +46,7 @@ public class RangeResponderTest {
 //    @Test
 //    public void respondTo_GETRequest_PartialContent_onlyStartIndex() {
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
+//        GetHandler getHandler = new GetHandler(mockRootPath, formFields);
 //        HashMap<String, String> rangeHeader = new HashMap<>();
 //        rangeHeader.put("Range","bytes=11-");
 //        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
@@ -67,7 +67,7 @@ public class RangeResponderTest {
 //    @Test
 //    public void respondTo_GETRequest_PartialContent_onlyEndNumber() {
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
+//        GetHandler getHandler = new GetHandler(mockRootPath, formFields);
 //        HashMap<String, String> rangeHeader = new HashMap<>();
 //        rangeHeader.put("Range","bytes=-6");
 //        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);
@@ -88,7 +88,7 @@ public class RangeResponderTest {
 //    @Test
 //    public void respondTo_GETRequest_PartialContent_RangeNotSatisfiable() {
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(mockRootPath, formFields);
+//        GetHandler getHandler = new GetHandler(mockRootPath, formFields);
 //        HashMap<String, String> rangeHeader = new HashMap<>();
 //        rangeHeader.put("Range","bytes=10-20");
 //        Request mockRequest = new Request(HTTPVerb.GET, resourcePath, rangeHeader, emptyBody);

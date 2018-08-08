@@ -2,7 +2,6 @@ package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Handlers.PUTHandler;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
 import org.junit.Assert;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class PUTHandlerTest {
+public class PutHandlerTest {
 
     private String mockRootPath = "src/test/resources";
     private String resourcePath = "/newFile.txt";
@@ -30,7 +29,7 @@ public class PUTHandlerTest {
         }
 
         Request mockRequest = new Request(HTTPVerb.PUT, resourcePath, emptyHeaders, mockContents);
-        PUTHandler putHandler = new PUTHandler(mockRootPath);
+        PutHandler putHandler = new PutHandler(mockRootPath);
 
         Response mockResponse = putHandler.getResponse(mockRequest);
 
@@ -45,7 +44,7 @@ public class PUTHandlerTest {
         String updatedContents = "Updated text";
 
         Request mockRequest = new Request(HTTPVerb.PUT, resourcePath, emptyHeaders, updatedContents);
-        PUTHandler putHandler = new PUTHandler(mockRootPath);
+        PutHandler putHandler = new PutHandler(mockRootPath);
 
         Response mockResponse = putHandler.getResponse(mockRequest);
 

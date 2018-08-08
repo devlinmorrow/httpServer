@@ -1,10 +1,8 @@
 package http.Responders;
 
-import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.Handlers.*;
 
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,14 +14,15 @@ public class Router2 {
 
     public Router2(String rootPath) {
         addHandlers(Arrays.asList(
-                new COOKIEHandler(),
-                new DELETEHandler(rootPath),
+                new CookieHandler(),
+                new DeleteHandler(rootPath),
+                new DirectoryHandler(rootPath),
                 new FormHandler(new FormFields(new HashMap<>())),
-                new GETHandler(rootPath),
-                new OPTIONSHandler(),
-                new PARAMETERHandler(),
-                new PATCHHandler(rootPath),
-                new PUTHandler(rootPath),
+                new GetHandler(rootPath),
+                new OptionsHandler(),
+                new ParametersHandler(),
+                new PatchHandler(rootPath),
+                new PutHandler(rootPath),
                 new RedirectHandler(),
                 new TeapotHandler()
         ));

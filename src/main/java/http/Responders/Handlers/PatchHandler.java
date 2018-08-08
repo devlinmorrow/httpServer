@@ -14,13 +14,13 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class PATCHHandler extends Handler {
+public class PatchHandler extends Handler {
 
     private String rootPath;
     private FileContentConverter fileContentConverter;
     private Request request;
 
-    public PATCHHandler(String rootPath) {
+    public PatchHandler(String rootPath) {
         this.rootPath = rootPath;
         fileContentConverter = new FileContentConverter();
         addHandledVerb(HTTPVerb.PATCH);

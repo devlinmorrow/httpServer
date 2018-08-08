@@ -4,7 +4,6 @@ import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class DELETEHandlerTest {
+public class DeleteHandlerTest {
 
     private String mockRootPath = "src/test/resources";
     private String resourcePath = "/fileToDelete.txt";
@@ -30,7 +29,7 @@ public class DELETEHandlerTest {
         }
 
         Request mockRequest = new Request(HTTPVerb.DELETE, resourcePath, emptyHeaders, "");
-        DELETEHandler deleteHandler = new DELETEHandler(mockRootPath);
+        DeleteHandler deleteHandler = new DeleteHandler(mockRootPath);
 
         Response mockResponse = deleteHandler.getResponse(mockRequest);
 
@@ -45,7 +44,7 @@ public class DELETEHandlerTest {
         }
 
         Request mockRequest = new Request(HTTPVerb.DELETE, resourcePath, emptyHeaders, "");
-        DELETEHandler deleteHandler = new DELETEHandler(mockRootPath);
+        DeleteHandler deleteHandler = new DeleteHandler(mockRootPath);
 
         Response mockResponse = deleteHandler.getResponse(mockRequest);
 

@@ -7,9 +7,9 @@ import http.Responders.ResponseStatus;
 
 import java.io.File;
 
-public class OPTIONSHandler extends Handler {
+public class OptionsHandler extends Handler {
 
-    public OPTIONSHandler() {
+    public OptionsHandler() {
         addHandledVerb(HTTPVerb.OPTIONS);
     }
 

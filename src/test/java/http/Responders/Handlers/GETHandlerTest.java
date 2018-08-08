@@ -28,7 +28,7 @@ public class GETHandlerTest {
 //        byte[] dummyFileContents = "file1 contents\n".getBytes();
 //        Request mockRequest = new Request(HTTPVerb.GET, "/dummyFile1.txt", emptyHeaders, emptyBody);
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -42,7 +42,7 @@ public class GETHandlerTest {
 //    public void respondTo_GETRequest_withNotFound() {
 //        Request mockRequest = new Request(HTTPVerb.GET,"/no-file.txt", emptyHeaders, emptyBody);
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -55,7 +55,7 @@ public class GETHandlerTest {
 //    public void respondTo_HEADRequest_withFileResource() {
 //        Request mockRequest = new Request(HTTPVerb.HEAD, "/dummyFile1.txt", emptyHeaders, emptyBody);
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -73,7 +73,7 @@ public class GETHandlerTest {
 //        Request mockRequest = new Request(HTTPVerb.GET,"/dummyDirectory", emptyHeaders, emptyBody);
 //
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -87,7 +87,7 @@ public class GETHandlerTest {
 //    public void respondTo_HEADRequest_withDirectoryResource() {
 //        Request mockRequest = new Request(HTTPVerb.HEAD,"/dummyDirectory", emptyHeaders, emptyBody);
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -100,7 +100,7 @@ public class GETHandlerTest {
 //    public void respondTo_HEADRequest_forLogs_withMethodNotAllowed() {
 //        Request mockRequest = new Request(HTTPVerb.HEAD,"/logs", emptyHeaders, emptyBody);
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -112,7 +112,7 @@ public class GETHandlerTest {
 //        Request mockRequest = new Request(HTTPVerb.HEAD, "/logs", emptyHeaders, emptyBody);
 //
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -124,7 +124,7 @@ public class GETHandlerTest {
 //        Request mockRequest = new Request(HTTPVerb.GET, "/logs", emptyHeaders, emptyBody);
 //
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //
@@ -151,7 +151,7 @@ public class GETHandlerTest {
 //        FileContentConverter fileContentConverter = new FileContentConverter();
 //        byte[] logsData = fileContentConverter.getFullContents(logFile);
 //        FormFields formFields = new FormFields(new HashMap<>());
-//        GETHandler getHandler = new GETHandler(testFileRoot, formFields);
+//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //
 //        Response mockResponse = getHandler.getResponse(mockRequest);
 //

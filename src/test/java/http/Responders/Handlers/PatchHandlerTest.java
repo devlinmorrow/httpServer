@@ -1,6 +1,5 @@
 package http.Responders.Handlers;
 
-import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.FileContentConverter;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class PATCHHandlerTest {
+public class PatchHandlerTest {
 
     private FileContentConverter fileContentConverter;
     private String mockRootPath = "src/test/resources";
@@ -31,7 +30,7 @@ public class PATCHHandlerTest {
     @Test
     public void handle_PATCHRequest_noEncoding() {
         Request mockRequest = new Request(HTTPVerb.PATCH, resourcePath, new HashMap<>(), "");
-        PATCHHandler patchHandler = new PATCHHandler(mockRootPath);
+        PatchHandler patchHandler = new PatchHandler(mockRootPath);
 
         Response mockResponse = patchHandler.getResponse(mockRequest);
 
@@ -50,7 +49,7 @@ public class PATCHHandlerTest {
         HashMap<String, String> ifMatchHeader = new HashMap<>();
         ifMatchHeader.put("If-Match", shaMock);
         Request mockRequest = new Request(HTTPVerb.PATCH, resourcePath, ifMatchHeader, "patched content");
-        PATCHHandler patchHandler = new PATCHHandler(mockRootPath);
+        PatchHandler patchHandler = new PatchHandler(mockRootPath);
 
         Response mockResponse = patchHandler.getResponse(mockRequest);
 

@@ -7,9 +7,9 @@ import http.Responders.ResponseStatus;
 
 import java.io.File;
 
-public class COOKIEHandler extends Handler {
+public class CookieHandler extends Handler {
 
-    public COOKIEHandler() {
+    public CookieHandler() {
         addHandledVerb(HTTPVerb.GET);
     }
 

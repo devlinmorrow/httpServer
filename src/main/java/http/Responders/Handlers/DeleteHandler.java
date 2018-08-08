@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DELETEHandler extends Handler {
+public class DeleteHandler extends Handler {
 
     private String rootPath;
     private Request request;
     private Response response;
 
-    public DELETEHandler(String rootPath) {
+    public DeleteHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.DELETE);
     }

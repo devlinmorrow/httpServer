@@ -2,16 +2,14 @@ package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.ContentType;
 import http.Responders.Response;
-import http.Responders.ResponseHeader;
 import http.Responders.ResponseStatus;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class TeapotHandlerTest {
 

@@ -9,9 +9,9 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class PARAMETERHandler extends Handler {
+public class ParametersHandler extends Handler {
 
-    public PARAMETERHandler() {
+    public ParametersHandler() {
         addHandledVerb(HTTPVerb.GET);
         addHandledPathSegment("parameter");
     }

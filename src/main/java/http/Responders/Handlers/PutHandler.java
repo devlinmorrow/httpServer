@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class PUTHandler extends Handler {
+public class PutHandler extends Handler {
 
     private String rootPath;
     private Request request;
     private Response response;
 
-    public PUTHandler(String rootPath) {
+    public PutHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.PUT);
         addHandledPathSegment("txt");
