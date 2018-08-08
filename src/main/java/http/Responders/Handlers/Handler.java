@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public abstract class Handler {
 
     private final ArrayList<HTTPVerb> handledVerbs = new ArrayList<>();
-    private final ArrayList<String> handledPaths = new ArrayList<>();
+    private final ArrayList<String> handledPathSegments = new ArrayList<>();
 
     public abstract Response getResponse(Request request);
 
@@ -22,12 +22,12 @@ public abstract class Handler {
     }
 
     public void addHandledPathSegment(String path) {
-        handledPaths.add(path);
+        handledPathSegments.add(path);
     }
 
     public boolean isHandledPathSegment(Request request) {
-        for (String handledPath : handledPaths) {
-            if (request.getResourcePath().contains(handledPath)) {
+        for (String handledPathSegment : handledPathSegments) {
+            if (request.getResourcePath().contains(handledPathSegment)) {
                 return true;
             }
         }

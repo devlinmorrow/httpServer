@@ -1,11 +1,10 @@
 package http.Responders;
 
+import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Handlers.FormFields;
-import http.Responders.Handlers.GETHandler;
-import http.Responders.Handlers.Handler;
-import http.Responders.Handlers.OPTIONSHandler;
+import http.Responders.Handlers.*;
 
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +17,13 @@ public class Router2 {
     public Router2(String rootPath) {
         addHandlers(Arrays.asList(
                 new GETHandler(rootPath, new FormFields(new HashMap<>())),
-                new OPTIONSHandler()
+                new OPTIONSHandler(),
+                new PUTHandler(rootPath),
+                new COOKIEHandler(),
+                new DELETEHandler(rootPath),
+                new PARAMETERHandler(),
+                new PATCHHandler(rootPath),
+                new RedirectHandler()
         ));
     }
 

@@ -27,9 +27,9 @@ public class GETHandler extends Handler {
         addHandledPathSegment("file2");
         addHandledPathSegment("txt");
         addHandledPathSegment("image");
-        addHandledPathSegment("/");
+        addHandledPathSegment("jpg");
+        addHandledPathSegment("foobar");
         addHandledPathSegment("logs");
-        addHandledPathSegment("redirect");
         addHandledPathSegment("parameter");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
@@ -37,6 +37,12 @@ public class GETHandler extends Handler {
         authenticator = new Authenticator();
         this.formFields = formFields;
         formHandler = new FormHandler(formFields);
+    }
+
+    @Override
+    public boolean isHandledPathSegment(Request request) {
+        return (super.isHandledPathSegment(request)) || (request.getResourcePath()
+                .charAt(request.getResourcePath().length() - 1) == '/');
     }
 
     @Override
