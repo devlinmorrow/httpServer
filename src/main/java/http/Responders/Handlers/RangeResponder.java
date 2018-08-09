@@ -6,7 +6,6 @@ import http.Responders.Response;
 import http.Responders.ResponseStatus;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class RangeResponder {
 
