@@ -26,8 +26,8 @@ public abstract class Handler {
     }
 
     public boolean isHandledPathSegment(Request request) {
-        for (String handledPathSegment : handledPathSegments) {
-            if (request.getResourcePath().contains(handledPathSegment)) {
+        for (String pathSegment : handledPathSegments) {
+            if (matches(request, pathSegment)) {
                 return true;
             }
         }
@@ -36,5 +36,9 @@ public abstract class Handler {
 
     public boolean handles(Request request) {
         return isHandledVerb(request) && isHandledPathSegment(request);
+    }
+
+    private boolean matches(Request request, String pathSegment) {
+        return request.getResourcePath().contains(pathSegment);
     }
 }

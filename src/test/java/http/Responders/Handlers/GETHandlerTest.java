@@ -51,50 +51,6 @@ public class GETHandlerTest {
 //        assertArrayEquals(ResponseStatus.NOTFOUND.getStatusBody(), mockResponse.getBodyContent());
 //    }
 //
-//    @Test
-//    public void respondTo_HEADRequest_withFileResource() {
-//        Request mockRequest = new Request(HTTPVerb.HEAD, "/dummyFile1.txt", emptyHeaders, emptyBody);
-//        FormFields formFields = new FormFields(new HashMap<>());
-//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
-//
-//        Response mockResponse = getHandler.getResponse(mockRequest);
-//
-//        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-//        assertTrue(mockResponse.getHeaders().isEmpty());
-//        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
-//
-//    }
-//
-//    @Test
-//    public void respondTo_GETDirectoryRequest() {
-//        byte[] dummyDirectoryContents = ("<html><head></head><body>" +
-//                "<a href='/dummyFile2.txt'>dummyFile2.txt</a><br>" +
-//                "</body></html>").getBytes();
-//        Request mockRequest = new Request(HTTPVerb.GET,"/dummyDirectory", emptyHeaders, emptyBody);
-//
-//        FormFields formFields = new FormFields(new HashMap<>());
-//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
-//
-//        Response mockResponse = getHandler.getResponse(mockRequest);
-//
-//        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-//        assertArrayEquals(ContentType.HTML.getBytesValue(),
-//                mockResponse.getHeaders().get(ResponseHeader.CONTENTTYPE));
-//        assertArrayEquals(dummyDirectoryContents, mockResponse.getBodyContent());
-//    }
-//
-//    @Test
-//    public void respondTo_HEADRequest_withDirectoryResource() {
-//        Request mockRequest = new Request(HTTPVerb.HEAD,"/dummyDirectory", emptyHeaders, emptyBody);
-//        FormFields formFields = new FormFields(new HashMap<>());
-//        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
-//
-//        Response mockResponse = getHandler.getResponse(mockRequest);
-//
-//        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-//        assertTrue(mockResponse.getHeaders().isEmpty());
-//        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
-//    }
 //
 //    @Test
 //    public void respondTo_HEADRequest_forLogs_withMethodNotAllowed() {

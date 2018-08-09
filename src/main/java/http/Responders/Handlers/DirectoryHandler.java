@@ -26,13 +26,24 @@ public class DirectoryHandler extends Handler {
 
     @Override
     public Response getResponse(Request request) {
+        File resource = new File(rootPath + request.getResourcePath());
+        Response response;
+        if (!resource.exists()) {
+            response = setResourceNotFoundResponse();
+        } else {
+            response = getDirectory(request);
+        }
+        if (headRequest(request)) {
+            response.clearAllExceptStatusLine();
+        }
+        return response;
+    }
+
+    private Response getDirectory(Request request) {
         Response response = new Response();
         response.setContentTypeHeader(ContentType.HTML);
         response.setBodyContent(getDirectoryContent(new File(rootPath + request.getResourcePath())));
         response.setStatus(ResponseStatus.OK);
-        if (headRequest(request)) {
-            response.clearAllExceptStatusLine();
-        }
         return response;
     }
 
@@ -50,5 +61,12 @@ public class DirectoryHandler extends Handler {
     }
     private boolean headRequest(Request request) {
         return request.getHTTPVerb() == HTTPVerb.HEAD;
+    }
+
+    private Response setResourceNotFoundResponse() {
+        Response response = new Response();
+        response.setStatus(ResponseStatus.NOTFOUND);
+        response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
+        return response;
     }
 }

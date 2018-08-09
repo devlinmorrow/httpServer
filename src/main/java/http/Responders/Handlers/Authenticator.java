@@ -3,18 +3,15 @@ package http.Responders.Handlers;
 import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Response;
 
 import java.util.Base64;
 
 public class Authenticator {
 
     private Request request;
-    private Response response;
 
-    public String handleLogs(Request request, Response response) {
+    public String handleLogs(Request request) {
         this.request = request;
-        this.response = response;
         if (notGET()) {
             return "NotAllowed";
         } else {

@@ -12,7 +12,6 @@ public class GetHandler extends Handler {
     private String rootPath;
     private ResourceTypeIdentifier resourceTypeIdentifier;
     private FileContentConverter fileContentConverter;
-    private Response response;
     private Request request;
     private RangeResponder rangeResponder;
     private Authenticator authenticator;
@@ -37,16 +36,16 @@ public class GetHandler extends Handler {
     @Override
     public Response getResponse(Request request) {
         this.request = request;
-        response = new Response();
+        Response response;
         File resource = new File(rootPath + request.getResourcePath());
         if (isLogs()) {
-            String logsAction = authenticator.handleLogs(request, response);
-            routeLogs(logsAction, resource);
+            String logsAction = authenticator.handleLogs(request);
+            response = routeLogs(logsAction, resource);
         } else {
             if (!resource.exists()) {
-                setResourceNotFoundResponse();
+                response = setResourceNotFoundResponse();
             } else {
-                GETFile(resource);
+                response = GETFile(resource);
             }
         }
         if (headRequest()) {
@@ -55,25 +54,30 @@ public class GetHandler extends Handler {
         return response;
     }
 
-    private void routeLogs(String logsAction, File resource) {
-        if (logsAction.equals("NotAllowed")) {
-            setMethodNotAllowed();
-        } else if (logsAction.equals("Unauthorised")) {
-            setUnauthorised();
-        } else {
-            GETFile(resource);
+    private Response routeLogs(String logsAction, File resource) {
+        switch (logsAction) {
+            case "NotAllowed":
+                return setMethodNotAllowed();
+            case "Unauthorised":
+                return setUnauthorised();
+            default:
+                return GETFile(resource);
         }
     }
 
-    private void setUnauthorised() {
+    private Response setUnauthorised() {
+        Response response = new Response();
         response.setUnauthorisedHeader(HardcodedValues.AUTHENTICATEMESSAGE.getS());
         response.setBodyContent(ResponseStatus.UNAUTHORISED.getStatusBody());
         response.setStatus(ResponseStatus.UNAUTHORISED);
+        return response;
     }
 
-    private void setMethodNotAllowed() {
+    private Response setMethodNotAllowed() {
+        Response response = new Response();
         response.setStatus(ResponseStatus.METHODNOTALLOWED);
         response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
+        return response;
     }
 
     private boolean isLogs() {
@@ -85,12 +89,15 @@ public class GetHandler extends Handler {
     }
 
 
-    private void setResourceNotFoundResponse() {
+    private Response setResourceNotFoundResponse() {
+        Response response = new Response();
         response.setStatus(ResponseStatus.NOTFOUND);
         response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
+        return response;
     }
 
-    private void GETFile(File resource) {
+    private Response GETFile(File resource) {
+        Response response = new Response();
         response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
         byte[] fullContents = fileContentConverter.getFullContents(resource);
         if (request.getHeaders().containsKey("Range")) {
@@ -99,5 +106,6 @@ public class GetHandler extends Handler {
             response.setBodyContent(fullContents);
             response.setStatus(ResponseStatus.OK);
         }
+        return response;
     }
 }
