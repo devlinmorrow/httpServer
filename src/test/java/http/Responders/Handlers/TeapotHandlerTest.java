@@ -23,7 +23,8 @@ public class TeapotHandlerTest {
 
     @Test
     public void getCoffeeResponse() {
-        Response response = getResponseToGetRequestAt("/coffee");
+        String coffeePath = "/coffee";
+        Response response = getResponseToGetRequestAt(coffeePath);
 
         assertEquals(ResponseStatus.IMATEAPOT, response.getStatus());
         assertArrayEquals(ResponseStatus.IMATEAPOT.getStatusBody(), response.getBodyContent());
@@ -31,14 +32,17 @@ public class TeapotHandlerTest {
 
     @Test
     public void getTeaResponse() {
-        Response mockResponse = getResponseToGetRequestAt("/tea");
+        String teaPath = "/tea";
+        Response mockResponse = getResponseToGetRequestAt(teaPath);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(teapotHandler.teaContent.getBytes(), mockResponse.getBodyContent());
     }
 
     private Response getResponseToGetRequestAt(String path) {
-        Request request = new Request(HTTPVerb.GET, path, new HashMap<>(), "");
+        HashMap<String, String> emptyHeaders = new HashMap<>();
+        String emptyBody = "";
+        Request request = new Request(HTTPVerb.GET, path, emptyHeaders, emptyBody);
 
         return teapotHandler.getResponse(request);
     }

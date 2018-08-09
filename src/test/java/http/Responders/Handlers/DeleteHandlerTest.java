@@ -16,38 +16,41 @@ import static org.junit.Assert.*;
 
 public class DeleteHandlerTest {
 
-    private String mockRootPath = "src/test/resources";
-    private String resourcePath = "/fileToDelete.txt";
-    private String mockFileURI = mockRootPath + resourcePath;
-    private HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final static String testRootPath = "src/test/resources";
+    private final static HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final static String emptyBody = "";
+
 
     @Test
     public void handle_deleteExistingResource() throws IOException {
-        if (!Files.exists(Paths.get(mockFileURI))) {
-            File newFile = new File(mockFileURI);
-            newFile.createNewFile();
-        }
+        String fileToDeletePath = "/fileToDelete.txt";
+        createFileIfDoesNotExist(testRootPath + fileToDeletePath);
 
-        Request mockRequest = new Request(HTTPVerb.DELETE, resourcePath, emptyHeaders, "");
-        DeleteHandler deleteHandler = new DeleteHandler(mockRootPath);
+        Response response = getResponseToDeleteRequestAt(fileToDeletePath);
 
-        Response mockResponse = deleteHandler.getResponse(mockRequest);
-
-        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
-        assertFalse(Files.exists(Paths.get(mockFileURI)));
+        assertEquals(ResponseStatus.OK, response.getStatus());
+        assertFalse(Files.exists(Paths.get(testRootPath + fileToDeletePath)));
     }
 
     @Test
-    public void handle_deleteResourceNotFound() throws IOException {
-        if (Files.exists(Paths.get(mockFileURI))) {
-            Files.delete(Paths.get(mockFileURI));
+    public void handle_deleteResourceNotFound() {
+        String notFoundPath = "/noFileHere.txt";
+        Response response = getResponseToDeleteRequestAt(notFoundPath);
+
+        assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
+    }
+
+    private void createFileIfDoesNotExist(String path) throws IOException {
+        if (!Files.exists(Paths.get(path))) {
+            File newFile = new File(path);
+            newFile.createNewFile();
         }
+    }
 
-        Request mockRequest = new Request(HTTPVerb.DELETE, resourcePath, emptyHeaders, "");
-        DeleteHandler deleteHandler = new DeleteHandler(mockRootPath);
+    private Response getResponseToDeleteRequestAt(String path) {
+        Request request = new Request(HTTPVerb.DELETE, path, emptyHeaders, emptyBody);
+        DeleteHandler deleteHandler = new DeleteHandler(testRootPath);
 
-        Response mockResponse = deleteHandler.getResponse(mockRequest);
-
-        assertEquals(ResponseStatus.NOTFOUND, mockResponse.getStatus());
+        return deleteHandler.getResponse(request);
     }
 }

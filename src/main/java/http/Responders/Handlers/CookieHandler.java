@@ -21,9 +21,12 @@ public class CookieHandler extends Handler {
     @Override
     public Response getResponse(Request request) {
         Response response = new Response();
-        if (request.getHeaders().get("Cookie") != null) {
+        if (request.getResourcePath().contains("eat") && request.getHeaders().get("Cookie") != null) {
             response.setStatus(ResponseStatus.OK);
             response.setBodyContent(("mmmm " + request.getHeaders().get("Cookie")).getBytes());
+        } else if (request.getResourcePath().contains("eat")) {
+            response.setStatus(ResponseStatus.NOTFOUND);
+            response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
         } else {
             String cookieType = getCookieType(request.getResourcePath());
             response.setStatus(ResponseStatus.OK);

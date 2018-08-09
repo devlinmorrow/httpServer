@@ -14,28 +14,31 @@ import static org.junit.Assert.*;
 
 public class DirectoryHandlerTest {
 
+    private final static String testRootPath = "src/test/resources";
+    private final static String realDirPath = "/testDir/";
+    private final static String falseDirPath = "/noDirectoryHere/";
+    private final static HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final static String emptyBody = "";
+
     @Test
     public void handlesPathsEndingInSlash() {
-        DirectoryHandler directoryHandler = new DirectoryHandler("/");
-        Request request = new Request(HTTPVerb.GET, "anything/", new HashMap<>(), "");
+        DirectoryHandler directoryHandler = new DirectoryHandler(testRootPath);
+        Request request = new Request(HTTPVerb.GET, "/endsInSlash/", emptyHeaders, emptyBody);
 
         assertTrue(directoryHandler.isHandledPathSegment(request));
     }
 
     @Test
     public void rejectsPathsNotEndingInSlash() {
-        DirectoryHandler directoryHandler = new DirectoryHandler("/");
-        Request request = new Request(HTTPVerb.GET, "anything", new HashMap<>(), "");
+        DirectoryHandler directoryHandler = new DirectoryHandler(testRootPath);
+        Request request = new Request(HTTPVerb.GET, "/doesNotEndInSlash", emptyHeaders, emptyBody);
 
         assertFalse(directoryHandler.isHandledPathSegment(request));
     }
 
     @Test
     public void getResponse_getDir_exists() {
-        DirectoryHandler directoryHandler = new DirectoryHandler("src/test/resources");
-        Request request = new Request(HTTPVerb.GET, "/testDir/", new HashMap<>(), "");
-
-        Response response = directoryHandler.getResponse(request);
+        Response response = getGetResponse(HTTPVerb.GET, realDirPath);
 
         String expectedDirListing = "<html><head></head><body><a href=" +
                 "'/testFile2.txt'>testFile2.txt</a><br></body></html>";
@@ -47,10 +50,7 @@ public class DirectoryHandlerTest {
 
     @Test
     public void getResponse_getDir_doesNotExist() {
-        DirectoryHandler directoryHandler = new DirectoryHandler("/");
-        Request request = new Request(HTTPVerb.GET, "/non-existent-dir/", new HashMap<>(), "");
-
-        Response response = directoryHandler.getResponse(request);
+        Response response = getGetResponse(HTTPVerb.GET, falseDirPath);
 
         assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
         assertArrayEquals(ResponseStatus.NOTFOUND.getStatusBody(), response.getBodyContent());
@@ -58,10 +58,7 @@ public class DirectoryHandlerTest {
 
     @Test
     public void getResponse_headDir_exists() {
-        DirectoryHandler directoryHandler = new DirectoryHandler("src/test/resources");
-        Request request = new Request(HTTPVerb.HEAD, "/", new HashMap<>(), "");
-
-        Response response = directoryHandler.getResponse(request);
+        Response response = getGetResponse(HTTPVerb.HEAD, realDirPath);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals("".getBytes(), response.getBodyContent());
@@ -69,12 +66,16 @@ public class DirectoryHandlerTest {
 
     @Test
     public void getResponse_headDir_doesNotExist() {
-        DirectoryHandler directoryHandler = new DirectoryHandler("/");
-        Request request = new Request(HTTPVerb.HEAD, "/non-existent-dir/", new HashMap<>(), "");
-
-        Response response = directoryHandler.getResponse(request);
+        Response response = getGetResponse(HTTPVerb.HEAD, falseDirPath);
 
         assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
         assertArrayEquals("".getBytes(), response.getBodyContent());
+    }
+
+    private Response getGetResponse(HTTPVerb httpVerb, String path) {
+        DirectoryHandler directoryHandler = new DirectoryHandler(testRootPath);
+        Request request = new Request(httpVerb, path, emptyHeaders, emptyBody);
+
+        return directoryHandler.getResponse(request);
     }
 }
