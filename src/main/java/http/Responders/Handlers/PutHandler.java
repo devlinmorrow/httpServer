@@ -1,7 +1,7 @@
 package http.Responders.Handlers;
 
+import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Handlers.Handler;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
 
@@ -9,16 +9,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class PUTHandler implements Handler {
+public class PutHandler extends Handler {
 
+    private String rootPath;
     private Request request;
     private Response response;
 
+    public PutHandler(String rootPath) {
+        this.rootPath = rootPath;
+        addHandledVerb(HTTPVerb.PUT);
+        addHandledPathSegment("txt");
+    }
+
     @Override
-    public Response handle(Request request) {
+    public Response getResponse(Request request) {
         this.request = request;
         response = new Response();
-        if (Files.exists(Paths.get(request.getURI()))) {
+        if (Files.exists(Paths.get(rootPath + request.getResourcePath()))) {
             performUpdateResponse();
         } else {
             performCreateResponse();
@@ -39,7 +46,7 @@ public class PUTHandler implements Handler {
 
     private void writeFile() {
         try {
-            Files.write(Paths.get(request.getURI()),
+            Files.write(Paths.get(rootPath + request.getResourcePath()),
                     request.getBodyContent().getBytes());
         } catch (IOException e) {
             e.printStackTrace();

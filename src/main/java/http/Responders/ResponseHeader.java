@@ -3,7 +3,7 @@ package http.Responders;
 public enum ResponseHeader {
 
     ALLOW("Allow"),
-    AUTHENTICATE("WWW-Authenticate"),
+    AUTHENTICATION("WWW-Authenticate"),
     CONTENTRANGE("Content-Range"),
     CONTENTTYPE("Content-Type"),
     COOKIE("Set-Cookie"),

@@ -12,14 +12,14 @@ import java.util.HashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class COOKIEHandlerTest {
+public class CookieHandlerTest {
 
     @Test
     public void handle_requestToSetCookie() {
         Request mockRequest = new Request(HTTPVerb.GET, "/cookie?type=mint", new HashMap<>(), "");
-        COOKIEHandler cookieHandler = new COOKIEHandler();
+        CookieHandler cookieHandler = new CookieHandler();
 
-        Response mockResponse = cookieHandler.handle(mockRequest);
+        Response mockResponse = cookieHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("mint".getBytes(), mockResponse.getHeaders().get(ResponseHeader.COOKIE));
@@ -31,9 +31,9 @@ public class COOKIEHandlerTest {
         HashMap<String, String> cookieHeader = new HashMap<>();
         cookieHeader.put("Cookie", "banana");
         Request mockRequest = new Request(HTTPVerb.GET, "/eat_cookie", cookieHeader, "");
-        COOKIEHandler cookieHandler = new COOKIEHandler();
+        CookieHandler cookieHandler = new CookieHandler();
 
-        Response mockResponse = cookieHandler.handle(mockRequest);
+        Response mockResponse = cookieHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals("mmmm banana".getBytes(), mockResponse.getBodyContent());

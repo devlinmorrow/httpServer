@@ -2,7 +2,6 @@ package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Handlers.PUTHandler;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
 import org.junit.Assert;
@@ -15,9 +14,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class PUTHandlerTest {
+public class PutHandlerTest {
 
-    private String mockFileURI = "src/test/resources/newFile.txt";
+    private String mockRootPath = "src/test/resources";
+    private String resourcePath = "/newFile.txt";
+    private String mockFileURI = mockRootPath + resourcePath;
     private HashMap<String, String> emptyHeaders = new HashMap<>();
     String mockContents = "Entered text";
 
@@ -27,10 +28,10 @@ public class PUTHandlerTest {
             Files.delete(Paths.get(mockFileURI));
         }
 
-        Request mockRequest = new Request(HTTPVerb.PUT, mockFileURI, emptyHeaders, mockContents);
-        PUTHandler putHandler = new PUTHandler();
+        Request mockRequest = new Request(HTTPVerb.PUT, resourcePath, emptyHeaders, mockContents);
+        PutHandler putHandler = new PutHandler(mockRootPath);
 
-        Response mockResponse = putHandler.handle(mockRequest);
+        Response mockResponse = putHandler.getResponse(mockRequest);
 
         Assert.assertEquals(ResponseStatus.CREATED, mockResponse.getStatus());
         assertTrue(Files.exists(Paths.get(mockFileURI)));
@@ -42,10 +43,10 @@ public class PUTHandlerTest {
         Files.write(Paths.get(mockFileURI), mockContents.getBytes());
         String updatedContents = "Updated text";
 
-        Request mockRequest = new Request(HTTPVerb.PUT, mockFileURI, emptyHeaders, updatedContents);
-        PUTHandler putHandler = new PUTHandler();
+        Request mockRequest = new Request(HTTPVerb.PUT, resourcePath, emptyHeaders, updatedContents);
+        PutHandler putHandler = new PutHandler(mockRootPath);
 
-        Response mockResponse = putHandler.handle(mockRequest);
+        Response mockResponse = putHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertArrayEquals(updatedContents.getBytes(), Files.readAllBytes(Paths.get(mockFileURI)));

@@ -3,6 +3,7 @@ package http.ClientConnectors;
 import http.HardcodedValues;
 import http.Responders.FileContentConverter;
 import http.Responders.ResponseStatus;
+import http.Responders.RequestRouter;
 import org.junit.Test;
 
 import java.io.*;
@@ -12,17 +13,18 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
-public class ClientConnectionManagerTest {
+public class ConnectionManagerTest {
 
     @Test
     public void respondTo_GETRequest_WithNotFoundResponse() throws IOException {
-        String GETRequest = "GET /non-existent-file123 HTTP/1.1";
+        String GETRequest = "GET /non-existent-file123.txt HTTP/1.1";
         SocketStubSpy mockRequest = new SocketStubSpy(GETRequest);
+        RequestRouter requestRouter = new RequestRouter("/");
 
-        ClientConnectionManager clientConnectionManager = new ClientConnectionManager
-                (new BufferedWriter(new FileWriter(HardcodedValues.RESOURCEPATH.getS() + "/logs", true)));
+        ConnectionManager connectionManager = new ConnectionManager
+                (new BufferedWriter(new FileWriter(HardcodedValues.RESOURCEPATH.getS() + "/logs", true)), requestRouter);
 
-        clientConnectionManager.respondTo(mockRequest);
+        connectionManager.respondTo(mockRequest);
 
         String expectedResponse = "HTTP/1.1 " + new String(ResponseStatus.NOTFOUND.getPhrase())
                 + "\r\n\r\n" + new String(ResponseStatus.NOTFOUND.getStatusBody());
@@ -32,6 +34,7 @@ public class ClientConnectionManagerTest {
 
     @Test
     public void writeLog() throws IOException {
+        RequestRouter requestRouter = new RequestRouter("/");
         String logPathString = HardcodedValues.RESOURCEPATH.getS() + "/logs";
         Path logsPath = Paths.get(logPathString);
         if (Files.exists(logsPath)) {
@@ -46,11 +49,11 @@ public class ClientConnectionManagerTest {
         String GETRequest2 = "GET /non-existent-file123 HTTP/1.1";
         SocketStubSpy mockRequest2 = new SocketStubSpy(GETRequest2);
 
-        ClientConnectionManager clientConnectionManager = new ClientConnectionManager
-                (new BufferedWriter(new FileWriter(theLogFile, true)));
+        ConnectionManager connectionManager = new ConnectionManager
+                (new BufferedWriter(new FileWriter(theLogFile, true)), requestRouter);
 
-        clientConnectionManager.respondTo(mockRequest);
-        clientConnectionManager.respondTo(mockRequest2);
+        connectionManager.respondTo(mockRequest);
+        connectionManager.respondTo(mockRequest2);
 
         FileContentConverter fileContentConverter = new FileContentConverter();
 

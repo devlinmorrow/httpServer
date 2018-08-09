@@ -1,5 +1,6 @@
 package http.Responders.Handlers;
 
+import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.FileContentConverter;
 import http.Responders.Response;
@@ -13,25 +14,33 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class PATCHHandler implements Handler {
+public class PatchHandler extends Handler {
 
+    private String rootPath;
     private FileContentConverter fileContentConverter;
     private Request request;
 
-    public PATCHHandler() {
+    public PatchHandler(String rootPath) {
+        this.rootPath = rootPath;
         fileContentConverter = new FileContentConverter();
+        addHandledVerb(HTTPVerb.PATCH);
     }
 
     @Override
-    public Response handle(Request request) {
+    public boolean isHandledPathSegment(Request request) {
+        return true;
+    }
+
+    @Override
+    public Response getResponse(Request request) {
         Response response = new Response();
         this.request = request;
-        String shaActual = createSHA1(request.getURI());
+        String shaActual = createSHA1(rootPath + request.getResourcePath());
         if (notCorrectETAG(shaActual)) {
             response.setStatus(ResponseStatus.PRECONDITIONFAILED);
         } else {
             try {
-                Files.write(Paths.get(request.getURI()), request.getBodyContent().getBytes());
+                Files.write(Paths.get(rootPath + request.getResourcePath()), request.getBodyContent().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }

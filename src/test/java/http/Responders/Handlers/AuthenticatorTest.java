@@ -23,7 +23,7 @@ public class AuthenticatorTest {
         Request mockRequest = new Request(HTTPVerb.HEAD,mockLogsURI, emptyHeaders, emptyBody);
         Authenticator authenticator = new Authenticator();
 
-        assertEquals("NotAllowed", authenticator.handleLogs(mockRequest, new Response()));
+        assertEquals("NotAllowed", authenticator.handleLogs(mockRequest));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class AuthenticatorTest {
         Request mockRequest = new Request(HTTPVerb.GET,mockLogsURI, emptyHeaders, emptyBody);
         Authenticator authenticator = new Authenticator();
 
-        assertEquals("Unauthorised", authenticator.handleLogs(mockRequest, new Response()));
+        assertEquals("Unauthorised", authenticator.handleLogs(mockRequest));
     }
 
     @Test
@@ -43,6 +43,6 @@ public class AuthenticatorTest {
         Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, authHeader, emptyBody);
         Authenticator authenticator = new Authenticator();
 
-        assertEquals("GET", authenticator.handleLogs(mockRequest, new Response()));
+        assertEquals("GET", authenticator.handleLogs(mockRequest));
     }
 }

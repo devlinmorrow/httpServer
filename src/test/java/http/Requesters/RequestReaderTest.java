@@ -7,7 +7,7 @@ import static junit.framework.TestCase.assertEquals;
 
 public class RequestReaderTest {
 
-    private String requestLine = "GET dummyFile1.txt HTTP/1.1";
+    private String requestLine = "GET testFile1.txt HTTP/1.1";
     private String requestHeaders = "Host: localhost:5000\nRange: bytes=0-4\n";
     private String requestBodyContent = "requestBodyContent";
     private String mockRequestInput = requestLine + "\n" +

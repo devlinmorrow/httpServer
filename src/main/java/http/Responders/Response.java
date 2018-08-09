@@ -59,7 +59,7 @@ public class Response {
     }
 
     public void setUnauthorisedHeader(String authenticateMessage) {
-        headers.put(ResponseHeader.AUTHENTICATE, authenticateMessage.getBytes());
+        headers.put(ResponseHeader.AUTHENTICATION, authenticateMessage.getBytes());
     }
 
     public void setLocationHeader(String redirectURI) {

@@ -4,7 +4,6 @@ import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,9 +14,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class DELETEHandlerTest {
+public class DeleteHandlerTest {
 
-    private String mockFileURI = "src/test/resources/fileToDelete.txt";
+    private String mockRootPath = "src/test/resources";
+    private String resourcePath = "/fileToDelete.txt";
+    private String mockFileURI = mockRootPath + resourcePath;
     private HashMap<String, String> emptyHeaders = new HashMap<>();
 
     @Test
@@ -27,10 +28,10 @@ public class DELETEHandlerTest {
             newFile.createNewFile();
         }
 
-        Request mockRequest = new Request(HTTPVerb.DELETE, mockFileURI, emptyHeaders, "");
-        DELETEHandler deleteHandler = new DELETEHandler();
+        Request mockRequest = new Request(HTTPVerb.DELETE, resourcePath, emptyHeaders, "");
+        DeleteHandler deleteHandler = new DeleteHandler(mockRootPath);
 
-        Response mockResponse = deleteHandler.handle(mockRequest);
+        Response mockResponse = deleteHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertFalse(Files.exists(Paths.get(mockFileURI)));
@@ -42,10 +43,10 @@ public class DELETEHandlerTest {
             Files.delete(Paths.get(mockFileURI));
         }
 
-        Request mockRequest = new Request(HTTPVerb.DELETE, mockFileURI, emptyHeaders, "");
-        DELETEHandler deleteHandler = new DELETEHandler();
+        Request mockRequest = new Request(HTTPVerb.DELETE, resourcePath, emptyHeaders, "");
+        DeleteHandler deleteHandler = new DeleteHandler(mockRootPath);
 
-        Response mockResponse = deleteHandler.handle(mockRequest);
+        Response mockResponse = deleteHandler.getResponse(mockRequest);
 
         assertEquals(ResponseStatus.NOTFOUND, mockResponse.getStatus());
     }

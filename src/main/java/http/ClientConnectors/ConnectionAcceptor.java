@@ -12,13 +12,13 @@ public class ConnectionAcceptor {
 
     private PrintStream stdOut;
     private ServerSocket serverSocket;
-    private ClientConnectionManager clientConnectionManager;
+    private ConnectionManager connectionManager;
     private ServerStatus serverStatus;
 
-    public ConnectionAcceptor(PrintStream stdOut, ServerSocket serverSocket, ClientConnectionManager clientConnectionManager, ServerStatus serverStatus) {
+    public ConnectionAcceptor(PrintStream stdOut, ServerSocket serverSocket, ConnectionManager connectionManager, ServerStatus serverStatus) {
         this.stdOut = stdOut;
         this.serverSocket = serverSocket;
-        this.clientConnectionManager = clientConnectionManager;
+        this.connectionManager = connectionManager;
         this.serverStatus = serverStatus;
     }
 
@@ -34,7 +34,7 @@ public class ConnectionAcceptor {
 
     private void respondToRequest(Socket clientConnection) throws IOException {
         stdOut.println(Message.REQUESTMADE.getS());
-        clientConnectionManager.respondTo(clientConnection);
+        connectionManager.respondTo(clientConnection);
         clientConnection.close();
     }
 }

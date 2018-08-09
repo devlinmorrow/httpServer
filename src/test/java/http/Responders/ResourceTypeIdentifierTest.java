@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ResourceTypeIdentifierTest {
 
-    private String mockFileURI = "src/test/resources/dummyFile1.txt";
+    private String mockFileURI = "src/test/resources/testFile1.txt";
 
     @Test
     public void getType_TXT() {
