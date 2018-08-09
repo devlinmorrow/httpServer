@@ -3,10 +3,8 @@ package http.Responders.Handlers;
 import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.Response;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -14,13 +12,13 @@ import static org.junit.Assert.assertEquals;
 
 public class AuthenticatorTest {
 
-    private String mockLogsURI = "src/test/resources/logs";
-    private HashMap<String, String> emptyHeaders = new HashMap<>();
-    private String emptyBody = "";
+    private final static String testLogsPath = "src/test/resources/logs";
+    private final static HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final static String emptyBody = "";
 
     @Test
     public void respondTo_HEADLogs_withMethodNotAllowed() {
-        Request mockRequest = new Request(HTTPVerb.HEAD,mockLogsURI, emptyHeaders, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.HEAD, testLogsPath, emptyHeaders, emptyBody);
         Authenticator authenticator = new Authenticator();
 
         assertEquals("NotAllowed", authenticator.handleLogs(mockRequest));
@@ -28,19 +26,19 @@ public class AuthenticatorTest {
 
     @Test
     public void respondTo_GETLogs_withUnauthorised() {
-        Request mockRequest = new Request(HTTPVerb.GET,mockLogsURI, emptyHeaders, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.GET, testLogsPath, emptyHeaders, emptyBody);
         Authenticator authenticator = new Authenticator();
 
         assertEquals("Unauthorised", authenticator.handleLogs(mockRequest));
     }
 
     @Test
-    public void respondTo_GETLogs_whenAuthorised() throws IOException {
+    public void respondTo_GETLogs_whenAuthorised() {
         HashMap<String, String> authHeader = new HashMap<>();
         byte[] auth = Base64.getEncoder().encode("admin:hunter2".getBytes());
         String authorizationValue = "Basic " + new String(auth);
         authHeader.put(HardcodedValues.AUTHORIZATIONHEADER.getS(), authorizationValue);
-        Request mockRequest = new Request(HTTPVerb.GET, mockLogsURI, authHeader, emptyBody);
+        Request mockRequest = new Request(HTTPVerb.GET, testLogsPath, authHeader, emptyBody);
         Authenticator authenticator = new Authenticator();
 
         assertEquals("GET", authenticator.handleLogs(mockRequest));

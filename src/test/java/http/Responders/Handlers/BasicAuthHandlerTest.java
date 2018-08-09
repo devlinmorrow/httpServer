@@ -2,18 +2,17 @@ package http.Responders.Handlers;
 
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.FileContentConverter;
 import http.Responders.Response;
 import http.Responders.ResponseHeader;
 import http.Responders.ResponseStatus;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -21,15 +20,11 @@ public class BasicAuthHandlerTest {
 
     private final String testRootPath = "src/test/resources";
     private final String logsPath = "/logs";
-    private final String testFullRootPath = testRootPath + "/logs";
 
     @Test
     public void getResponseToGetLogs_unauthorised() {
-        Request request = new Request(HTTPVerb.GET, logsPath, new HashMap<>(), "");
-
-        BasicAuthHandler basicAuthHandler = new BasicAuthHandler(testRootPath);
-
-        Response response = basicAuthHandler.getResponse(request);
+        HashMap<String, String> emptyHeaders = new HashMap<>();
+        Response response = getResponseToGetAuthFile(emptyHeaders);
 
         assertEquals(ResponseStatus.UNAUTHORISED, response.getStatus());
         assertNotNull(response.getHeaders().get(ResponseHeader.AUTHENTICATION));
@@ -37,30 +32,29 @@ public class BasicAuthHandlerTest {
     }
 
     @Test
-    public void respondTo_GETLogs_whenAuthorised() {
-        if (!Files.exists(Paths.get(testFullRootPath))) {
-            try {
-                Files.createFile(Paths.get(testFullRootPath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        File logFile = new File(testFullRootPath);
+    public void getResponseToGetLogs_authorised() throws IOException {
+        String logsData = "logs data";
+        writeDataToTestLogsFile(logsData);
 
         HashMap<String, String> authHeader = new HashMap<>();
-        byte[] auth = Base64.getEncoder().encode("admin:hunter2".getBytes());
-        String authorizationValue = "Basic " + new String(auth);
-        authHeader.put("Authorization", authorizationValue);
-        Request request = new Request(HTTPVerb.GET, logsPath, authHeader, "");
+        String authorization = "Basic " + new String(Base64.getEncoder().encode("admin:hunter2".getBytes()));
+        authHeader.put("Authorization", authorization);
 
-        BasicAuthHandler basicAuthHandler = new BasicAuthHandler(testRootPath);
-
-        Response response = basicAuthHandler.getResponse(request);
-
-        FileContentConverter fileContentConverter = new FileContentConverter();
-        byte[] logsData = fileContentConverter.getFullContents(logFile);
+        Response response = getResponseToGetAuthFile(authHeader);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
-        assertArrayEquals(logsData, response.getBodyContent());
+        assertArrayEquals(logsData.getBytes(), response.getBodyContent());
+    }
+
+    private Response getResponseToGetAuthFile(Map<String, String> headers) {
+        String emptyBody = "";
+        Request request = new Request(HTTPVerb.GET, logsPath, headers, emptyBody);
+        BasicAuthHandler basicAuthHandler = new BasicAuthHandler(testRootPath);
+        return basicAuthHandler.getResponse(request);
+    }
+
+    private void writeDataToTestLogsFile(String data) throws IOException {
+        String testFullRootPath = testRootPath + logsPath;
+        Files.write(Paths.get(testFullRootPath), data.getBytes());
     }
 }

@@ -21,7 +21,7 @@ public class CookieHandlerTest {
     public void getResponse_getRequestSettingCookie() {
         String cookieParameterPath = "/cookie?type=mint";
 
-        Response response = getResponseToGet(cookieParameterPath, emptyHeaders);
+        Response response = getResponseToGetRequestAt(cookieParameterPath, emptyHeaders);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals("mint".getBytes(), response.getHeaders().get(ResponseHeader.COOKIE));
@@ -32,25 +32,26 @@ public class CookieHandlerTest {
     public void getResponse_getRequestWithCookie() {
         String eatCookiePath = "/eat_cookie";
         HashMap<String, String> cookieBananaHeader = new HashMap<>();
-        cookieBananaHeader.put("Cookie", "banana");
+        String cookieFlavour = "banana";
+        cookieBananaHeader.put("Cookie", cookieFlavour);
 
-        Response response = getResponseToGet(eatCookiePath, cookieBananaHeader);
+        Response response = getResponseToGetRequestAt(eatCookiePath, cookieBananaHeader);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
-        assertArrayEquals("mmmm banana".getBytes(), response.getBodyContent());
+        assertArrayEquals(("mmmm " + cookieFlavour).getBytes(), response.getBodyContent());
     }
 
     @Test
     public void getResponse_getRequestNoCookie() {
         String eatCookiePath = "/eat_cookie";
 
-        Response response = getResponseToGet(eatCookiePath, emptyHeaders);
+        Response response = getResponseToGetRequestAt(eatCookiePath, emptyHeaders);
 
         assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
         assertArrayEquals(ResponseStatus.NOTFOUND.getStatusBody(), response.getBodyContent());
     }
 
-    private Response getResponseToGet(String path, Map<String, String> headers) {
+    private Response getResponseToGetRequestAt(String path, Map<String, String> headers) {
         String emptyBody = "";
         Request request = new Request(HTTPVerb.GET, path, headers, emptyBody);
         CookieHandler cookieHandler = new CookieHandler();

@@ -21,11 +21,11 @@ import static org.junit.Assert.assertEquals;
 
 public class PatchHandlerTest {
 
-    private FileContentConverter fileContentConverter;
-    private String testRootPath = "src/test/resources";
-    private String resourcePath = "/patchFile.txt";
-    private String fullTestPath = testRootPath + resourcePath;
-    private File testPatchFile = new File(fullTestPath);
+    private static FileContentConverter fileContentConverter;
+    private final static String testRootPath = "src/test/resources";
+    private final static String resourcePath = "/patchFile.txt";
+    private final static String fullTestPath = testRootPath + resourcePath;
+    private final static File testPatchFile = new File(fullTestPath);
 
     @Test
     public void getResponse_PATCHRequest_noETAG() {
