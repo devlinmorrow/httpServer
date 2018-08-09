@@ -18,7 +18,7 @@ public class RequestRouter {
                 new CookieHandler(),
                 new DeleteHandler(rootPath),
                 new DirectoryHandler(rootPath),
-                new FormHandler(new FormFields(new HashMap<>())),
+                new FormHandler(rootPath, new FormFields(new HashMap<>())),
                 new GetHandler(rootPath),
                 new OptionsHandler(),
                 new ParametersHandler(),
@@ -29,16 +29,6 @@ public class RequestRouter {
         ));
     }
 
-    public void addHandlers(List<Handler> handlers) {
-        for (Handler handler : handlers) {
-            addHandler(handler);
-        }
-    }
-
-    public void addHandler(Handler handler) {
-        handlers.add(handler);
-    }
-
     public Response handle(Request request) {
         for (Handler handler : handlers) {
             if (handler.handles(request)) {
@@ -46,6 +36,16 @@ public class RequestRouter {
             }
         }
         return methodNotAllowedResponse();
+    }
+
+    private void addHandlers(List<Handler> handlers) {
+        for (Handler handler : handlers) {
+            addHandler(handler);
+        }
+    }
+
+    private void addHandler(Handler handler) {
+        handlers.add(handler);
     }
 
     private Response methodNotAllowedResponse() {

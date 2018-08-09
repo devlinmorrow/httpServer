@@ -26,7 +26,7 @@ public class GetHandlerTest {
 //    @Test
 //    public void respondTo_GETRequest_withFileResource() {
 //        byte[] dummyFileContents = "file1 contents\n".getBytes();
-//        Request mockRequest = new Request(HTTPVerb.GET, "/dummyFile1.txt", emptyHeaders, emptyBody);
+//        Request mockRequest = new Request(HTTPVerb.GET, "/testFile1.txt", emptyHeaders, emptyBody);
 //        FormFields formFields = new FormFields(new HashMap<>());
 //        GetHandler getHandler = new GetHandler(testFileRoot, formFields);
 //

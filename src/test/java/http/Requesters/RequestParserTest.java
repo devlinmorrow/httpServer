@@ -1,6 +1,5 @@
 package http.Requesters;
 
-import http.HardcodedValues;
 import http.IOHelper;
 import org.junit.Test;
 
@@ -8,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestParserTest {
 
-    private String mockURI = "/dummyFile1.txt";
+    private String mockURI = "/testFile1.txt";
 
     @Test
     public void parse_GETRequest_noHeaders() {

@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 public class OptionsHandlerTest {
 
-    private String mockFileURI = "src/test/resources/dummyFile1.txt";
+    private String mockFileURI = "src/test/resources/testFile1.txt";
     private HashMap<String, String> emptyHeaders = new HashMap<>();
     private String emptyBody = "";
 

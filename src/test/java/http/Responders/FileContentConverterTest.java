@@ -14,7 +14,7 @@ public class FileContentConverterTest {
         FileContentConverter fileContentConverter = new FileContentConverter();
 
         byte[] actualContents = fileContentConverter.getFullContents(new File
-                ("src/test/resources/dummyFile1.txt"));
+                ("src/test/resources/testFile1.txt"));
 
         assertArrayEquals(file1Contents, actualContents);
     }

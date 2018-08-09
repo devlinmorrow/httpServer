@@ -1,23 +1,11 @@
 package http.Responders.Handlers;
 
-import http.Requesters.HTTPVerb;
-import http.Requesters.Request;
-import http.Responders.FileContentConverter;
-import http.Responders.Response;
-import http.Responders.ResponseHeader;
-import http.Responders.ResponseStatus;
-import org.junit.Test;
-
-import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
-
-import static org.junit.Assert.*;
 
 public class RangeResponderTest {
 
     private String mockRootPath = "src/test/resources";
-    private String resourcePath = "/dummyFile1.txt";
+    private String resourcePath = "/testFile1.txt";
     private String mockFileURI = mockRootPath + resourcePath;
     private HashMap<String, String> emptyHeaders = new HashMap<>();
     private String emptyBody = "";
