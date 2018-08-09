@@ -1,6 +1,5 @@
 package http.Responders;
 
-import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import org.junit.Test;
@@ -83,10 +82,10 @@ public class RouterTest {
 
     @Test
     public void respondTo_teaRequest() {
-        Router2 router2 = new Router2("/");
+        RequestRouter requestRouter = new RequestRouter("/");
         Request mockRequest = new Request(HTTPVerb.OPTIONS, "/tea", emptyHeaders, emptyBody);
 
-        Response mockResponse = router2.handle(mockRequest);
+        Response mockResponse = requestRouter.handle(mockRequest);
 
         assertEquals(ResponseStatus.OK, mockResponse.getStatus());
         assertNotNull(mockResponse.getHeaders().get(ResponseHeader.ALLOW));

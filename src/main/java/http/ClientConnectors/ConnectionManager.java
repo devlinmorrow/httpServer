@@ -5,7 +5,7 @@ import http.Requesters.Request;
 import http.Requesters.RequestParser;
 import http.Responders.Response;
 import http.Responders.ResponseWriter;
-import http.Responders.Router2;
+import http.Responders.RequestRouter;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,10 +18,10 @@ public class ConnectionManager {
     private ResponseWriter responseWriter;
     private FileOutputStream fileOutputStream;
     private BufferedWriter bufferedWriter;
-    private Router2 router2;
+    private RequestRouter requestRouter;
 
-    public ConnectionManager(BufferedWriter bufferedWriter, Router2 router2) {
-        this.router2 = router2;
+    public ConnectionManager(BufferedWriter bufferedWriter, RequestRouter requestRouter) {
+        this.requestRouter = requestRouter;
         requestParser = new RequestParser();
         responseWriter = new ResponseWriter();
         this.bufferedWriter = bufferedWriter;
@@ -36,7 +36,7 @@ public class ConnectionManager {
         connectInAndOut(clientConnection);
         Request request = requestParser.parse(clientInput);
         writeToLog(request);
-        Response response = router2.handle(request);
+        Response response = requestRouter.handle(request);
         responseWriter.write(response, clientOutput);
     }
 

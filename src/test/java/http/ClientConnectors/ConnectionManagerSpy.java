@@ -1,6 +1,6 @@
 package http.ClientConnectors;
 
-import http.Responders.Router2;
+import http.Responders.RequestRouter;
 
 import java.io.BufferedWriter;
 import java.net.Socket;
@@ -9,8 +9,8 @@ public class ConnectionManagerSpy extends ConnectionManager {
 
     private boolean handleRequestWasCalled;
 
-    public ConnectionManagerSpy(BufferedWriter bufferedWriter, Router2 router2) {
-        super(bufferedWriter, router2);
+    public ConnectionManagerSpy(BufferedWriter bufferedWriter, RequestRouter requestRouter) {
+        super(bufferedWriter, requestRouter);
         handleRequestWasCalled = false;
     }
 

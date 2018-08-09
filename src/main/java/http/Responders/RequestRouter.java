@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Router2 {
+public class RequestRouter {
 
     private final ArrayList<Handler> handlers = new ArrayList<>();
 
-    public Router2(String rootPath) {
+    public RequestRouter(String rootPath) {
         addHandlers(Arrays.asList(
                 new BasicAuthHandler(rootPath),
                 new CookieHandler(),
