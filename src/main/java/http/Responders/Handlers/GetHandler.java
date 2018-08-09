@@ -14,7 +14,6 @@ public class GetHandler extends Handler {
     private FileContentConverter fileContentConverter;
     private Request request;
     private RangeResponder rangeResponder;
-    private Authenticator authenticator;
 
     public GetHandler(String rootPath) {
         this.rootPath = rootPath;
@@ -26,11 +25,9 @@ public class GetHandler extends Handler {
         addHandledPathSegment("image");
         addHandledPathSegment("jpg");
         addHandledPathSegment("foobar");
-        addHandledPathSegment("logs");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
-        authenticator = new Authenticator();
     }
 
     @Override
@@ -38,15 +35,10 @@ public class GetHandler extends Handler {
         this.request = request;
         Response response;
         File resource = new File(rootPath + request.getResourcePath());
-        if (isLogs()) {
-            String logsAction = authenticator.handleLogs(request);
-            response = routeLogs(logsAction, resource);
+        if (!resource.exists()) {
+            response = setResourceNotFoundResponse();
         } else {
-            if (!resource.exists()) {
-                response = setResourceNotFoundResponse();
-            } else {
-                response = GETFile(resource);
-            }
+            response = GETFile(resource);
         }
         if (headRequest()) {
             response.clearAllExceptStatusLine();
@@ -54,40 +46,9 @@ public class GetHandler extends Handler {
         return response;
     }
 
-    private Response routeLogs(String logsAction, File resource) {
-        switch (logsAction) {
-            case "NotAllowed":
-                return setMethodNotAllowed();
-            case "Unauthorised":
-                return setUnauthorised();
-            default:
-                return GETFile(resource);
-        }
-    }
-
-    private Response setUnauthorised() {
-        Response response = new Response();
-        response.setUnauthorisedHeader(HardcodedValues.AUTHENTICATEMESSAGE.getS());
-        response.setBodyContent(ResponseStatus.UNAUTHORISED.getStatusBody());
-        response.setStatus(ResponseStatus.UNAUTHORISED);
-        return response;
-    }
-
-    private Response setMethodNotAllowed() {
-        Response response = new Response();
-        response.setStatus(ResponseStatus.METHODNOTALLOWED);
-        response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
-        return response;
-    }
-
-    private boolean isLogs() {
-        return request.getResourcePath().toLowerCase().contains("logs");
-    }
-
     private boolean headRequest() {
         return request.getHTTPVerb() == HTTPVerb.HEAD;
     }
-
 
     private Response setResourceNotFoundResponse() {
         Response response = new Response();

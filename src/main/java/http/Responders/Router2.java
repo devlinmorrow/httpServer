@@ -14,6 +14,7 @@ public class Router2 {
 
     public Router2(String rootPath) {
         addHandlers(Arrays.asList(
+                new BasicAuthHandler(rootPath),
                 new CookieHandler(),
                 new DeleteHandler(rootPath),
                 new DirectoryHandler(rootPath),
