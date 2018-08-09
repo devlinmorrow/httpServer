@@ -14,33 +14,31 @@ import static org.junit.Assert.*;
 
 public class OptionsHandlerTest {
 
-    private String mockFileURI = "src/test/resources/testFile1.txt";
-    private HashMap<String, String> emptyHeaders = new HashMap<>();
-    private String emptyBody = "";
-
     @Test
     public void respondTo_OPTIONSRequest_NotLogs() {
-        Request mockRequest = new Request(HTTPVerb.OPTIONS, mockFileURI, emptyHeaders, emptyBody);
-        OptionsHandler optionsHandler = new OptionsHandler();
+        Response response = getOptionsResponseTo("/testFile1.txt");
 
-        Response mockResponse = optionsHandler.getResponse(mockRequest);
-
-        Assert.assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+                Assert.assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals(HTTPVerb.getAllowedMethods().getBytes(),
-                mockResponse.getHeaders().get(ResponseHeader.ALLOW));
-        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
+                response.getHeaders().get(ResponseHeader.ALLOW));
+        assertArrayEquals("".getBytes(), response.getBodyContent());
     }
 
     @Test
     public void respondTo_OPTIONSRequest_ForLogs() {
-        Request mockRequest = new Request(HTTPVerb.OPTIONS, "src/test/resources/Logs", emptyHeaders, emptyBody);
-        OptionsHandler optionsHandler = new OptionsHandler();
+        Response response = getOptionsResponseTo("/logs");
 
-        Response mockResponse = optionsHandler.getResponse(mockRequest);
-
-        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals("GET, HEAD, OPTIONS, PATCH".getBytes(),
-                mockResponse.getHeaders().get(ResponseHeader.ALLOW));
-        assertArrayEquals("".getBytes(), mockResponse.getBodyContent());
+                response.getHeaders().get(ResponseHeader.ALLOW));
+        assertArrayEquals("".getBytes(), response.getBodyContent());
+    }
+
+    private Response getOptionsResponseTo(String path) {
+        HashMap<String, String> emptyHeaders = new HashMap<>();
+        String emptyBody = "";
+        Request request = new Request(HTTPVerb.OPTIONS, "src/test/resources" + path, emptyHeaders, emptyBody);
+        OptionsHandler optionsHandler = new OptionsHandler();
+        return optionsHandler.getResponse(request);
     }
 }

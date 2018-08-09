@@ -11,15 +11,12 @@ import static org.junit.Assert.*;
 
 public class GetHandlerTest {
 
-    private String testFileRoot = "src/test/resources";
+    private final static String testFileRoot = "src/test/resources";
 
     @Test
     public void getResponse_getFile() {
+        Response response = getResponseToGetRequestAt("/testFile1.txt");
         byte[] testFileContents = "file1 contents\n".getBytes();
-        Request request = new Request(HTTPVerb.GET, "/testFile1.txt", new HashMap<>(), "");
-        GetHandler getHandler = new GetHandler(testFileRoot);
-
-        Response response = getHandler.getResponse(request);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals(ContentType.TXT.getBytesValue(),
@@ -29,12 +26,18 @@ public class GetHandlerTest {
 
     @Test
     public void getResponse_getNotFound() {
-        Request request = new Request(HTTPVerb.GET,"/no-file.txt", new HashMap<>(), "");
-        GetHandler getHandler = new GetHandler(testFileRoot);
-
-        Response response = getHandler.getResponse(request);
+        Response response = getResponseToGetRequestAt("/no-file.txt");
 
         assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
         assertArrayEquals(ResponseStatus.NOTFOUND.getStatusBody(), response.getBodyContent());
+    }
+
+    private Response getResponseToGetRequestAt(String path) {
+        HashMap<String, String> emptyHeaders = new HashMap<>();
+        String emptyBody = "";
+        Request request = new Request(HTTPVerb.GET, path, emptyHeaders, emptyBody);
+        GetHandler getHandler = new GetHandler(testFileRoot);
+
+        return getHandler.getResponse(request);
     }
 }

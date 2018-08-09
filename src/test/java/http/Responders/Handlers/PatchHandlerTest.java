@@ -22,49 +22,48 @@ import static org.junit.Assert.assertEquals;
 public class PatchHandlerTest {
 
     private FileContentConverter fileContentConverter;
-    private String mockRootPath = "src/test/resources";
+    private String testRootPath = "src/test/resources";
     private String resourcePath = "/patchFile.txt";
-    private String URI = mockRootPath + resourcePath;
-    private File patchFileDummy = new File(URI);
+    private String fullTestPath = testRootPath + resourcePath;
+    private File testPatchFile = new File(fullTestPath);
 
     @Test
-    public void handle_PATCHRequest_noEncoding() {
-        Request mockRequest = new Request(HTTPVerb.PATCH, resourcePath, new HashMap<>(), "");
-        PatchHandler patchHandler = new PatchHandler(mockRootPath);
+    public void getResponse_PATCHRequest_noETAG() {
+        HashMap<String, String> emptyHeaders = new HashMap<>();
+        String emptyBody = "";
+        Response response = getResponseToPatchRequest(emptyHeaders, emptyBody);
 
-        Response mockResponse = patchHandler.getResponse(mockRequest);
-
-
-        assertEquals(ResponseStatus.PRECONDITIONFAILED, mockResponse.getStatus());
+        assertEquals(ResponseStatus.PRECONDITIONFAILED, response.getStatus());
     }
 
     @Test
-    public void handle_PATCHRequest_withCorrectEncoding() throws NoSuchAlgorithmException {
-        try {
-            Files.write(Paths.get(URI), "some stuff".getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String shaMock = createSHA1();
-        HashMap<String, String> ifMatchHeader = new HashMap<>();
-        ifMatchHeader.put("If-Match", shaMock);
-        Request mockRequest = new Request(HTTPVerb.PATCH, resourcePath, ifMatchHeader, "patched content");
-        PatchHandler patchHandler = new PatchHandler(mockRootPath);
+    public void getResponse_PATCHRequest_withETAG() throws NoSuchAlgorithmException, IOException {
+        Files.write(Paths.get(fullTestPath), "some stuff".getBytes());
 
-        Response mockResponse = patchHandler.getResponse(mockRequest);
+        String shaDouble = createSHA1();
+        HashMap<String, String> ETagHeader = new HashMap<>();
+        ETagHeader.put("If-Match", shaDouble);
+        String bodyContent = "patched content";
 
-        byte[] newPatchFileContents = fileContentConverter.getFullContents(patchFileDummy);
+        Response response = getResponseToPatchRequest(ETagHeader, bodyContent);
 
-        assertEquals(ResponseStatus.NOCONTENT, mockResponse.getStatus());
-        assertArrayEquals("patched content".getBytes(), newPatchFileContents);
+        byte[] updatedFileContents = fileContentConverter.getFullContents(testPatchFile);
+
+        assertEquals(ResponseStatus.NOCONTENT, response.getStatus());
+        assertArrayEquals("patched content".getBytes(), updatedFileContents);
     }
 
     private String createSHA1() throws NoSuchAlgorithmException {
         fileContentConverter = new FileContentConverter();
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.reset();
-        digest.update(fileContentConverter.getFullContents(patchFileDummy));
+        digest.update(fileContentConverter.getFullContents(testPatchFile));
         return new BigInteger(1, digest.digest()).toString(16);
     }
 
+    private Response getResponseToPatchRequest(HashMap<String, String> headers, String bodyContent) {
+        Request request = new Request(HTTPVerb.PATCH, resourcePath, headers, bodyContent);
+        PatchHandler patchHandler = new PatchHandler(testRootPath);
+        return patchHandler.getResponse(request);
+    }
 }

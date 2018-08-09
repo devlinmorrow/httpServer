@@ -6,15 +6,16 @@ import http.Responders.Response;
 import http.Responders.ResponseStatus;
 
 import java.io.File;
+import java.util.Map;
 
 public class FormHandler extends Handler {
 
     private Response response;
     private Request request;
-    private FormFields formFields;
+    private Map<String, String> formFields;
     private String rootPath;
 
-    public FormHandler(String rootPath, FormFields formFields) {
+    public FormHandler(String rootPath, Map<String, String> formFields) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.DELETE);
         addHandledVerb(HTTPVerb.GET);
@@ -44,12 +45,12 @@ public class FormHandler extends Handler {
     private Response getResponseToGet() {
         File resource = new File(rootPath + request.getResourcePath());
         String keyRequest = resource.getName();
-        if (!formFields.getFormFields().containsKey(keyRequest)) {
+        if (!formFields.containsKey(keyRequest)) {
             response.setStatus(ResponseStatus.NOTFOUND);
             response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
         } else {
             response.setStatus(ResponseStatus.OK);
-            response.setBodyContent((keyRequest + "=" + formFields.getFormFields().get(keyRequest)).getBytes());
+            response.setBodyContent((keyRequest + "=" + formFields.get(keyRequest)).getBytes());
         }
         return response;
     }
@@ -58,7 +59,7 @@ public class FormHandler extends Handler {
         String[] keyValuePair = request.getBodyContent().split("=");
         String keyOfData = keyValuePair[0];
         String valueOfData = keyValuePair[1];
-        formFields.getFormFields().put(keyOfData, valueOfData);
+        formFields.put(keyOfData, valueOfData);
         String formName = request.getResourcePath().split("/")[1];
         response.setLocationHeader("/" + formName + "/" + keyOfData);
         response.setStatus(ResponseStatus.CREATED);
@@ -69,10 +70,10 @@ public class FormHandler extends Handler {
         String[] keyValuePair = request.getBodyContent().split("=");
         String keyOfData = keyValuePair[0];
         String valueOfData = keyValuePair[1];
-        if (formFields.getFormFields().containsKey(keyOfData)) {
-            formFields.getFormFields().replace(keyOfData, valueOfData);
+        if (formFields.containsKey(keyOfData)) {
+            formFields.replace(keyOfData, valueOfData);
         } else {
-            formFields.getFormFields().put(keyOfData, valueOfData);
+            formFields.put(keyOfData, valueOfData);
         }
         response.setStatus(ResponseStatus.OK);
         return response;
@@ -81,7 +82,7 @@ public class FormHandler extends Handler {
     private Response getResponseToDelete() {
         File resource = new File(rootPath + request.getResourcePath());
         String keyRequest = resource.getName();
-        formFields.getFormFields().remove(keyRequest);
+        formFields.remove(keyRequest);
         response.setStatus(ResponseStatus.OK);
         return response;
     }

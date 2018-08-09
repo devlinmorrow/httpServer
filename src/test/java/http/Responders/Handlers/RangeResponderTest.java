@@ -20,19 +20,12 @@ public class RangeResponderTest {
     private String testRootPath = "src/test/resources";
     private String resourcePath = "/testFile1.txt";
     private String testFullPath = testRootPath + resourcePath;
+    private byte[] fullFileContents = getFullFileContents(testFullPath);
 
     @Test
     public void performRangeRequest_onByteRange() {
-        FileContentConverter fileContentConverter = new FileContentConverter();
-        RangeResponder rangeResponder = new RangeResponder(fileContentConverter);
-        HashMap<String, String> rangeHeader = new HashMap<>();
-        rangeHeader.put("Range","bytes=0-4");
-        Request request = new Request(HTTPVerb.GET, resourcePath, rangeHeader, "");
-
-        byte[] fullContent = fileContentConverter.getFullContents(new File(testFullPath));
-        byte[] expectedContent = Arrays.copyOfRange(fullContent, 0, 5);
-
-        Response response = rangeResponder.performRangeRequest(request, fullContent);
+        Response response = getResponseToRangeRequest("bytes=0-4");
+        byte[] expectedContent = getContentRange(0, 5);
 
         assertEquals(ResponseStatus.PARTIALCONTENT, response.getStatus());
         assertArrayEquals("bytes 0-4/15".getBytes(), response.getHeaders()
@@ -42,16 +35,8 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent_onlyStartIndex() {
-        FileContentConverter fileContentConverter = new FileContentConverter();
-        RangeResponder rangeResponder = new RangeResponder(fileContentConverter);
-        HashMap<String, String> rangeHeader = new HashMap<>();
-        rangeHeader.put("Range","bytes=11-");
-        Request request = new Request(HTTPVerb.GET, resourcePath, rangeHeader, "");
-
-        byte[] fullContent = fileContentConverter.getFullContents(new File(testFullPath));
-        byte[] expectedContent = Arrays.copyOfRange(fullContent, 11, fullContent.length);
-
-        Response response = rangeResponder.performRangeRequest(request, fullContent);
+        Response response = getResponseToRangeRequest("bytes=11-");
+        byte[] expectedContent = getContentRange(11, fullFileContents.length);
 
         assertEquals(ResponseStatus.PARTIALCONTENT, response.getStatus());
         assertArrayEquals("bytes 11-14/15".getBytes(), response.getHeaders()
@@ -61,17 +46,8 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent_onlyEndNumber() {
-        FileContentConverter fileContentConverter = new FileContentConverter();
-        RangeResponder rangeResponder = new RangeResponder(fileContentConverter);
-        HashMap<String, String> rangeHeader = new HashMap<>();
-        rangeHeader.put("Range","bytes=-6");
-        Request request = new Request(HTTPVerb.GET, resourcePath, rangeHeader, "");
-
-
-        byte[] fullContent = fileContentConverter.getFullContents(new File(testFullPath));
-        byte[] expectedContent = Arrays.copyOfRange(fullContent, 9, fullContent.length);
-
-        Response response = rangeResponder.performRangeRequest(request, fullContent);
+        Response response = getResponseToRangeRequest("bytes=-6");
+        byte[] expectedContent = getContentRange(9, fullFileContents.length);
 
         assertEquals(ResponseStatus.PARTIALCONTENT, response.getStatus());
         assertArrayEquals("bytes 9-14/15".getBytes(), response.getHeaders()
@@ -81,18 +57,27 @@ public class RangeResponderTest {
 
     @Test
     public void respondTo_GETRequest_PartialContent_RangeNotSatisfiable() {
-        FileContentConverter fileContentConverter = new FileContentConverter();
-        RangeResponder rangeResponder = new RangeResponder(fileContentConverter);
-        HashMap<String, String> rangeHeader = new HashMap<>();
-        rangeHeader.put("Range","bytes=10-20");
-        Request request = new Request(HTTPVerb.GET, resourcePath, rangeHeader, "");
-
-        byte[] fullContent = fileContentConverter.getFullContents(new File(testFullPath));
-
-        Response response = rangeResponder.performRangeRequest(request, fullContent);
+        Response response = getResponseToRangeRequest("bytes=10-20");
 
         assertEquals(ResponseStatus.RANGENOTSATISFIABLE, response.getStatus());
         assertArrayEquals("bytes */15".getBytes(), response.getHeaders()
                 .get(ResponseHeader.CONTENTRANGE));
+    }
+
+    private Response getResponseToRangeRequest(String byteRange) {
+        RangeResponder rangeResponder = new RangeResponder(new FileContentConverter());
+        HashMap<String, String> rangeHeader = new HashMap<>();
+        rangeHeader.put("Range", byteRange);
+        Request request = new Request(HTTPVerb.GET, resourcePath, rangeHeader, "");
+        return rangeResponder.performRangeRequest(request, fullFileContents);
+    }
+
+    private byte[] getContentRange(int start, int end) {
+        return Arrays.copyOfRange(fullFileContents, start, end);
+    }
+
+    private byte[] getFullFileContents(String path) {
+        FileContentConverter fileContentConverter = new FileContentConverter();
+        return fileContentConverter.getFullContents(new File(path));
     }
 }

@@ -5,7 +5,6 @@ import http.Requesters.Request;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 

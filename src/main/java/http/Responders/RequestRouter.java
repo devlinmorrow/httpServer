@@ -18,7 +18,7 @@ public class RequestRouter {
                 new CookieHandler(),
                 new DeleteHandler(rootPath),
                 new DirectoryHandler(rootPath),
-                new FormHandler(rootPath, new FormFields(new HashMap<>())),
+                new FormHandler(rootPath, (new HashMap<>())),
                 new GetHandler(rootPath),
                 new OptionsHandler(),
                 new ParametersHandler(),

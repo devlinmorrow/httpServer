@@ -8,6 +8,7 @@ import http.Responders.ResponseStatus;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -15,30 +16,27 @@ import static org.junit.Assert.assertFalse;
 
 public class FormHandlerTest {
 
-    private final String testRootPath = "src/test/resources";
-    private final String formPath = "/cat-form/data";
-    private final String fullPath = testRootPath + formPath;
+    private final static String testRootPath = "src/test/resources";
+    private final static String formPath = "/cat-form/data";
+    private final static HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final static String emptyBody = "";
 
     @Test
     public void getResponse_getForm_dataNotFound() {
-        Request request = new Request(HTTPVerb.GET, formPath, new HashMap<>(), "");
-        FormFields formFields = new FormFields(new HashMap<>());
-        FormHandler formHandler = new FormHandler(testRootPath, formFields);
+        Request request = new Request(HTTPVerb.GET, formPath, emptyHeaders, emptyBody);
+        HashMap<String, String> emptyFormFields = new HashMap<>();
 
-        Response response = formHandler.getResponse(request);
+        Response response = getResponse(request, emptyFormFields);
 
         assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
     }
 
     @Test
     public void getResponse_getForm_dataExists() {
-        Request request = new Request(HTTPVerb.GET, formPath, new HashMap<>(), "");
-        HashMap<String, String> dataField = new HashMap<>();
-        dataField.put("data", "fatcat");
-        FormFields formFields = new FormFields(dataField);
-        FormHandler formHandler = new FormHandler(testRootPath, formFields);
+        Request request = new Request(HTTPVerb.GET, formPath, emptyHeaders, emptyBody);
+        HashMap<String, String> formField = createFatCatDataField();
 
-        Response response = formHandler.getResponse(request);
+        Response response = getResponse(request, formField);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals("data=fatcat".getBytes(), response.getBodyContent());
@@ -46,45 +44,47 @@ public class FormHandlerTest {
 
     @Test
     public void getResponse_postAsForm() {
-        Request request = new Request(HTTPVerb.POST, formPath, new HashMap<>(),
-                "data=fatcat");
-        FormFields formFields = new FormFields(new HashMap<>());
-        FormHandler formHandler = new FormHandler(testRootPath, formFields);
+        String tabbyCatData = "data=tabbycat";
+        Request request = new Request(HTTPVerb.POST, formPath, emptyHeaders, tabbyCatData);
+        HashMap<String, String> formField = createFatCatDataField();
 
-        Response response = formHandler.getResponse(request);
-
-        System.out.println(new String(response.getHeaders().get(ResponseHeader.LOCATION)));
+        Response response = getResponse(request, formField);
 
         assertEquals(ResponseStatus.CREATED, response.getStatus());
         assertArrayEquals("/cat-form/data".getBytes(),
                 response.getHeaders().get(ResponseHeader.LOCATION));
     }
 
-
     @Test
-    public void handle_putForm() {
-        Request mockGetRequest = new Request(HTTPVerb.PUT, formPath, new HashMap<>(), "data=tabbycat");
-        HashMap<String, String> dataField = new HashMap<>();
-        dataField.put("data", "fatcat");
-        FormFields formFields = new FormFields(dataField);
-        FormHandler formHandler = new FormHandler(testRootPath, formFields);
+    public void getResponse_putForm() {
+        String tabbyCatData = "data=tabbycat";
+        Request request = new Request(HTTPVerb.PUT, formPath, emptyHeaders, tabbyCatData);
+        HashMap<String, String> formField = createFatCatDataField();
 
-        Response mockResponse = formHandler.getResponse(mockGetRequest);
+        Response response = getResponse(request, formField);
 
-        assertEquals(ResponseStatus.OK, mockResponse.getStatus());
+        assertEquals(ResponseStatus.OK, response.getStatus());
     }
 
     @Test
-    public void handle_deleteForm() {
-        Request request = new Request(HTTPVerb.DELETE, formPath, new HashMap<>(), "");
-        HashMap<String, String> dataField = new HashMap<>();
-        dataField.put("data", "fatcat");
-        FormFields formFields = new FormFields(dataField);
-        FormHandler formHandler = new FormHandler(testRootPath, formFields);
+    public void getResponse_deleteForm() {
+        Request request = new Request(HTTPVerb.DELETE, formPath, emptyHeaders, emptyBody);
+        HashMap<String, String> formField = createFatCatDataField();
 
-        Response response = formHandler.getResponse(request);
+        Response response = getResponse(request, formField);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
-        assertFalse(formFields.getFormFields().containsKey("data"));
+        assertFalse(formField.containsKey("data"));
+    }
+
+    private Response getResponse(Request request, Map<String, String> formFields) {
+        FormHandler formHandler = new FormHandler(testRootPath, formFields);
+        return formHandler.getResponse(request);
+    }
+
+    private HashMap<String, String> createFatCatDataField() {
+        HashMap<String, String> formField = new HashMap<>();
+        formField.put("data", "fatcat");
+        return formField;
     }
 }
