@@ -14,31 +14,33 @@ import static org.junit.Assert.*;
 
 public class OptionsHandlerTest {
 
+    private final static String rootPath = "src/test/resources";
+    private final static HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final static String emptyBody = "";
+
     @Test
     public void respondTo_OPTIONSRequest_NotLogs() {
-        Response response = getOptionsResponseTo("/testFile1.txt");
+        String resourcePath = "/testFile1.txt";
+        Request request = new Request(HTTPVerb.OPTIONS,  resourcePath, emptyHeaders, emptyBody);
+        OptionsHandler optionsHandler = new OptionsHandler();
+        Response response = optionsHandler.getResponse(request);
 
                 Assert.assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals(HTTPVerb.getAllowedMethods().getBytes(),
                 response.getHeaders().get(ResponseHeader.ALLOW));
-        assertArrayEquals("".getBytes(), response.getBodyContent());
+        assertArrayEquals(emptyBody.getBytes(), response.getBodyContent());
     }
 
     @Test
     public void respondTo_OPTIONSRequest_ForLogs() {
-        Response response = getOptionsResponseTo("/logs");
+        String resourcePath = "/logs";
+        Request request = new Request(HTTPVerb.OPTIONS,  resourcePath, emptyHeaders, emptyBody);
+        OptionsHandler optionsHandler = new OptionsHandler();
+        Response response = optionsHandler.getResponse(request);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
         assertArrayEquals("GET, HEAD, OPTIONS, PATCH".getBytes(),
                 response.getHeaders().get(ResponseHeader.ALLOW));
-        assertArrayEquals("".getBytes(), response.getBodyContent());
-    }
-
-    private Response getOptionsResponseTo(String path) {
-        HashMap<String, String> emptyHeaders = new HashMap<>();
-        String emptyBody = "";
-        Request request = new Request(HTTPVerb.OPTIONS, "src/test/resources" + path, emptyHeaders, emptyBody);
-        OptionsHandler optionsHandler = new OptionsHandler();
-        return optionsHandler.getResponse(request);
+        assertArrayEquals(emptyBody.getBytes(), response.getBodyContent());
     }
 }

@@ -33,6 +33,7 @@ public class HeadHandlerTest {
 
         assertFalse(headHandler.isHandledPathSegment(request));
     }
+
     @Test
     public void getResponse_headRequest_existingFile() {
         String resourcePath = "/testFile1.txt";
@@ -65,10 +66,7 @@ public class HeadHandlerTest {
 
     @Test
     public void getResponse_headRequest_notFoundFile() {
-        String testRootPath = "src/test/resources";
         String resourcePath = "/no_file_exists.txt";
-        HashMap<String, String> emptyHeaders = new HashMap<>();
-        String emptyBody = "";
         Request request = new Request(HTTPVerb.HEAD, resourcePath,
                 emptyHeaders, emptyBody);
 

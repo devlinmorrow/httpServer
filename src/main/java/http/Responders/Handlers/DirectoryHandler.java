@@ -33,9 +33,6 @@ public class DirectoryHandler extends Handler {
         } else {
             response = getDirectory(request);
         }
-        if (headRequest(request)) {
-            response.clearBody();
-        }
         return response;
     }
 

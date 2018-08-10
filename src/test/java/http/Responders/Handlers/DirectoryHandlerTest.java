@@ -38,7 +38,11 @@ public class DirectoryHandlerTest {
 
     @Test
     public void getResponse_getDir_exists() {
-        Response response = getGetResponse(HTTPVerb.GET, realDirPath);
+        String testDirPath = "/testDir/";
+        Request request = new Request(HTTPVerb.GET, testDirPath, emptyHeaders, emptyBody);
+        DirectoryHandler directoryHandler = new DirectoryHandler(testRootPath);
+
+        Response response = directoryHandler.getResponse(request);
 
         String expectedDirListing = "<html><head></head><body><a href=" +
                 "'/testFile2.txt'>testFile2.txt</a><br></body></html>";
@@ -50,32 +54,13 @@ public class DirectoryHandlerTest {
 
     @Test
     public void getResponse_getDir_doesNotExist() {
-        Response response = getGetResponse(HTTPVerb.GET, falseDirPath);
+        String falseDirPath = "/non-existent-dir/";
+        Request request = new Request(HTTPVerb.GET, falseDirPath, emptyHeaders, emptyBody);
+        DirectoryHandler directoryHandler = new DirectoryHandler(testRootPath);
+
+        Response response = directoryHandler.getResponse(request);
 
         assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
         assertArrayEquals(ResponseStatus.NOTFOUND.getStatusBody(), response.getBodyContent());
-    }
-
-    @Test
-    public void getResponse_headDir_exists() {
-        Response response = getGetResponse(HTTPVerb.HEAD, realDirPath);
-
-        assertEquals(ResponseStatus.OK, response.getStatus());
-        assertArrayEquals("".getBytes(), response.getBodyContent());
-    }
-
-    @Test
-    public void getResponse_headDir_doesNotExist() {
-        Response response = getGetResponse(HTTPVerb.HEAD, falseDirPath);
-
-        assertEquals(ResponseStatus.NOTFOUND, response.getStatus());
-        assertArrayEquals("".getBytes(), response.getBodyContent());
-    }
-
-    private Response getGetResponse(HTTPVerb httpVerb, String path) {
-        DirectoryHandler directoryHandler = new DirectoryHandler(testRootPath);
-        Request request = new Request(httpVerb, path, emptyHeaders, emptyBody);
-
-        return directoryHandler.getResponse(request);
     }
 }
