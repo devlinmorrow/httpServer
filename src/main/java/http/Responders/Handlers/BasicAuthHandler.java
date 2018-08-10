@@ -1,6 +1,5 @@
 package http.Responders.Handlers;
 
-import http.HardcodedValues;
 import http.Logger;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
@@ -11,8 +10,10 @@ public class BasicAuthHandler extends Handler {
 
     private Authenticator authenticator;
     private Logger logger;
+    private String authenticateMessage;
 
     public BasicAuthHandler(Logger logger) {
+        authenticateMessage = "Basic realm=\"Access the logs file.\"";
         this.logger = logger;
         authenticator = new Authenticator();
         addHandledVerb(HTTPVerb.GET);
@@ -47,7 +48,7 @@ public class BasicAuthHandler extends Handler {
 
     private Response setUnauthorised() {
         Response response = new Response();
-        response.setUnauthorisedHeader(HardcodedValues.AUTHENTICATEMESSAGE.getS());
+        response.setUnauthorisedHeader(authenticateMessage);
         response.setBodyContent(ResponseStatus.UNAUTHORISED.getStatusBody());
         response.setStatus(ResponseStatus.UNAUTHORISED);
         return response;

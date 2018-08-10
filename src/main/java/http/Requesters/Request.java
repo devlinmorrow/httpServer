@@ -1,17 +1,17 @@
 package http.Requesters;
 
-import http.HardcodedValues;
-
 import java.util.Map;
 
 public class Request {
 
+    private String HTTPVersion;
     private HTTPVerb HTTPVerb;
     private String resourcePath;
     private Map<String, String> headers;
     private String bodyContent;
 
     public Request(HTTPVerb HTTPVerb, String resourcePath, Map<String, String> headers, String bodyContent) {
+        HTTPVersion = "HTTP/1.1";
         this.HTTPVerb = HTTPVerb;
         this.resourcePath = resourcePath;
         this.headers = headers;
@@ -31,7 +31,7 @@ public class Request {
     }
 
     public String getRequestLine() {
-        return HTTPVerb + " " + resourcePath + " " + HardcodedValues.HTTPVERSION.getS();
+        return HTTPVerb + " " + resourcePath + " " + HTTPVersion;
     }
 
     public String getResourcePath() {

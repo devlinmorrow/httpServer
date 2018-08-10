@@ -1,7 +1,5 @@
 package http.Requesters;
 
-import http.HardcodedValues;
-
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -38,10 +36,6 @@ public class RequestParser {
 
     private HTTPVerb matchHTTPVerb(String requestedVerb) {
         return HTTPVerb.find(requestedVerb);
-    }
-
-    private String getFullURI(String requestedURI) {
-        return HardcodedValues.RESOURCEPATH.getS() + requestedURI;
     }
 
     private HashMap<String, String> assembleHeaders(String allHeaders) {

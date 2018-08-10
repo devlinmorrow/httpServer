@@ -1,6 +1,5 @@
 package http.Responders.Handlers;
 
-import http.HardcodedValues;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 
@@ -9,6 +8,11 @@ import java.util.Base64;
 public class Authenticator {
 
     private Request request;
+    private String authorizationHeader;
+
+    public Authenticator() {
+        authorizationHeader = "Authorization";
+    }
 
     public String handleLogs(Request request) {
         this.request = request;
@@ -25,8 +29,8 @@ public class Authenticator {
 
     private boolean unAuthorised() {
         boolean unAuthorised = true;
-        if ((request.getHeaders().get(HardcodedValues.AUTHORIZATIONHEADER.getS())) != null) {
-            String credentials = request.getHeaders().get(HardcodedValues.AUTHORIZATIONHEADER.getS())
+        if ((request.getHeaders().get(authorizationHeader)) != null) {
+            String credentials = request.getHeaders().get(authorizationHeader)
                     .replace("Basic ", "");
             String decodedCreds = (new String(Base64.getDecoder().decode(credentials.getBytes())));
             if ("admin:hunter2".equals(decodedCreds)) {

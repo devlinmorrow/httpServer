@@ -1,6 +1,5 @@
 package http.Responders;
 
-import http.HardcodedValues;
 import http.IOHelper;
 import org.junit.Test;
 
@@ -36,8 +35,7 @@ public class ResponseWriterTest {
     }
 
     private String makeExpectedR(ResponseStatus status, ContentType contentType, String bodyContents) {
-        return (HardcodedValues.HTTPVERSION.getS() + " " + status.getPhraseAsS()
-                + "\r\n" + HardcodedValues.CONTENTTYPEHEADER.getS()
+        return ("HTTP/1.1" + " " + status.getPhraseAsS() + "\r\n" + "Content-Type: "
                 + contentType.getValueAsS() + "\r\n\r\n" + bodyContents);
     }
 }
