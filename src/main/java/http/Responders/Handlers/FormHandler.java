@@ -6,6 +6,7 @@ import http.Responders.Response;
 import http.Responders.ResponseStatus;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FormHandler extends Handler {
@@ -15,14 +16,14 @@ public class FormHandler extends Handler {
     private Map<String, String> formFields;
     private String rootPath;
 
-    public FormHandler(String rootPath, Map<String, String> formFields) {
+    public FormHandler(String rootPath) {
+        formFields = new HashMap<>();
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.DELETE);
         addHandledVerb(HTTPVerb.GET);
         addHandledVerb(HTTPVerb.POST);
         addHandledVerb(HTTPVerb.PUT);
         addHandledPathSegment("form");
-        this.formFields = formFields;
     }
 
     @Override

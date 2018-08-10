@@ -1,24 +1,24 @@
 package http.Responders;
 
+import http.Logger;
 import http.Requesters.Request;
 import http.Responders.Handlers.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class RequestRouter {
 
     private final ArrayList<Handler> handlers = new ArrayList<>();
 
-    public RequestRouter(String rootPath) {
+    public RequestRouter(String rootPath, Logger logger) {
         addHandlers(Arrays.asList(
-                new BasicAuthHandler(rootPath),
+                new BasicAuthHandler(logger),
                 new CookieHandler(),
                 new DeleteHandler(rootPath),
                 new DirectoryHandler(rootPath),
-                new FormHandler(rootPath, (new HashMap<>())),
+                new FormHandler(rootPath),
                 new GetHandler(rootPath),
                 new OptionsHandler(),
                 new ParametersHandler(),

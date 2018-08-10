@@ -1,6 +1,7 @@
 package http.ClientConnectors;
 
 import http.HardcodedValues;
+import http.Logger;
 import http.Requesters.Request;
 import http.Requesters.RequestParser;
 import http.Responders.Response;
@@ -16,20 +17,14 @@ public class ConnectionManager {
     private OutputStream clientOutput;
     private RequestParser requestParser;
     private ResponseWriter responseWriter;
-    private FileOutputStream fileOutputStream;
-    private BufferedWriter bufferedWriter;
     private RequestRouter requestRouter;
+    private Logger logger;
 
-    public ConnectionManager(BufferedWriter bufferedWriter, RequestRouter requestRouter) {
+    public ConnectionManager(RequestRouter requestRouter, Logger logger) {
         this.requestRouter = requestRouter;
+        this.logger = logger;
         requestParser = new RequestParser();
         responseWriter = new ResponseWriter();
-        this.bufferedWriter = bufferedWriter;
-        try {
-            fileOutputStream = new FileOutputStream(new File(HardcodedValues.RESOURCEPATH.getS() + "/logs"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public void respondTo(Socket clientConnection) {
@@ -41,11 +36,7 @@ public class ConnectionManager {
     }
 
     private void writeToLog(Request request) {
-        try {
-            fileOutputStream.write((request.getRequestLine() + "\n").getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        logger.addLog(request.getRequestLine());
     }
 
     private void connectInAndOut(Socket clientConnection) {

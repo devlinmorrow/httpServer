@@ -1,5 +1,6 @@
 package http.Responders;
 
+import http.Logger;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class RequestRouterTest {
 
     @Test
     public void handlesRequest() {
-        RequestRouter requestRouter = new RequestRouter(testRootPath);
+        RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
         Request request = new Request(HTTPVerb.GET, "/testFile1.txt", new HashMap<>(), "");
 
         Response response = requestRouter.handle(request);
@@ -24,7 +25,7 @@ public class RequestRouterTest {
 
     @Test
     public void methodNotAllowedDefaultIfRequestNotHandled() {
-        RequestRouter requestRouter = new RequestRouter(testRootPath);
+        RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
         Request request = new Request(HTTPVerb.GET, "/non-existent", new HashMap<>(), "");
 
         Response response = requestRouter.handle(request);

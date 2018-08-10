@@ -1,6 +1,7 @@
 package http.ClientConnectors;
 
 import http.HardcodedValues; import http.IOHelper;
+import http.Logger;
 import http.Responders.RequestRouter;
 import org.junit.Test;
 
@@ -19,8 +20,9 @@ public class ConnectionAcceptorTest {
 
     @Test
     public void respondToClientConnectionIsCalled() throws IOException {
+        Logger logger = new Logger();
         ConnectionManagerSpy connectionManagerSpy = new ConnectionManagerSpy
-                (new BufferedWriter(new FileWriter("x")), new RequestRouter("/"));
+                (new RequestRouter("/", logger), logger);
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
                 new ServerSocketSpy(new SocketStubSpy("")),
@@ -33,11 +35,12 @@ public class ConnectionAcceptorTest {
 
     @Test
     public void acceptIsCalledTwiceForTwoRequests() throws IOException {
+        Logger logger = new Logger();
         ServerSocketSpy serverSocketSpy = new ServerSocketSpy(new SocketStubSpy(""));
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
-                serverSocketSpy, new ConnectionManagerSpy(new BufferedWriter
-                (new FileWriter("x")), new RequestRouter("/")), new ServerStatusStub(2));
+                serverSocketSpy, new ConnectionManagerSpy(new RequestRouter("/", logger),
+                logger), new ServerStatusStub(2));
 
         connectionAcceptor.start();
 
@@ -46,33 +49,16 @@ public class ConnectionAcceptorTest {
 
     @Test
     public void clientSocketClosed() throws IOException {
+        Logger logger = new Logger();
         SocketStubSpy socketStubSpy = new SocketStubSpy("");
 
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
-                new ServerSocketSpy(socketStubSpy), new ConnectionManagerSpy(new BufferedWriter
-                (new FileWriter("x")), new RequestRouter("/")), new ServerStatusStub(1));
+                new ServerSocketSpy(socketStubSpy), new ConnectionManagerSpy(new RequestRouter
+                ("/", logger), logger), new ServerStatusStub(1));
 
         connectionAcceptor.start();
 
         assertTrue(socketStubSpy.wasClosedCalled());
-    }
-
-    @Test
-    public void startLog() throws IOException {
-        Path logsPath = Paths.get(HardcodedValues.RESOURCEPATH.getS() + "/logs");
-        if (Files.exists(logsPath)) {
-            Files.delete(logsPath);
-        }
-
-        SocketStubSpy socketStubSpy = new SocketStubSpy("");
-
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(makeStdOut(),
-                new ServerSocketSpy(socketStubSpy), new ConnectionManagerSpy(new BufferedWriter
-                (new FileWriter("x")), new RequestRouter("/")), new ServerStatusStub(0));
-
-        connectionAcceptor.start();
-
-        assertTrue(Files.exists(Paths.get(HardcodedValues.RESOURCEPATH.getS() + "/logs")));
     }
 
     private PrintStream makeStdOut() {

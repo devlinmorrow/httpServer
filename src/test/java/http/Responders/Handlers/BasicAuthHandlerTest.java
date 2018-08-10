@@ -1,15 +1,14 @@
 package http.Responders.Handlers;
 
+import http.Logger;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
 import http.Responders.Response;
 import http.Responders.ResponseHeader;
 import http.Responders.ResponseStatus;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +17,14 @@ import static org.junit.Assert.*;
 
 public class BasicAuthHandlerTest {
 
-    private final String testRootPath = "src/test/resources";
-    private final String logsPath = "/logs";
+    private Logger logger;
+    private final static String logsData = "logs data";
+
+    @Before
+    public void setUp() {
+        logger = new Logger();
+        logger.addLog(logsData);
+    }
 
     @Test
     public void getResponseToGetLogs_unauthorised() {
@@ -32,29 +37,24 @@ public class BasicAuthHandlerTest {
     }
 
     @Test
-    public void getResponseToGetLogs_authorised() throws IOException {
-        String logsData = "logs data";
-        writeDataToTestLogsFile(logsData);
+    public void getResponseToGetLogs_authorised() {
 
         HashMap<String, String> authHeader = new HashMap<>();
-        String authorization = "Basic " + new String(Base64.getEncoder().encode("admin:hunter2".getBytes()));
-        authHeader.put("Authorization", authorization);
+        String authorizationData = "Basic " + new String
+                (Base64.getEncoder().encode("admin:hunter2".getBytes()));
+        authHeader.put("Authorization", authorizationData);
 
         Response response = getResponseToGetAuthFile(authHeader);
 
         assertEquals(ResponseStatus.OK, response.getStatus());
-        assertArrayEquals(logsData.getBytes(), response.getBodyContent());
+        assertArrayEquals((logsData + "\n").getBytes(), response.getBodyContent());
     }
 
     private Response getResponseToGetAuthFile(Map<String, String> headers) {
+        String logsPath = "/logs";
         String emptyBody = "";
         Request request = new Request(HTTPVerb.GET, logsPath, headers, emptyBody);
-        BasicAuthHandler basicAuthHandler = new BasicAuthHandler(testRootPath);
+        BasicAuthHandler basicAuthHandler = new BasicAuthHandler(logger);
         return basicAuthHandler.getResponse(request);
-    }
-
-    private void writeDataToTestLogsFile(String data) throws IOException {
-        String testFullRootPath = testRootPath + logsPath;
-        Files.write(Paths.get(testFullRootPath), data.getBytes());
     }
 }

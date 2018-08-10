@@ -1,27 +1,20 @@
 package http.Responders.Handlers;
 
 import http.HardcodedValues;
+import http.Logger;
 import http.Requesters.HTTPVerb;
 import http.Requesters.Request;
-import http.Responders.FileContentConverter;
-import http.Responders.ResourceTypeIdentifier;
 import http.Responders.Response;
 import http.Responders.ResponseStatus;
-
-import java.io.File;
 
 public class BasicAuthHandler extends Handler {
 
     private Authenticator authenticator;
-    private FileContentConverter fileContentConverter;
-    private ResourceTypeIdentifier resourceTypeIdentifier;
-    private String rootPath;
+    private Logger logger;
 
-    public BasicAuthHandler(String rootPath) {
+    public BasicAuthHandler(Logger logger) {
+        this.logger = logger;
         authenticator = new Authenticator();
-        fileContentConverter = new FileContentConverter();
-        resourceTypeIdentifier = new ResourceTypeIdentifier();
-        this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.GET);
         addHandledPathSegment("logs");
     }
@@ -30,19 +23,18 @@ public class BasicAuthHandler extends Handler {
     public Response getResponse(Request request) {
         Response response;
         String logsAction = authenticator.handleLogs(request);
-        File resource = new File(rootPath + request.getResourcePath());
-        response = routeLogs(logsAction, resource);
+        response = routeLogs(logsAction);
         return response;
     }
 
-    private Response routeLogs(String logsAction, File resource) {
+    private Response routeLogs(String logsAction) {
         switch (logsAction) {
             case "NotAllowed":
                 return setMethodNotAllowed();
             case "Unauthorised":
                 return setUnauthorised();
             default:
-                return GETFile(resource);
+                return GETFile();
         }
     }
 
@@ -61,11 +53,10 @@ public class BasicAuthHandler extends Handler {
         return response;
     }
 
-    private Response GETFile(File resource) {
+    private Response GETFile() {
         Response response = new Response();
-        response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
-        byte[] fullContents = fileContentConverter.getFullContents(resource);
-        response.setBodyContent(fullContents);
+        String fullContents = logger.getLogsBody();
+        response.setBodyContent(fullContents.getBytes());
         response.setStatus(ResponseStatus.OK);
         return response;
     }
