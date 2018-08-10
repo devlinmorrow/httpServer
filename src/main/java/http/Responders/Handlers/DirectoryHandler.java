@@ -56,9 +56,6 @@ public class DirectoryHandler extends Handler {
         listing.append("</body></html>");
         return String.valueOf(listing).getBytes();
     }
-    private boolean headRequest(Request request) {
-        return request.getHTTPVerb() == HTTPVerb.HEAD;
-    }
 
     private Response setResourceNotFoundResponse() {
         Response response = new Response();

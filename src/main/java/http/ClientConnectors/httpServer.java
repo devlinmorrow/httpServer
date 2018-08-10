@@ -1,7 +1,6 @@
 package http.ClientConnectors;
 
 import http.Logger;
-import http.Message;
 import http.Responders.RequestRouter;
 import http.Responders.ServerStatus;
 
@@ -34,7 +33,7 @@ public class httpServer {
             try {
                 while (serverStatus.isRunning()) {
                     Socket clientConnection = serverSocket.accept();
-                    stdOut.println(Message.REQUESTMADE.getS());
+                    stdOut.println("Request made.");
                     executor.execute(new ServerRunner(clientConnection,
                             new ConnectionManager(requestRouter, logger)));
                 }
