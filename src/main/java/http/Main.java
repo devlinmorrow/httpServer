@@ -1,12 +1,13 @@
 package http;
 
-import http.ClientConnectors.ConnectionAcceptor;
+import http.ClientConnectors.httpServer;
 import http.ClientConnectors.ConnectionManager;
 import http.Responders.RequestRouter;
 import http.Responders.ServerStatus;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.Executors;
 
 public class Main {
 
@@ -16,9 +17,9 @@ public class Main {
         RequestRouter requestRouter = new RequestRouter(rootPath, logger);
         int port = 5000;
         ServerSocket serverSocket = new ServerSocket(port);
-        ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor
-                (System.out, serverSocket, new ConnectionManager(requestRouter,
-                        logger), new ServerStatus());
-        connectionAcceptor.start();
+        httpServer httpServer = new httpServer
+                (System.out, serverSocket, new ServerStatus(),
+                        Executors.newFixedThreadPool(20), requestRouter, logger);
+        httpServer.start();
     }
 }

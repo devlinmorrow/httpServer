@@ -1,14 +1,15 @@
 package http.ClientConnectors;
 
-import http.HardcodedValues;
 import http.Logger;
 import http.Requesters.Request;
 import http.Requesters.RequestParser;
+import http.Responders.RequestRouter;
 import http.Responders.Response;
 import http.Responders.ResponseWriter;
-import http.Responders.RequestRouter;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ConnectionManager {
@@ -33,6 +34,11 @@ public class ConnectionManager {
         writeToLog(request);
         Response response = requestRouter.handle(request);
         responseWriter.write(response, clientOutput);
+        try {
+            clientConnection.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void writeToLog(Request request) {

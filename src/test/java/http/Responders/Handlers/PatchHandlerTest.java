@@ -23,7 +23,7 @@ public class PatchHandlerTest {
 
     private static FileContentConverter fileContentConverter;
     private final static String testRootPath = "src/test/resources";
-    private final static String resourcePath = "/patchFile.txt";
+    private final static String resourcePath = "/testPatchFile.txt";
     private final static String fullTestPath = testRootPath + resourcePath;
     private final static File testPatchFile = new File(fullTestPath);
 
