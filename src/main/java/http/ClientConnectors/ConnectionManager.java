@@ -14,8 +14,6 @@ import java.net.Socket;
 
 public class ConnectionManager {
 
-    private InputStream clientInput;
-    private OutputStream clientOutput;
     private RequestParser requestParser;
     private ResponseWriter responseWriter;
     private RequestRouter requestRouter;
@@ -29,7 +27,8 @@ public class ConnectionManager {
     }
 
     public void respondTo(Socket clientConnection) {
-        connectInAndOut(clientConnection);
+        InputStream clientInput = setClientIn(clientConnection);
+        OutputStream clientOutput = setClientOut(clientConnection);
         Request request = requestParser.parse(clientInput);
         writeToLog(request);
         Response response = requestRouter.handle(request);
@@ -41,16 +40,27 @@ public class ConnectionManager {
         }
     }
 
-    private void writeToLog(Request request) {
-        logger.addLog(request.getRequestLine());
-    }
-
-    private void connectInAndOut(Socket clientConnection) {
+    private InputStream setClientIn(Socket clientConnection) {
+        InputStream clientInput = null;
         try {
             clientInput = clientConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return clientInput;
+    }
+
+    private OutputStream setClientOut(Socket clientConnection) {
+        OutputStream clientOutput = null;
+        try {
             clientOutput = clientConnection.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return clientOutput;
+    }
+
+    private void writeToLog(Request request) {
+        logger.addLog(request.getRequestLine());
     }
 }
