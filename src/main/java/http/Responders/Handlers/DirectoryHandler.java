@@ -34,7 +34,7 @@ public class DirectoryHandler extends Handler {
             response = getDirectory(request);
         }
         if (headRequest(request)) {
-            response.clearAllExceptStatusLine();
+            response.clearBody();
         }
         return response;
     }

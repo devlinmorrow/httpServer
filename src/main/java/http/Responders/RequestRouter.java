@@ -20,6 +20,7 @@ public class RequestRouter {
                 new DirectoryHandler(rootPath),
                 new FormHandler(rootPath),
                 new GetHandler(rootPath),
+                new HeadHandler(rootPath),
                 new OptionsHandler(),
                 new ParametersHandler(),
                 new PatchHandler(rootPath),

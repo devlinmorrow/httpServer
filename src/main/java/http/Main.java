@@ -1,7 +1,6 @@
 package http;
 
 import http.ClientConnectors.httpServer;
-import http.ClientConnectors.ConnectionManager;
 import http.Responders.RequestRouter;
 import http.Responders.ServerStatus;
 

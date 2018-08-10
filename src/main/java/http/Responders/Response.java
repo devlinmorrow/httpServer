@@ -45,8 +45,7 @@ public class Response {
         headers.put(ResponseHeader.CONTENTTYPE, contentType.getBytesValue());
     }
 
-    public void clearAllExceptStatusLine() {
-        headers.clear();
+    public void clearBody() {
         bodyContent = new byte[0];
     }
 
