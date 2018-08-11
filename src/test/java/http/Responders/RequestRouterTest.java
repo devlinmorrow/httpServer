@@ -26,7 +26,7 @@ public class RequestRouterTest {
     @Test
     public void methodNotAllowedDefaultIfRequestNotHandled() {
         RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
-        Request request = new Request(HTTPVerb.GET, "/non-existent", new HashMap<>(), "");
+        Request request = new Request(HTTPVerb.POST, "/non-existent", new HashMap<>(), "");
 
         Response response = requestRouter.handle(request);
 
