@@ -16,15 +16,12 @@ public class HeadHandler extends Handler {
     public HeadHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.HEAD);
-        addHandledPathSegment("txt");
-        addHandledPathSegment("image");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
     }
 
     @Override
     public boolean isHandledPathSegment(Request request) {
-        return super.isHandledPathSegment(request) || request.getResourcePath()
-                .charAt(request.getResourcePath().length() - 1) == '/';
+        return true;
     }
 
     @Override

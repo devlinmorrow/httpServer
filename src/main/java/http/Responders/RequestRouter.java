@@ -16,17 +16,17 @@ public class RequestRouter {
         addHandlers(Arrays.asList(
                 new BasicAuthHandler(logger),
                 new CookieHandler(),
-                new DeleteHandler(rootPath),
-                new DirectoryHandler(rootPath),
                 new FormHandler(rootPath),
+                new RedirectHandler(),
+                new TeapotHandler(),
+                new ParametersHandler(),
+                new DirectoryHandler(rootPath),
+                new DeleteHandler(rootPath),
                 new GetHandler(rootPath),
                 new HeadHandler(rootPath),
                 new OptionsHandler(),
-                new ParametersHandler(),
                 new PatchHandler(rootPath),
-                new PutHandler(rootPath),
-                new RedirectHandler(),
-                new TeapotHandler()
+                new PutHandler(rootPath)
         ));
     }
 

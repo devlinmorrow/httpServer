@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 
 public class OptionsHandlerTest {
 
-    private final static String rootPath = "src/test/resources";
     private final static HashMap<String, String> emptyHeaders = new HashMap<>();
     private final static String emptyBody = "";
 

@@ -22,7 +22,7 @@ public class DeleteHandler extends Handler {
 
     @Override
     public boolean isHandledPathSegment(Request request) {
-        return request.getResourcePath().toLowerCase().contains("txt");
+        return true;
     }
 
     @Override

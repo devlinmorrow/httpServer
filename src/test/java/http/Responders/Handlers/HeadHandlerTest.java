@@ -19,22 +19,6 @@ public class HeadHandlerTest {
     private final static String emptyBody = "";
 
     @Test
-    public void handlesPathsEndingInSlash() {
-        HeadHandler headHandler = new HeadHandler(testRootPath);
-        Request request = new Request(HTTPVerb.HEAD, "/endsInSlash/", emptyHeaders, emptyBody);
-
-        assertTrue(headHandler.isHandledPathSegment(request));
-    }
-
-    @Test
-    public void rejectsNonHandledPaths() {
-        HeadHandler headHandler = new HeadHandler(testRootPath);
-        Request request = new Request(HTTPVerb.HEAD, "/doesNotEndInSlash", emptyHeaders, emptyBody);
-
-        assertFalse(headHandler.isHandledPathSegment(request));
-    }
-
-    @Test
     public void getResponse_headRequest_existingFile() {
         String resourcePath = "/testFile1.txt";
         Request request = new Request(HTTPVerb.HEAD, resourcePath,

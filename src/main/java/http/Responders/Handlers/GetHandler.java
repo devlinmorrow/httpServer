@@ -20,15 +20,14 @@ public class GetHandler extends Handler {
     public GetHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.GET);
-        addHandledPathSegment("file1");
-        addHandledPathSegment("file2");
-        addHandledPathSegment("txt");
-        addHandledPathSegment("image");
-        addHandledPathSegment("jpg");
-        addHandledPathSegment("foobar");
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
         rangeResponder = new RangeResponder(fileContentConverter);
+    }
+
+    @Override
+    public boolean isHandledPathSegment(Request request) {
+        return true;
     }
 
     @Override

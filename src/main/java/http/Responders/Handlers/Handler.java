@@ -21,8 +21,8 @@ public abstract class Handler {
         return handledVerbs.contains(request.getHTTPVerb());
     }
 
-    public void addHandledPathSegment(String path) {
-        handledPathSegments.add(path);
+    public void addHandledPathSegment(String pathSegment) {
+        handledPathSegments.add(pathSegment);
     }
 
     public boolean isHandledPathSegment(Request request) {

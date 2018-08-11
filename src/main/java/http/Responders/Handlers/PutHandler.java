@@ -18,7 +18,11 @@ public class PutHandler extends Handler {
     public PutHandler(String rootPath) {
         this.rootPath = rootPath;
         addHandledVerb(HTTPVerb.PUT);
-        addHandledPathSegment("txt");
+    }
+
+    @Override
+    public boolean isHandledPathSegment(Request request) {
+        return true;
     }
 
     @Override
