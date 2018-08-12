@@ -77,10 +77,17 @@ Go back to the HttpTestSuite website's initial page and click 'Suite' at the top
 test suite. You can click into suites or tests and click 'Suite' or 'Test' respectively at the top to 
 test these individually.
 
-### Known Issues
+### Known Issues and Wish List
 
+* **Logging**  
+My Logger class is very simple - logs are maintained as an array of Strings and to add a log, the class simply adds
+a String input to such array, and this is done only for the first line of requests (and does not include errors, 
+for example). In the future, I would like to research how sophisticated logging systems work and employ 
+this in my program.  
 
-### Wish List
+  Further, in the ConnectionManager class, the 'respondTo' method has two responsibilities: generating a response to
+the request and logging. I would expect this issue to be eliminated by the use of a more sophisticated
+logging system.
 
 
 

@@ -8,8 +8,6 @@ import http.Responders.Response;
 import http.Responders.ResponseWriter;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 public class ConnectionManager {
@@ -26,38 +24,19 @@ public class ConnectionManager {
         responseWriter = new ResponseWriter();
     }
 
-    public void respondTo(Socket clientConnection) {
-        InputStream clientInput = setClientIn(clientConnection);
-        OutputStream clientOutput = setClientOut(clientConnection);
-        Request request = requestParser.parse(clientInput);
+    public void respondTo(Socket clientConnection) throws IOException {
+        responseWriter.write(getReponse(clientConnection), clientConnection.getOutputStream());
+        clientConnection.close();
+    }
+
+    private Response getReponse(Socket clientConnection) throws IOException {
+        Request request = getRequest(clientConnection);
         writeToLog(request);
-        Response response = requestRouter.handle(request);
-        responseWriter.write(response, clientOutput);
-        try {
-            clientConnection.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return requestRouter.handle(request);
     }
 
-    private InputStream setClientIn(Socket clientConnection) {
-        InputStream clientInput = null;
-        try {
-            clientInput = clientConnection.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return clientInput;
-    }
-
-    private OutputStream setClientOut(Socket clientConnection) {
-        OutputStream clientOutput = null;
-        try {
-            clientOutput = clientConnection.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return clientOutput;
+    private Request getRequest(Socket clientConnection) throws IOException {
+        return requestParser.parse(clientConnection.getInputStream());
     }
 
     private void writeToLog(Request request) {

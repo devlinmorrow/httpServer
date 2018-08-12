@@ -43,8 +43,8 @@ public class httpServerTest {
     }
 
     private ServerSocketSpy makeServerSocketWithTwoClientRequests() throws IOException {
-        SocketStubSpy clientOne = new SocketStubSpy("GET /testFile1");
-        SocketStubSpy clientTwo = new SocketStubSpy("GET /testFile1");
+        SocketStubSpy clientOne = new SocketStubSpy("GET /testFile1.txt");
+        SocketStubSpy clientTwo = new SocketStubSpy("GET /testFile1.txt");
         return new ServerSocketSpy(Arrays.asList(clientOne, clientTwo));
     }
 

@@ -12,11 +12,14 @@ import static org.junit.Assert.*;
 public class RequestRouterTest {
 
     private final String testRootPath = "src/test/resources";
+    private final HashMap<String, String> emptyHeaders = new HashMap<>();
+    private final String emptyBody = "";
+    private final String testFilePath = "/testFile1.txt";
 
     @Test
-    public void handlesRequest() {
+    public void whenGivenRequest_aHandlerHandlesIt() {
+        Request request = new Request(HTTPVerb.GET, testFilePath, emptyHeaders, emptyBody);
         RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
-        Request request = new Request(HTTPVerb.GET, "/testFile1.txt", new HashMap<>(), "");
 
         Response response = requestRouter.handle(request);
 
@@ -24,9 +27,9 @@ public class RequestRouterTest {
     }
 
     @Test
-    public void methodNotAllowedDefaultIfRequestNotHandled() {
+    public void whenGivenRequestForWhichThereIsNoHandler_makesNotAllowedResponse() {
+        Request request = new Request(HTTPVerb.POST, testFilePath, emptyHeaders, emptyBody);
         RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
-        Request request = new Request(HTTPVerb.POST, "/non-existent", new HashMap<>(), "");
 
         Response response = requestRouter.handle(request);
 
