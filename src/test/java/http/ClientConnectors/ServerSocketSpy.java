@@ -3,24 +3,29 @@ package http.ClientConnectors;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class ServerSocketSpy extends ServerSocket {
 
-    private Socket socket;
-    private int numberAcceptCalled;
+    private List<Socket> clientSockets;
+    private int currentClient;
+    private int timesAcceptCalled;
 
-    public ServerSocketSpy(Socket socket) throws IOException {
-        this.socket = socket;
-        numberAcceptCalled = 0;
+    public ServerSocketSpy(List<Socket> clientConnections) throws IOException {
+        this.clientSockets = clientConnections;
+        currentClient = 0;
+        timesAcceptCalled = 0;
     }
 
     @Override
     public Socket accept() {
-        numberAcceptCalled++;
-        return socket;
+        Socket currentClientConnection = clientSockets.get(currentClient);
+        currentClient++;
+        timesAcceptCalled++;
+        return currentClientConnection;
     }
 
     public int howManyTimesAcceptCalled() {
-        return numberAcceptCalled;
+        return timesAcceptCalled;
     }
 }
