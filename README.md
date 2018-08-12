@@ -77,7 +77,7 @@ Go back to the HttpTestSuite website's initial page and click 'Suite' at the top
 test suite. You can click into suites or tests and click 'Suite' or 'Test' respectively at the top to 
 test these individually.
 
-### Known Issues and Wish List
+### Issues and Wish List
 
 * **Logging**  
 My Logger class is very simple - logs are maintained as an array of Strings and to add a log, the class simply adds
@@ -87,7 +87,21 @@ this in my program.
 
   Further, in the ConnectionManager class, the 'respondTo' method has two responsibilities: generating a response to
 the request and logging. I would expect this issue to be eliminated by the use of a more sophisticated
-logging system.
+logging system.  
+
+* **Threading**  
+Currently my httpServer class makes a new ConnectionManager (the class which generates the 
+Response and writes it to the output stream of the client connection) every time that a new 
+client connection comes in. This does not cause an issue in terms of speed or memory for the 
+Cob Spec tests, but in a real server, this would not be the most efficient formulation for the 
+program - there only needs to be one ConnectionManager. However, there is a conflict in use of 
+resources somewhere in my program if I do not create a new ConnectionManager each time. So in the
+future I would like to amend this.  
+
+* **Setup for others**  
+There is currently a reasonably large set of instructions that other developers must follow in 
+order to set up running the Cob Spec test suite against this program. I would like to create a 
+more extensive build automation system to cut down on such set up for others.
 
 
 
