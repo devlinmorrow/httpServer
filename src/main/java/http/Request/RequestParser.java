@@ -1,41 +1,27 @@
 package http.Request;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
 public class RequestParser {
 
-    private HTTPVerb httpVerb;
-    private String URI;
-    private HashMap<String, String> headers;
-    private String bodyContent;
-
-    public Request parse(InputStream clientIn) {
+    public Request parse(InputStream clientIn) throws IOException {
         RequestReader requestReader = new RequestReader(clientIn);
-        setRequestElements(requestReader);
-        return new Request(httpVerb, URI, headers, bodyContent);
-    }
-
-    private void setRequestElements(RequestReader requestReader) {
         String[] requestLine = requestReader.extractRequestLine().split(" ");
-        httpVerb = matchHTTPVerb(requestLine[0]);
-        URI = requestLine[1];
-        String potentialHeaders = requestReader.extractHeaders();
-        if (!potentialHeaders.isEmpty()) {
-            headers = assembleHeaders(potentialHeaders);
-        } else {
-            headers = new HashMap<>();
-        }
-        if (headers.get("Content-Length") != null) {
-            bodyContent = requestReader.extractBodyContent
-                    (Integer.parseInt(headers.get("Content-Length").trim()));
-        } else {
-            bodyContent = "";
-        }
+        HTTPVerb httpVerb = matchHTTPVerb(requestLine[0]);
+        String resourcePath = requestLine[1];
+        HashMap<String, String> headers = setRequestHeaders(requestReader.extractHeaders());
+        String bodyContent = setBodyContent(headers, requestReader);
+        return new Request(httpVerb, resourcePath, headers, bodyContent);
     }
 
     private HTTPVerb matchHTTPVerb(String requestedVerb) {
         return HTTPVerb.find(requestedVerb);
+    }
+
+    private HashMap<String, String> setRequestHeaders(String potentialHeaders) {
+        return (!potentialHeaders.isEmpty()) ? assembleHeaders(potentialHeaders) : new HashMap<>();
     }
 
     private HashMap<String, String> assembleHeaders(String allHeaders) {
@@ -52,4 +38,12 @@ public class RequestParser {
         return newHeaders;
     }
 
+    private String setBodyContent(HashMap<String, String> headers, RequestReader requestReader) throws IOException {
+        return contentLengthExists(headers) ? requestReader.extractBodyContent
+                    (Integer.parseInt(headers.get("Content-Length").trim())) : "";
+    }
+
+    private boolean contentLengthExists(HashMap<String, String> headers) {
+        return headers.get("Content-Length") != null;
+    }
 }

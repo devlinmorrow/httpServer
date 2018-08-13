@@ -17,12 +17,12 @@ public class BasicAuthHandlerTest {
 
     private final Logger logger = new Logger();
     private final String logsPath = "/logs";
+    private final HashMap<String, String> emptyHeaders = new HashMap<>();
     private final String emptyBody = "";
     private final BasicAuthHandler basicAuthHandler = new BasicAuthHandler(logger);
 
     @Test
     public void givenUnauthorisedGetRequestForLogs_getUnauthorisedResponse() {
-        HashMap<String, String> emptyHeaders = new HashMap<>();
         Request request = new Request(HTTPVerb.GET, logsPath, emptyHeaders, emptyBody);
 
         Response response = basicAuthHandler.getResponse(request);
@@ -33,7 +33,7 @@ public class BasicAuthHandlerTest {
     }
 
     @Test
-    public void getResponseToGetLogs_authorised() {
+    public void givenAuthorisedGetRequestForLogs_setLogsResponse() {
         String logsData = "logs data";
         logger.addLog(logsData);
 

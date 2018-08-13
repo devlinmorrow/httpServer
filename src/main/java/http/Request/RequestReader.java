@@ -13,45 +13,31 @@ public class RequestReader {
         reader = new BufferedReader(new InputStreamReader(clientIn));
     }
 
-    public String extractRequestLine() {
-        String line = null;
-        try {
-            line = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return line;
+    public String extractRequestLine() throws IOException {
+        return reader.readLine();
     }
 
-    public String extractHeaders() {
+    public String extractHeaders() throws IOException {
         StringBuilder headers = new StringBuilder();
         String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                if (line.isEmpty()) {
-                    break;
-                } else {
-                    headers.append(line).append("\n");
-                }
+        while ((line = reader.readLine()) != null) {
+            if (line.isEmpty()) {
+                break;
+            } else {
+                headers.append(line).append("\n");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return new String(headers);
     }
 
-    public String extractBodyContent(int contentLength) {
-        String body = "";
+    public String extractBodyContent(int contentLength) throws IOException {
+        StringBuilder body = new StringBuilder();
         char[] buffer = new char[contentLength];
-        try {
-            reader.read(buffer);
-            for (char s : buffer) {
-                body += s;
-            }
-            } catch (IOException e) {
-            e.printStackTrace();
+        reader.read(buffer);
+        for (char s : buffer) {
+            body.append(s);
         }
-        return body.trim();
+        return body.toString().trim();
     }
 
 }

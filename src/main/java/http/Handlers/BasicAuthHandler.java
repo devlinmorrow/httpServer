@@ -6,16 +6,20 @@ import http.Request.Request;
 import http.Response.Response;
 import http.Response.ResponseStatus;
 
+import java.util.Base64;
+
 public class BasicAuthHandler extends Handler {
 
-    private Authenticator authenticator;
     private Logger logger;
-    private String authenticateMessage;
+    private final String authenticateMessage;
+    private final String authorizationHeader;
+    private final String authorisingCreds;
 
     public BasicAuthHandler(Logger logger) {
         authenticateMessage = "Basic realm=\"Access the logs file.\"";
+        authorizationHeader = "Authorization";
+        authorisingCreds = "admin:hunter2";
         this.logger = logger;
-        authenticator = new Authenticator();
         addHandledVerb(HTTPVerb.GET);
         addHandledPathSegment("logs");
     }
@@ -23,27 +27,34 @@ public class BasicAuthHandler extends Handler {
     @Override
     public Response getResponse(Request request) {
         Response response;
-        String logsAction = authenticator.handleLogs(request);
-        response = routeLogs(logsAction);
+        if (!authorised(request)) {
+            response = setUnauthorised();
+        } else {
+            response = setLogsResponse();
+        }
         return response;
     }
 
-    private Response routeLogs(String logsAction) {
-        switch (logsAction) {
-            case "NotAllowed":
-                return setMethodNotAllowed();
-            case "Unauthorised":
-                return setUnauthorised();
-            default:
-                return GETFile();
+    private boolean authorised(Request request) {
+        if (authorizeHeaderExists(request)) {
+            return checkAuthCreds(request);
+        } else {
+            return false;
         }
     }
 
-    private Response setMethodNotAllowed() {
-        Response response = new Response();
-        response.setStatus(ResponseStatus.METHODNOTALLOWED);
-        response.setBodyContent(ResponseStatus.METHODNOTALLOWED.getStatusBody());
-        return response;
+    private boolean authorizeHeaderExists(Request request) {
+        return (request.getHeaders().get(authorizationHeader) != null);
+    }
+
+    private boolean checkAuthCreds(Request request) {
+        String decodedCreds = getDecodedCreds(request.getHeaders().get(authorizationHeader));
+        return (decodedCreds).equals(authorisingCreds);
+    }
+
+    private String getDecodedCreds(String authorizeInfo) {
+        String credentials = authorizeInfo.replace("Basic ", "");
+        return new String(Base64.getDecoder().decode(credentials.getBytes()));
     }
 
     private Response setUnauthorised() {
@@ -54,10 +65,9 @@ public class BasicAuthHandler extends Handler {
         return response;
     }
 
-    private Response GETFile() {
+    private Response setLogsResponse() {
         Response response = new Response();
-        String fullContents = logger.getLogsBody();
-        response.setBodyContent(fullContents.getBytes());
+        response.setBodyContent(logger.getLogsBody().getBytes());
         response.setStatus(ResponseStatus.OK);
         return response;
     }

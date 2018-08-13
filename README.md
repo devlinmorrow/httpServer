@@ -110,7 +110,11 @@ future I would like to amend this.
 * **Setup for others**  
 There is currently a reasonably large set of instructions that other developers must follow in 
 order to set up running the Cob Spec test suite against this program. I would like to create a 
-more extensive build automation system to cut down on such set up for others.
+more extensive build automation system to cut down on such set up for others.  
+
+* **Response Builder**
+Several of the Handlers needs to build the same type of Response (e.g. 'Not Found Response'). Currently, 
+they are each manually building such identical Responses - this should be performed by a Builder class.
 
 
 

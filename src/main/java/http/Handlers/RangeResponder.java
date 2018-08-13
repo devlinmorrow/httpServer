@@ -4,19 +4,28 @@ import http.Request.Request;
 import http.Response.Response;
 import http.Response.ResponseStatus;
 import http.util.FileContentConverter;
+import http.util.ResourceTypeIdentifier;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RangeResponder {
 
+    private String rootPath;
     private FileContentConverter fileContentConverter;
+    private ResourceTypeIdentifier resourceTypeIdentifier;
 
-   public RangeResponder(FileContentConverter fileContentConverter) {
+   public RangeResponder(String rootPath, FileContentConverter fileContentConverter, ResourceTypeIdentifier resourceTypeIdentifier) {
+       this.rootPath = rootPath;
        this.fileContentConverter = fileContentConverter;
+       this.resourceTypeIdentifier = resourceTypeIdentifier;
    }
 
-    public Response performRangeRequest(Request request, byte[] fullContents) {
+    public Response performRange(Request request) throws IOException {
        Response response = new Response();
+        File resource = new File(rootPath + request.getResourcePath());
+        byte[] fullContents = fileContentConverter.getFullContents(resource);
         String rangeSpec = request.getHeaders().get("Range");
         String rangeCut = rangeSpec.replaceAll("[^0-9-0-9]+", " ").trim();
         String rangePattern = findRangePattern(rangeCut);
@@ -57,6 +66,7 @@ public class RangeResponder {
                 + "-" + Integer.toString(last) + "/" + Integer.toString(fullContents.length)));
             response.setStatus(ResponseStatus.PARTIALCONTENT);
         }
+        response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
         return response;
     }
 

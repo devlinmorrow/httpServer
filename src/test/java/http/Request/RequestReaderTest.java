@@ -3,42 +3,25 @@ package http.Request;
 import http.util.IOHelper;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static junit.framework.TestCase.assertEquals;
 
 public class RequestReaderTest {
 
-    private String requestLine = "GET testFile1.txt HTTP/1.1";
-    private String requestHeaders = "Host: localhost:5000\nRange: bytes=0-4\n";
-    private String requestBodyContent = "requestBodyContent";
-    private String mockRequestInput = requestLine + "\n" +
-            requestHeaders + "\n" + requestBodyContent;
+    private final String requestLineInput = "GET testFile1.txt HTTP/1.1";
+    private final String headersInput = "Host: localhost:5000\nRange: bytes=0-4\n";
+    private final String bodyInput = "body content";
+    private final String fullRequestInput = requestLineInput + "\n" +
+            headersInput + "\n" + bodyInput;
 
     @Test
-    public void extractRequestLine() {
-        RequestReader requestReader = setUpRequestReader();
+    public void givenRequestInput_extractAllRequestElements() throws IOException {
+        IOHelper clientIO = new IOHelper(fullRequestInput);
+        RequestReader requestReader = new RequestReader(clientIO.getIn());
 
-        assertEquals(requestLine, requestReader.extractRequestLine());
-    }
-
-    @Test
-    public void extractHeaders() {
-        RequestReader requestReader = setUpRequestReader();
-        requestReader.extractRequestLine();
-
-        assertEquals(requestHeaders, requestReader.extractHeaders());
-    }
-
-    @Test
-    public void extractBodyContent() {
-        RequestReader requestReader = setUpRequestReader();
-        requestReader.extractRequestLine();
-        requestReader.extractHeaders();
-
-        assertEquals(requestBodyContent, requestReader.extractBodyContent(requestBodyContent.length()));
-    }
-
-    private RequestReader setUpRequestReader() {
-        IOHelper clientIO = new IOHelper(mockRequestInput);
-        return new RequestReader(clientIO.getIn());
+        assertEquals(requestLineInput, requestReader.extractRequestLine());
+        assertEquals(headersInput, requestReader.extractHeaders());
+        assertEquals(bodyInput, requestReader.extractBodyContent(bodyInput.length()));
     }
 }

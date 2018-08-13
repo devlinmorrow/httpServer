@@ -6,6 +6,7 @@ import http.Response.Response;
 import http.Response.ResponseHeader;
 import http.Response.ResponseStatus;
 import http.util.FileContentConverter;
+import http.util.ResourceTypeIdentifier;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,8 @@ public class RangeResponderTest {
     private final String filePath = "/testFile1.txt";
     private final String testFullPath = testRootPath + filePath;
     private final FileContentConverter fileContentConverter = new FileContentConverter();
-    private final RangeResponder rangeResponder = new RangeResponder(new FileContentConverter());
+    private final ResourceTypeIdentifier resourceTypeIdentifier = new ResourceTypeIdentifier();
+    private final RangeResponder rangeResponder = new RangeResponder(testRootPath, new FileContentConverter(), resourceTypeIdentifier);
     private final String emptyBody = "";
     byte[] fullTestFileContents;
 
@@ -33,13 +35,13 @@ public class RangeResponderTest {
     }
 
     @Test
-    public void givenRangeRequestWithFullByteRange_setRangeResponse() {
+    public void givenRangeRequestWithFullByteRange_setRangeResponse() throws IOException {
         String byteRange = "bytes=0-4";
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range", byteRange);
         Request request = new Request(HTTPVerb.GET, filePath, rangeHeader, emptyBody);
 
-        Response response = rangeResponder.performRangeRequest(request, fullTestFileContents);
+        Response response = rangeResponder.performRange(request);
 
         int rangeStart = 0;
         int rangeEnd = 5;
@@ -52,13 +54,13 @@ public class RangeResponderTest {
     }
 
     @Test
-    public void givenRangeRequestWithStartByte_setRangeResponse() {
+    public void givenRangeRequestWithStartByte_setRangeResponse() throws IOException {
         String byteRange = "bytes=11-";
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range", byteRange);
         Request request = new Request(HTTPVerb.GET, filePath, rangeHeader, emptyBody);
 
-        Response response = rangeResponder.performRangeRequest(request, fullTestFileContents);
+        Response response = rangeResponder.performRange(request);
 
         int rangeStart = 11;
         int rangeEnd = fullTestFileContents.length;
@@ -71,13 +73,13 @@ public class RangeResponderTest {
     }
 
     @Test
-    public void givenRangeRequestWithEndByte_setRangeResponse() {
+    public void givenRangeRequestWithEndByte_setRangeResponse() throws IOException {
         String byteRange = "bytes=-6";
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range", byteRange);
         Request request = new Request(HTTPVerb.GET, filePath, rangeHeader, emptyBody);
 
-        Response response = rangeResponder.performRangeRequest(request, fullTestFileContents);
+        Response response = rangeResponder.performRange(request);
 
         int rangeStart = 9;
         int rangeEnd = fullTestFileContents.length;
@@ -90,13 +92,13 @@ public class RangeResponderTest {
     }
 
     @Test
-    public void givenRangeRequestWhichIsNotSatisfiable_setNotSatisfiableResponse() {
+    public void givenRangeRequestWhichIsNotSatisfiable_setNotSatisfiableResponse() throws IOException {
         String byteRange = "bytes=10-20";
         HashMap<String, String> rangeHeader = new HashMap<>();
         rangeHeader.put("Range", byteRange);
         Request request = new Request(HTTPVerb.GET, filePath, rangeHeader, emptyBody);
 
-        Response response = rangeResponder.performRangeRequest(request, fullTestFileContents);
+        Response response = rangeResponder.performRange(request);
 
         assertEquals(ResponseStatus.RANGENOTSATISFIABLE, response.getStatus());
         assertArrayEquals("bytes */15".getBytes(), response.getHeaders()

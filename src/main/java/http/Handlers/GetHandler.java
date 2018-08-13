@@ -9,13 +9,14 @@ import http.util.ResourceTypeIdentifier;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class GetHandler extends Handler {
 
     private String rootPath;
     private ResourceTypeIdentifier resourceTypeIdentifier;
     private FileContentConverter fileContentConverter;
-    private Request request;
     private RangeResponder rangeResponder;
 
     public GetHandler(String rootPath) {
@@ -23,7 +24,7 @@ public class GetHandler extends Handler {
         addHandledVerb(HTTPVerb.GET);
         resourceTypeIdentifier = new ResourceTypeIdentifier();
         fileContentConverter = new FileContentConverter();
-        rangeResponder = new RangeResponder(fileContentConverter);
+        rangeResponder = new RangeResponder(rootPath, fileContentConverter, resourceTypeIdentifier);
     }
 
     @Override
@@ -33,34 +34,35 @@ public class GetHandler extends Handler {
 
     @Override
     public Response getResponse(Request request) throws IOException {
-        this.request = request;
-        Response response;
-        File resource = new File(rootPath + request.getResourcePath());
-        if (!resource.exists()) {
-            response = setResourceNotFoundResponse();
-        } else {
-            response = GETFile(resource);
-        }
-        return response;
+        return resourceDoesNotExist(request) ? notFoundResponse() : performGet(request);
     }
 
-    private Response setResourceNotFoundResponse() {
+    private boolean resourceDoesNotExist(Request request) {
+        return !Files.exists(Paths.get(rootPath + request.getResourcePath()));
+    }
+
+    private Response notFoundResponse() {
         Response response = new Response();
         response.setStatus(ResponseStatus.NOTFOUND);
         response.setBodyContent(ResponseStatus.NOTFOUND.getStatusBody());
         return response;
     }
 
-    private Response GETFile(File resource) throws IOException {
+    private Response performGet(Request request) throws IOException {
+        return range(request) ? rangeResponder.performRange(request) : fullGet(request);
+    }
+
+    private boolean range(Request request) {
+        return request.getHeaders().containsKey("Range");
+    }
+
+    private Response fullGet(Request request) throws IOException {
         Response response = new Response();
-        response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
+        File resource = new File(rootPath + request.getResourcePath());
         byte[] fullContents = fileContentConverter.getFullContents(resource);
-        if (request.getHeaders().containsKey("Range")) {
-            response = rangeResponder.performRangeRequest(request, fullContents);
-        } else {
-            response.setBodyContent(fullContents);
-            response.setStatus(ResponseStatus.OK);
-        }
+        response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
+        response.setBodyContent(fullContents);
+        response.setStatus(ResponseStatus.OK);
         return response;
     }
 }
