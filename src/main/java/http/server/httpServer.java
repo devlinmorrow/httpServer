@@ -1,7 +1,7 @@
 package http.server;
 
-import http.util.Logger;
 import http.Handlers.RequestRouter;
+import http.util.Logger;
 
 import java.io.PrintStream;
 import java.net.ServerSocket;

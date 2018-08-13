@@ -1,10 +1,10 @@
 package http;
 
-import http.util.ProgramArgParser;
-import http.server.httpServer;
 import http.Handlers.RequestRouter;
 import http.server.ServerStatus;
+import http.server.httpServer;
 import http.util.Logger;
+import http.util.ProgramArgParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;

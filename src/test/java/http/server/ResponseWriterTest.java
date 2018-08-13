@@ -1,8 +1,8 @@
 package http.server;
 
-import http.util.ContentType;
 import http.Response.Response;
 import http.Response.ResponseStatus;
+import http.util.ContentType;
 import http.util.IOHelper;
 import org.junit.Test;
 

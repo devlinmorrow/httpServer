@@ -4,7 +4,6 @@ import http.Request.HTTPVerb;
 import http.Request.Request;
 import http.Response.Response;
 import http.Response.ResponseStatus;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;

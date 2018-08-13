@@ -1,10 +1,10 @@
 package http.Handlers;
 
-import http.util.Logger;
 import http.Request.HTTPVerb;
 import http.Request.Request;
 import http.Response.Response;
 import http.Response.ResponseStatus;
+import http.util.Logger;
 
 import java.util.Base64;
 
