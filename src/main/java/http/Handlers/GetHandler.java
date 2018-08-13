@@ -8,6 +8,7 @@ import http.util.FileContentConverter;
 import http.util.ResourceTypeIdentifier;
 
 import java.io.File;
+import java.io.IOException;
 
 public class GetHandler extends Handler {
 
@@ -31,7 +32,7 @@ public class GetHandler extends Handler {
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response getResponse(Request request) throws IOException {
         this.request = request;
         Response response;
         File resource = new File(rootPath + request.getResourcePath());
@@ -50,7 +51,7 @@ public class GetHandler extends Handler {
         return response;
     }
 
-    private Response GETFile(File resource) {
+    private Response GETFile(File resource) throws IOException {
         Response response = new Response();
         response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
         byte[] fullContents = fileContentConverter.getFullContents(resource);

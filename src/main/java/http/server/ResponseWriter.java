@@ -10,34 +10,26 @@ import java.util.Map;
 
 public class ResponseWriter {
 
-    public void write(Response response, OutputStream clientResponseOutput) {
+    public void write(Response response, OutputStream clientResponseOutput) throws IOException {
         ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
-        try {
-            responseStream.write(response.getHttpVersion());
-            responseStream.write(" ".getBytes());
-            responseStream.write(response.getStatus().getPhrase());
-            responseStream.write("\r\n".getBytes());
+        responseStream.write(response.getHttpVersion());
+        responseStream.write(" ".getBytes());
+        responseStream.write(response.getStatus().getPhrase());
+        responseStream.write("\r\n".getBytes());
 
-            for (Map.Entry<ResponseHeader, byte[]> entry : response.getHeaders().entrySet()) {
-                responseStream.write(entry.getKey().getLabel());
-                responseStream.write(": ".getBytes());
-                responseStream.write(entry.getValue());
-                responseStream.write("\r\n".getBytes());
-            }
-
+        for (Map.Entry<ResponseHeader, byte[]> entry : response.getHeaders().entrySet()) {
+            responseStream.write(entry.getKey().getLabel());
+            responseStream.write(": ".getBytes());
+            responseStream.write(entry.getValue());
             responseStream.write("\r\n".getBytes());
-            responseStream.write(response.getBodyContent());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        responseStream.write("\r\n".getBytes());
+        responseStream.write(response.getBodyContent());
         writeToSocket(responseStream.toByteArray(), clientResponseOutput);
     }
 
-    private void writeToSocket(byte[] response, OutputStream clientResponseOutput) {
-        try {
-            clientResponseOutput.write(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void writeToSocket(byte[] response, OutputStream clientResponseOutput) throws IOException {
+        clientResponseOutput.write(response);
     }
 }

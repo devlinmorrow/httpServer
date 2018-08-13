@@ -29,7 +29,7 @@ public class PatchHandlerTest {
     private final FileContentConverter fileContentConverter = new FileContentConverter();
 
     @Test
-    public void givenPatchRequestWithNoEtag_setPreconditionFailedResponse() {
+    public void givenPatchRequestWithNoEtag_setPreconditionFailedResponse() throws IOException {
         HashMap<String, String> emptyHeaders = new HashMap<>();
         String emptyBody = "";
         Request request = new Request(HTTPVerb.PATCH, patchFilePath, emptyHeaders, emptyBody);
@@ -59,7 +59,7 @@ public class PatchHandlerTest {
         Files.write(Paths.get(path), content);
     }
 
-    private String createSHA1() throws NoSuchAlgorithmException {
+    private String createSHA1() throws NoSuchAlgorithmException, IOException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.reset();
         digest.update(fileContentConverter.getFullContents(testPatchFile));

@@ -32,10 +32,15 @@ gradle first - this command will handle that for you):
 
 Execute the jar to start the server on your machine, making sure to replace the root 
 directory argument below with the correct path to the Cob Spec's public folder on 
-your machine (to find the full path, cd into the required folder and execute 'pwd'):
+your machine (to find the full path, cd into the required directory and execute 'pwd'):
 
     java -jar ./httpServer/build/libs/httpServer-1.0-SNAPSHOT.jar -p 5000 -d (path-to-cob-spec-root-dir)/cob_spec/public
-    
+   
+This server should now be running (note that there is no confirmation message).  
+
+You can go to [http://localhost:5000/](http://localhost:5000) to see the public directory of files and make 
+HTTP requests.  
+
 ### Running the Cob Spec tests
 
 In order to run the Cob Spec tests against this project, you must first cd into your cob_spec directory
@@ -60,13 +65,13 @@ box are the ones we need to update.
 
 1. SERVER_START_COMMAND is the command to start your server and the '.jar' file should be replaced with:
 
-      *(path-to-httpServer-root)/httpServer/build/libs/httpServer-1.0-SNAPSHOT.jar*
+      *(path-to-httpServer-root)/build/libs/httpServer-1.0-SNAPSHOT.jar*
 
 2. PUBLIC_DIR is the path to cob spec public folder of test files and it should be replaced with:
 
-    *(path-to-cob-spec-root-dir)/cob_spec/public*
+    *(path-to-cob-spec-root-dir)/public*
 
-You must also remove the '-' at the beginning of the line in order for the User-Defined Variables 
+You must also remove the '-' at the beginning of each line in order for the User-Defined Variables 
 to be recognised.
 
 Click Save.
@@ -88,6 +93,10 @@ this in my program.
   Further, in the ConnectionManager class, the 'respondTo' method has two responsibilities: generating a response to
 the request and logging. I would expect this issue to be eliminated by the use of a more sophisticated
 logging system.  
+
+* **Error Handling**  
+I have not had a lot of experience with error handling and mostly have thrown errors. Given more time, I would like
+to research how to handle errors better.
 
 * **Threading**  
 Currently my httpServer class makes a new ConnectionManager (the class which generates the 

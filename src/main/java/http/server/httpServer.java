@@ -3,7 +3,6 @@ package http.server;
 import http.util.Logger;
 import http.Handlers.RequestRouter;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,15 +28,15 @@ public class httpServer {
     }
 
     public void start() {
+        while (serverStatus.isRunning()) {
             try {
-                while (serverStatus.isRunning()) {
-                    Socket clientConnection = serverSocket.accept();
-                    stdOut.println("Request made.");
-                    executor.execute(new ServerRunner(clientConnection,
-                            new ConnectionManager(requestRouter, logger)));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                Socket clientConnection = serverSocket.accept();
+                stdOut.println("Request made.");
+                executor.execute(new ServerRunner(clientConnection,
+                        new ConnectionManager(requestRouter, logger)));
+            } catch (Exception exception) {
+                logger.addLog("Socket error occurred.");
             }
+        }
     }
 }

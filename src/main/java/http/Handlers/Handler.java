@@ -4,6 +4,7 @@ import http.Request.HTTPVerb;
 import http.Request.Request;
 import http.Response.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Handler {
@@ -11,7 +12,7 @@ public abstract class Handler {
     private final ArrayList<HTTPVerb> handledVerbs = new ArrayList<>();
     private final ArrayList<String> handledPathSegments = new ArrayList<>();
 
-    public abstract Response getResponse(Request request);
+    public abstract Response getResponse(Request request) throws IOException;
 
     public void addHandledVerb(HTTPVerb httpVerb) {
         handledVerbs.add(httpVerb);

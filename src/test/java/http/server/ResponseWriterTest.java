@@ -6,12 +6,14 @@ import http.Response.ResponseStatus;
 import http.util.IOHelper;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static junit.framework.TestCase.assertEquals;
 
 public class ResponseWriterTest {
 
     @Test
-    public void buildsResponse_simpleGET_NoHeaders() {
+    public void buildsResponse_simpleGET_NoHeaders() throws IOException {
         ResponseStatus exampleStatus = ResponseStatus.OK;
         ContentType exampleContentType = ContentType.TXT;
         String exampleContents = "file1 contents";

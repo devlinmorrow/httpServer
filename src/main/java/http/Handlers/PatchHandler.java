@@ -32,7 +32,7 @@ public class PatchHandler extends Handler {
     }
 
     @Override
-    public Response getResponse(Request request) {
+    public Response getResponse(Request request) throws IOException {
         Response response = new Response();
         this.request = request;
         String shaActual = createSHA1(rootPath + request.getResourcePath());
@@ -54,7 +54,7 @@ public class PatchHandler extends Handler {
                 !request.getHeaders().get("If-Match").equals(shaActual);
     }
 
-    private String createSHA1(String fileURI) {
+    private String createSHA1(String fileURI) throws IOException {
         fileContentConverter = new FileContentConverter();
         MessageDigest digest = null;
         try {

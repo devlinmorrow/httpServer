@@ -6,13 +6,9 @@ import java.nio.file.Paths;
 
 public class FileContentConverter {
 
-    public byte[] getFullContents(File resource) {
+    public byte[] getFullContents(File resource) throws IOException {
         byte[] encoded = new byte[0];
-        try {
             encoded = Files.readAllBytes(Paths.get(resource.toURI()));
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
         return encoded;
     }
 

@@ -5,6 +5,7 @@ import http.Request.Request;
 import http.Response.Response;
 import http.Response.ResponseStatus;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +32,7 @@ public class RequestRouter {
         ));
     }
 
-    public Response handle(Request request) {
+    public Response handle(Request request) throws IOException {
         for (Handler handler : handlers) {
             if (handler.handles(request)) {
                 return handler.getResponse(request);

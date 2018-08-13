@@ -6,9 +6,11 @@ import http.Response.Response;
 import http.Response.ResponseHeader;
 import http.Response.ResponseStatus;
 import http.util.FileContentConverter;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -21,9 +23,14 @@ public class RangeResponderTest {
     private final String filePath = "/testFile1.txt";
     private final String testFullPath = testRootPath + filePath;
     private final FileContentConverter fileContentConverter = new FileContentConverter();
-    private byte[] fullTestFileContents = fileContentConverter.getFullContents(new File(testFullPath));
     private final RangeResponder rangeResponder = new RangeResponder(new FileContentConverter());
     private final String emptyBody = "";
+    byte[] fullTestFileContents;
+
+    @Before
+    public void setUp() throws IOException {
+         fullTestFileContents = fileContentConverter.getFullContents(new File(testFullPath));
+    }
 
     @Test
     public void givenRangeRequestWithFullByteRange_setRangeResponse() {

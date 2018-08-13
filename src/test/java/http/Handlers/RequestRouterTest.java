@@ -7,6 +7,7 @@ import http.Response.ResponseStatus;
 import http.util.Logger;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +20,7 @@ public class RequestRouterTest {
     private final String testFilePath = "/testFile1.txt";
 
     @Test
-    public void whenGivenRequest_aHandlerHandlesIt() {
+    public void whenGivenRequest_aHandlerHandlesIt() throws IOException {
         Request request = new Request(HTTPVerb.GET, testFilePath, emptyHeaders, emptyBody);
         RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
 
@@ -29,7 +30,7 @@ public class RequestRouterTest {
     }
 
     @Test
-    public void whenGivenRequestForWhichThereIsNoHandler_setNotAllowedResponse() {
+    public void whenGivenRequestForWhichThereIsNoHandler_setNotAllowedResponse() throws IOException {
         Request request = new Request(HTTPVerb.POST, testFilePath, emptyHeaders, emptyBody);
         RequestRouter requestRouter = new RequestRouter(testRootPath, new Logger());
 

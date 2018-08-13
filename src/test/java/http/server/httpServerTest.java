@@ -25,7 +25,6 @@ public class httpServerTest {
         SocketStubSpy clientTwo = new SocketStubSpy("GET /testFile1.txt");
         ServerSocketSpy serverSocketSpy = new ServerSocketSpy(Arrays.asList(clientOne, clientTwo));
         ServerStatusStub serverStatusForTwoRequests = new ServerStatusStub(2);
-
         httpServer httpServer = new httpServer(stdOut, serverSocketSpy,
                 serverStatusForTwoRequests, executorWithNoThreadsSpy, requestRouter, logger);
 
@@ -33,5 +32,18 @@ public class httpServerTest {
 
         assertEquals(2, serverSocketSpy.howManyTimesAcceptCalled());
         assertEquals(2, executorWithNoThreadsSpy.getTimesExecuteWasCalled());
+    }
+
+    @Test
+    public void givenNullSocketConnection_printsErrorToLog() throws IOException {
+        ServerStatusStub serverStatusForOneRequest = new ServerStatusStub(1);
+        ServerSocketSpy serverSocketSpy = new ServerSocketSpy(Arrays.asList(new SocketStubSpy("")));
+        serverSocketSpy.setSocketException();
+        httpServer httpServer = new httpServer(stdOut, serverSocketSpy,
+                serverStatusForOneRequest, executorWithNoThreadsSpy, requestRouter, logger);
+
+        httpServer.start();
+
+        assertEquals("Socket error occurred.\n", logger.getLogsBody());
     }
 }

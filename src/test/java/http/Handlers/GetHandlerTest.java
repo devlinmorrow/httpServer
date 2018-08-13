@@ -8,6 +8,7 @@ import http.Response.ResponseStatus;
 import http.util.ContentType;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -20,7 +21,7 @@ public class GetHandlerTest {
     private final GetHandler getHandler = new GetHandler(testFileRoot);
 
     @Test
-    public void givenGetRequestForExistingFile_getFileAndSetOKResponse() {
+    public void givenGetRequestForExistingFile_getFileAndSetOKResponse() throws IOException {
         String filePath = "/testFile1.txt";
         Request request = new Request(HTTPVerb.GET, filePath, emptyHeaders, emptyBody);
 
@@ -33,7 +34,7 @@ public class GetHandlerTest {
     }
 
     @Test
-    public void givenGetRequestForNonExistentFile_setNotFoundResponse() {
+    public void givenGetRequestForNonExistentFile_setNotFoundResponse() throws IOException {
         String nonExistentFilePath = "/no-file.txt";
         Request request = new Request(HTTPVerb.GET, nonExistentFilePath, emptyHeaders, emptyBody);
 
