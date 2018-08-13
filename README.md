@@ -112,9 +112,17 @@ There is currently a reasonably large set of instructions that other developers 
 order to set up running the Cob Spec test suite against this program. I would like to create a 
 more extensive build automation system to cut down on such set up for others.  
 
-* **Response Builder**
+* **Response Builder**  
 Several of the Handlers needs to build the same type of Response (e.g. 'Not Found Response'). Currently, 
-they are each manually building such identical Responses - this should be performed by a Builder class.
+they are each manually building such identical Responses - this should be performed by a Builder class.  
+  
+  This will also help with some of the 'magic Strings' that are in my code - places where I have hardcoded
+String values which need to be removed, such as when setting the values of ResponseHeaders. 
+
+* **File Handling**  
+In addition to Response building, there are file manipulations shared between classes which essentially has led 
+to code duplication. Given more time, I would like to come up with a better system for automating retrieving files
+(for example, identifying their file type and automatically setting this as the Content-Type header of the response).
 
 
 

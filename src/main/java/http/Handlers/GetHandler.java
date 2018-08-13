@@ -59,9 +59,8 @@ public class GetHandler extends Handler {
     private Response fullGet(Request request) throws IOException {
         Response response = new Response();
         File resource = new File(rootPath + request.getResourcePath());
-        byte[] fullContents = fileContentConverter.getFullContents(resource);
         response.setContentTypeHeader(resourceTypeIdentifier.getType(resource));
-        response.setBodyContent(fullContents);
+        response.setBodyContent(fileContentConverter.getFullContents(resource));
         response.setStatus(ResponseStatus.OK);
         return response;
     }
