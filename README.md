@@ -13,11 +13,11 @@ download these first.
 
 Clone the Cob Spec repo to save the test suite and root file directory onto your machine:  
 
-    git clone git@github.com:8thlight/cob_spec.git 
+    git clone https://github.com/8thlight/cob_spec.git 
 
 Then clone this project's repo:
 
-    git clone git@github.com:devlinglasman/httpServer.git
+    git clone https://github.com/devlinglasman/httpServer.git
 
 ### Running the server
 
