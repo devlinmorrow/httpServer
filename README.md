@@ -34,7 +34,7 @@ Execute the jar to start the server on your machine, making sure to replace the 
 directory argument below with the correct path to the Cob Spec's directory called 'public' on 
 your machine (to find the full path, cd into the required directory and execute 'pwd'):
 
-    java -jar ./httpServer/build/libs/httpServer-1.0-SNAPSHOT.jar -p 5000 -d (path-to-cob-spec-root-dir)/cob_spec/public
+    java -jar ./build/libs/httpServer-1.0-SNAPSHOT.jar -p 5000 -d (path-to-cob-spec-root-dir)/cob_spec/public
    
 This server should now be running (note that there is no confirmation message).  
 
