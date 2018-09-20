@@ -37,7 +37,7 @@ public class PutHandlerTest {
 
     @Test
     public void givenPutRequestForExistingFile_updateFileAndSetOKResponse() throws IOException {
-        overwriteDataToFile("some words".getBytes(), fullTestPath);
+        overwriteDataToFile("some words".getBytes());
 
         String updatedContents = "Updated text";
         Request request = new Request(HTTPVerb.PUT, resourcePath, emptyHeaders, updatedContents);
@@ -54,7 +54,7 @@ public class PutHandlerTest {
         }
     }
 
-    private void overwriteDataToFile(byte[] content, String path) throws IOException {
-        Files.write(Paths.get(path), content);
+    private void overwriteDataToFile(byte[] content) throws IOException {
+        Files.write(Paths.get("src/test/resources/newFile.txt"), content);
     }
 }

@@ -1,5 +1,6 @@
 package http.util;
 
+import http.server.ResponseWriter;
 import org.junit.Test;
 
 import java.io.File;

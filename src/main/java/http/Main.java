@@ -13,8 +13,7 @@ import java.util.concurrent.Executors;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        int defaultPort = 5000;
-        ProgramArgParser programArgParser = new ProgramArgParser(args, defaultPort);
+        ProgramArgParser programArgParser = new ProgramArgParser(args);
 
         Logger logger = new Logger();
         RequestRouter requestRouter = new RequestRouter(programArgParser.getRootPath(), logger);
