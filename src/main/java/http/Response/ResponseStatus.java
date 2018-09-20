@@ -27,7 +27,7 @@ public enum ResponseStatus {
         return phrase.getBytes();
     }
 
-    public String getPhraseAsS() {
+    public String getPhraseAsString() {
         return phrase;
     }
 
