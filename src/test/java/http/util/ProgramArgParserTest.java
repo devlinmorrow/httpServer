@@ -12,8 +12,7 @@ public class ProgramArgParserTest {
         int port = Integer.parseInt(portArg);
         String[] programArgs = {"-p", portArg};
 
-        int defaultPort = 5000;
-        ProgramArgParser programArgParser = new ProgramArgParser(programArgs, defaultPort);
+        ProgramArgParser programArgParser = new ProgramArgParser(programArgs);
 
         assertEquals(port, programArgParser.getPort());
     }
@@ -23,8 +22,7 @@ public class ProgramArgParserTest {
         String dirArg = "src/test/resources/";
         String[] programArgs = {"-d", dirArg};
 
-        int defaultPort = 5000;
-        ProgramArgParser programArgParser = new ProgramArgParser(programArgs, defaultPort);
+        ProgramArgParser programArgParser = new ProgramArgParser(programArgs);
 
         assertEquals(dirArg, programArgParser.getRootPath());
     }
@@ -36,8 +34,7 @@ public class ProgramArgParserTest {
         String dirArg = "src/test/resources/";
         String[] programArgs = {"-p", portArg, "-d", dirArg};
 
-        int defaultPort = 5000;
-        ProgramArgParser programArgParser = new ProgramArgParser(programArgs, defaultPort);
+        ProgramArgParser programArgParser = new ProgramArgParser(programArgs);
 
         assertEquals(port, programArgParser.getPort());
         assertEquals(dirArg, programArgParser.getRootPath());
@@ -46,8 +43,7 @@ public class ProgramArgParserTest {
     @Test
     public void givenNoPort_setDefault() {
         String[] programArgs = {};
-        int defaultPort = 5000;
-        ProgramArgParser programArgParser = new ProgramArgParser(programArgs, defaultPort);
+        ProgramArgParser programArgParser = new ProgramArgParser(programArgs);
 
         assertEquals(5000, programArgParser.getPort());
     }

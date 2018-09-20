@@ -11,12 +11,11 @@ public class ProgramArgParser {
     private final String portSignifier = "-p";
     private final String dirSignifier = "-d";
     private HashMap<String, String> programParameters;
-    private int defaultPort;
+    private int defaultPort = 5000;
 
-    public ProgramArgParser(String[] programArgs, int defaultPort) {
+    public ProgramArgParser(String[] programArgs) {
         addSignifiers(Arrays.asList(portSignifier, dirSignifier));
         programParameters = new HashMap<>();
-        this.defaultPort = defaultPort;
         parse(programArgs);
     }
 
