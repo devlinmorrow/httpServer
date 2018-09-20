@@ -41,7 +41,7 @@ public class PatchHandlerTest {
 
     @Test
     public void givenPathRequestWithCorrectEtag_patchFileAndSetNoContentResponse() throws NoSuchAlgorithmException, IOException {
-        overwriteDataToFile("some stuff".getBytes(), fullTestPath);
+        overwriteDataToFile("some stuff".getBytes());
 
         String SHAData = createSHA1();
         HashMap<String, String> ETagHeader = new HashMap<>();
@@ -55,8 +55,8 @@ public class PatchHandlerTest {
         assertArrayEquals("patched content".getBytes(), fileContentConverter.getFullContents(testPatchFile));
     }
 
-    private void overwriteDataToFile(byte[] content, String path) throws IOException {
-        Files.write(Paths.get(path), content);
+    private void overwriteDataToFile(byte[] content) throws IOException {
+        Files.write(Paths.get("src/test/resources/testPatchFile.txt"), content);
     }
 
     private String createSHA1() throws NoSuchAlgorithmException, IOException {
