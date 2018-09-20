@@ -3,7 +3,6 @@ package http.server;
 import http.Handlers.RequestRouter;
 import http.Request.Request;
 import http.Request.RequestParser;
-import http.Response.Response;
 import http.util.Logger;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.net.Socket;
 public class ConnectionManager {
 
     private RequestParser requestParser;
-    private ResponseStringConstructor responseStringConstructor;
+    private ResponseConstructor responseConstructor;
     private RequestRouter requestRouter;
     private Logger logger;
     private ResponseWriter responseWriter;
@@ -21,19 +20,19 @@ public class ConnectionManager {
         this.requestRouter = requestRouter;
         this.logger = logger;
         requestParser = new RequestParser();
-        responseStringConstructor = new ResponseStringConstructor();
+        responseConstructor = new ResponseConstructor();
         responseWriter = new ResponseWriter();
     }
 
     public void respondTo(Socket clientConnection) throws IOException {
-        responseWriter.writeToSocket(getReponseAsString(clientConnection), clientConnection.getOutputStream());
+        responseWriter.writeToSocket(getResponse(clientConnection), clientConnection.getOutputStream());
         clientConnection.close();
     }
 
-    private String getReponseAsString(Socket clientConnection) throws IOException {
+    private byte[] getResponse(Socket clientConnection) throws IOException {
         Request request = getRequest(clientConnection);
         writeToLog(request);
-        return responseStringConstructor.construct(requestRouter.handle(request));
+        return responseConstructor.construct(requestRouter.handle(request));
     }
 
     private Request getRequest(Socket clientConnection) throws IOException {
